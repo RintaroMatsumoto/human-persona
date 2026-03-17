@@ -41,7 +41,7 @@ This follows Hall's (1976) high/low-context culture framework. A `context_level`
 
 ## Links
 
-- **Repo**: [github.com/RintaroMatsumoto/human-like-ai](https://github.com/RintaroMatsumoto/human-like-ai)
+- **Repo**: [github.com/RintaroMatsumoto/human-persona](https://github.com/RintaroMatsumoto/human-persona)
 - **License**: MIT
 - **Ethics**: Full guidelines included — prohibited uses explicitly listed (fraud, impersonation, election interference, etc.)
 
