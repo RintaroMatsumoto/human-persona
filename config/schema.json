@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HumanPersona Configuration",
+  "description": "派生クラス用の設定スキーマ。言語・文化・タイミングを外部定義する。",
+  "type": "object",
+  "required": ["name", "language", "culture"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "ペルソナの識別名"
+    },
+    "language": {
+      "type": "string",
+      "description": "ISO 639-1 言語コード (例: ja, en, es)",
+      "pattern": "^[a-z]{2}$"
+    },
+    "culture": {
+      "type": "object",
+      "description": "文化的パラメータ",
+      "properties": {
+        "context_level": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "コンテキストレベル (0.0=ローコンテキスト, 1.0=ハイコンテキスト)"
+        },
+        "formality_default": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "デフォルトのフォーマリティレベル"
+        },
+        "indirect_expression_rate": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "間接的表現の使用率"
+        },
+        "silence_tolerance": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "沈黙（返信遅延）の許容度"
+        }
+      },
+      "required": ["context_level"]
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["chat", "crowdsourcing_message", "email"],
+      "default": "chat",
+      "description": "対象プラットフォーム"
+    },
+    "timing": {
+      "type": "object",
+      "description": "返信速度制御の設定",
+      "properties": {
+        "platform_timing": {
+          "type": "object",
+          "properties": {
+            "chat": {
+              "type": "object",
+              "properties": {
+                "min_sec": { "type": "number", "minimum": 0 },
+                "max_sec": { "type": "number", "minimum": 0 }
+              }
+            },
+            "crowdsourcing_message": {
+              "type": "object",
+              "properties": {
+                "min_sec": { "type": "number", "minimum": 0 },
+                "max_sec": { "type": "number", "minimum": 0 }
+              }
+            },
+            "email": {
+              "type": "object",
+              "properties": {
+                "min_hour": { "type": "number", "minimum": 0 },
+                "max_hour": { "type": "number", "minimum": 0 }
+              }
+            },
+            "active_hours": {
+              "type": "string",
+              "pattern": "^\\d{2}:\\d{2}-\\d{2}:\\d{2}$",
+              "default": "08:00-22:00"
+            },
+            "night_queue": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      }
+    },
+    "style": {
+      "type": "object",
+      "description": "文体揺らぎの設定",
+      "properties": {
+        "uncertainty_rate": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "default": 0.15,
+          "description": "不確実表現の挿入確率"
+        },
+        "style_patterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "templates"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["confirmation", "empathy", "deferral", "transition", "uncertain"]
+              },
+              "templates": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "weight": {
+                "type": "number",
+                "minimum": 0,
+                "default": 1.0
+              }
+            }
+          }
+        }
+      }
+    },
+    "emotion": {
+      "type": "object",
+      "description": "感情状態機械の設定",
+      "properties": {
+        "initial_state": {
+          "type": "string",
+          "enum": ["formal", "warming", "tense", "relieved", "trusted"],
+          "default": "formal"
+        },
+        "transitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "trigger"],
+            "properties": {
+              "from": { "type": "string" },
+              "to": { "type": "string" },
+              "trigger": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "escalation": {
+      "type": "object",
+      "description": "エスカレーション検知の設定",
+      "properties": {
+        "max_chat_turns": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 3
+        },
+        "escalation_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["reason", "keywords"],
+            "properties": {
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "negotiation", "call_request", "extended_chat",
+                  "complaint", "meeting_request", "identity_check", "custom"
+                ]
+              },
+              "keywords": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "threshold": {
+                "type": "integer",
+                "minimum": 1,
+                "default": 1
+              },
+              "priority": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5,
+                "default": 3
+              },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
