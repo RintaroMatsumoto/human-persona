@@ -3,7 +3,7 @@ title: "AIを人間と区別できなくした話：LLMジャッジで測るチ�
 emoji: "🤖"
 type: "tech"
 topics: ["ai", "llm", "python", "chatbot", "oss"]
-published: false
+published: true
 ---
 
 ## AIが「人間らしい」とはどういうことか
