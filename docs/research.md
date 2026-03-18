@@ -117,6 +117,41 @@ Edward T. Hall の "Beyond Culture" (1976) が提唱した分類:
 
 ---
 
+## 6. 本プロジェクトのベンチマーク結果
+
+### 6.1 評価手法
+
+LLM ジャッジ (Claude Sonnet) による自動評価:
+- 10 シナリオ（日本語 5, 英語 5）× 5 回実行
+- 3 指標: Human Likeness (1-10), Style Variation Rate (0-1), Timing Naturalness (1-10)
+- `--verbose` モードでジャッジの理由・改善提案も取得可能
+
+### 6.2 ベンチマーク推移
+
+| バージョン | Human Likeness | Style Variation | Timing Naturalness | 主な改善 |
+|---|---|---|---|---|
+| v1 (パラメータのみ) | 4.1 | 0.64 | 4.1 | ベースライン |
+| v2 (テキスト生成) | 6.1 | 0.56 | 3.5 | Anthropic API 統合 |
+| v3 (フィラー注入) | 7.2 | 0.50 | 4.5 | フィラー・構造バリエーション |
+| v4 (verbose診断) | 6.8 | 0.45 | 4.5 | ジャッジ診断による改善 |
+| v5 (human_likeness_rules) | **7.7** | **0.36** | **5.5** | 禁止フレーズ・挨拶多様化 |
+
+### 6.3 主要な知見
+
+1. **フィラー語の効果**: 「えーと」「Hmm,」等の挿入で HL +18% 改善
+2. **構造バリエーション**: 挨拶→承認→質問の固定パターン破壊で SV -30%
+3. **敬語レベルの動的制御**: 感情状態に連動させることで自然さ向上
+4. **トーンミラーリング**: ユーザーのカジュアル度に合わせることで EN の HL 改善
+5. **禁止フレーズ**: "Thanks for reaching out" 等の AI 的定型句の排除が効果的
+
+### 6.4 DPO 参照データ
+
+HumanLLMs/Human-Like-DPO-Dataset (Hugging Face) の 100 サンプルを
+`tests/human_samples/` に取得済み。人間的な応答（chosen）と AI 的な応答（rejected）の
+対比データとして、今後の評価基準の精緻化に活用予定。
+
+---
+
 ## 参考文献
 
 1. Jones, C. R., & Bergen, B. K. (2024). "A Turing test of whether AI chatbots
