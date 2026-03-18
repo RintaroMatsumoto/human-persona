@@ -3,7 +3,7 @@
   "title": "HumanPersona Configuration",
   "description": "派生クラス用の設定スキーマ。言語・文化・タイミングを外部定義する。",
   "type": "object",
-  "required": ["name", "language", "culture"],
+  "required": ["name", "language", "culture", "timing", "style", "escalation"],
   "properties": {
     "name": {
       "type": "string",
@@ -18,11 +18,16 @@
       "type": "object",
       "description": "文化的パラメータ",
       "properties": {
+        "culture_context": {
+          "type": "string",
+          "enum": ["high", "low"],
+          "description": "ハイコンテキスト文化 (high) またはローコンテキスト文化 (low)"
+        },
         "context_level": {
           "type": "number",
           "minimum": 0.0,
           "maximum": 1.0,
-          "description": "コンテキストレベル (0.0=ローコンテキスト, 1.0=ハイコンテキスト)"
+          "description": "コンテキストレベルの数値表現 (0.0=ローコンテキスト, 1.0=ハイコンテキスト)"
         },
         "formality_default": {
           "type": "number",
@@ -43,7 +48,7 @@
           "description": "沈黙（返信遅延）の許容度"
         }
       },
-      "required": ["context_level"]
+      "required": ["culture_context", "context_level"]
     },
     "platform": {
       "type": "string",
