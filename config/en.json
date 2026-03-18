@@ -106,6 +106,52 @@
       }
     ]
   },
+  "human_likeness_rules": {
+    "banned_phrases": [
+      "Thanks for reaching out",
+      "Thanks for checking in",
+      "Thanks for asking",
+      "moving along well",
+      "making steady progress",
+      "I appreciate you checking in"
+    ],
+    "greeting_openers": [
+      "Hi!",
+      "Hello!",
+      "Hey there!",
+      "Hey!",
+      "Oh cool!",
+      "Awesome!",
+      "",
+      ""
+    ],
+    "progress_report_alternatives": [
+      "Things are coming together",
+      "We're making solid headway",
+      "Almost there",
+      "Good progress on my end",
+      "On track so far",
+      "Wrapping up the main part now",
+      "Getting close to the finish line",
+      "Cruising through it"
+    ],
+    "initial_contact_angles": [
+      "Ask about the project type and scope",
+      "Express genuine interest and ask about their timeline",
+      "Share a brief relevant experience, then ask for details",
+      "Ask about their budget or expectations first",
+      "Simply confirm availability and ask them to elaborate",
+      "Ask what inspired them to reach out specifically to you"
+    ],
+    "positive_response_alternatives": [
+      "That means a lot, thank you",
+      "Glad it worked out!",
+      "Appreciate the kind words",
+      "Happy to hear that!",
+      "Great to know you're pleased",
+      "Awesome, glad you like it"
+    ]
+  },
   "escalation": {
     "max_chat_turns": 5,
     "escalation_rules": [

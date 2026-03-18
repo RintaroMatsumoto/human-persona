@@ -103,6 +103,9 @@ class HumanPersonaBase:
         filler = self.style.get_filler(lang)
         structure = self.style.get_structure_pattern(lang)
 
+        # human_likeness_rules をconfigから読み込み
+        hl_rules = self._config_raw.get("human_likeness_rules", {})
+
         # 言語別の基本指示
         if lang == "ja":
             base = (
@@ -320,6 +323,70 @@ class HumanPersonaBase:
             parts.append(uncertainty_inst)
         if template_inst:
             parts.append(template_inst)
+
+        # --- human_likeness_rules: 禁止フレーズ ---
+        banned = hl_rules.get("banned_phrases", [])
+        if banned:
+            import random as _rnd
+            phrases_str = ", ".join(f'"{p}"' for p in banned)
+            if lang == "ja":
+                parts.append(f"以下のフレーズは絶対に使わないでください: {phrases_str}")
+            elif lang == "es":
+                parts.append(f"Nunca uses estas frases: {phrases_str}")
+            else:
+                parts.append(f"NEVER use these phrases: {phrases_str}")
+
+        # --- human_likeness_rules: 挨拶バリエーション ---
+        greeting_openers = hl_rules.get("greeting_openers", [])
+        if greeting_openers and exchange_count == 0:
+            import random as _rnd
+            opener = _rnd.choice(greeting_openers)
+            if opener:
+                if lang == "ja":
+                    parts.append(f"初回挨拶として「{opener}」を使ってください（毎回同じ挨拶の繰り返し禁止）。")
+                else:
+                    parts.append(f'For this first message, open with "{opener}" (never repeat the same greeting).')
+            else:
+                if lang == "ja":
+                    parts.append("挨拶なしでいきなり本題から入ってください。")
+                else:
+                    parts.append("Skip any greeting and jump straight into substance.")
+
+        # --- human_likeness_rules: 初回接触の切り口バリエーション ---
+        contact_angles = hl_rules.get("initial_contact_angles", [])
+        if contact_angles and exchange_count == 0:
+            import random as _rnd
+            angle = _rnd.choice(contact_angles)
+            if lang == "ja":
+                parts.append(f"初回メッセージの切り口: {angle}（毎回異なる観点で返信すること）。")
+            else:
+                parts.append(f"Angle for this first reply: {angle}. Never use the same approach twice.")
+
+        # --- human_likeness_rules: ポジティブ応答バリエーション ---
+        positive_alts = hl_rules.get("positive_response_alternatives", [])
+        if positive_alts:
+            import random as _rnd
+            alt = _rnd.choice(positive_alts)
+            if lang == "ja":
+                parts.append(
+                    f"ポジティブなフィードバックへの返信では、毎回異なる表現を使ってください。"
+                    f"今回の参考表現: 「{alt}」（そのままコピー禁止、自分の言葉で言い換えること）。"
+                )
+            else:
+                parts.append(
+                    f"When responding to positive feedback, always use different expressions. "
+                    f'Reference for this reply: "{alt}" (rephrase in your own words, do not copy).'
+                )
+
+        # --- human_likeness_rules: 進捗報告バリエーション (EN) ---
+        progress_alts = hl_rules.get("progress_report_alternatives", [])
+        if progress_alts:
+            import random as _rnd
+            alt = _rnd.choice(progress_alts)
+            parts.append(
+                f"When reporting progress, never use generic phrases. "
+                f'Reference for this reply: "{alt}" (rephrase naturally, do not copy verbatim).'
+            )
 
         # 短文制約
         if lang == "ja":
