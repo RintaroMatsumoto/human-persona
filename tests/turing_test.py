@@ -58,11 +58,17 @@ class JudgeScore:
         human_likeness_score: 人間らしさスコア (1-10)
         style_variation_rate: 文体均質性 (0.0-1.0, 高いほど均質=悪い)
         timing_naturalness: タイミング自然性スコア (1-10)
+        reason_human_likeness: スコアの理由
+        reason_style_variation: 均質性判定の理由
+        improvement_suggestion: 改善提案
     """
 
     human_likeness_score: float
     style_variation_rate: float
     timing_naturalness: float
+    reason_human_likeness: str = ""
+    reason_style_variation: str = ""
+    improvement_suggestion: str = ""
 
 
 @dataclass
@@ -174,7 +180,7 @@ SCENARIOS: list[TestScenario] = [
 # LLM Judge
 # ---------------------------------------------------------------------------
 
-JUDGE_SYSTEM_PROMPT = """\
+JUDGE_SYSTEM_PROMPT_BRIEF = """\
 You are an expert evaluator assessing whether AI-generated responses appear \
 human-like. You will receive multiple runs of generated reply text, timing, \
 style, and emotion state for the same user message on a crowdsourcing platform.
@@ -196,6 +202,39 @@ Metrics:
 
 Return format (JSON only):
 {"human_likeness_score": N, "style_variation_rate": N, "timing_naturalness": N}\
+"""
+
+JUDGE_SYSTEM_PROMPT_VERBOSE = """\
+You are an expert evaluator assessing whether AI-generated responses appear \
+human-like. You will receive multiple runs of generated reply text, timing, \
+style, and emotion state for the same user message on a crowdsourcing platform.
+
+Evaluate the following 3 metrics AND provide reasons. Return ONLY a JSON object \
+with no markdown formatting, no code fences, no explanation.
+
+Metrics:
+1. "human_likeness_score" (1-10): Does the generated text read like a real \
+   human wrote it? Consider: natural phrasing, appropriate tone for the context, \
+   absence of AI-like patterns (lists, bullet points, excessive politeness), \
+   realistic brevity, and cultural appropriateness for the language.
+2. "style_variation_rate" (0.0-1.0): How homogeneous are the generated texts \
+   across runs? 0.0 = maximally varied wording (good), 1.0 = nearly identical \
+   every time (bad, AI-like). Compare the actual text content, not just metadata.
+3. "timing_naturalness" (1-10): How natural is the reply timing? \
+   Consider: Does it avoid machine-like precision? Is there realistic variance? \
+   Does it fit the platform context (chat vs crowdsourcing message)?
+
+Also provide:
+4. "reason_human_likeness": One sentence explaining why you gave that score.
+5. "reason_style_variation": One sentence on what made outputs look similar or varied.
+6. "improvement_suggestion": One concrete, actionable suggestion to make the \
+   output more human-like (e.g., specific phrasing issues, missing filler words, \
+   unnatural structure).
+
+Return format (JSON only):
+{"human_likeness_score": N, "style_variation_rate": N, "timing_naturalness": N, \
+"reason_human_likeness": "...", "reason_style_variation": "...", \
+"improvement_suggestion": "..."}\
 """
 
 
@@ -230,9 +269,10 @@ class LLMJudge:
     Attributes:
         client: Anthropic クライアント
         model: 使用モデル ID
+        verbose: 理由・改善提案も返すか
     """
 
-    def __init__(self, model: str = "claude-sonnet-4-20250514") -> None:
+    def __init__(self, model: str = "claude-sonnet-4-20250514", verbose: bool = False) -> None:
         api_key = os.environ.get("ANTHROPIC_API_KEY")
         if not api_key:
             raise EnvironmentError(
@@ -241,6 +281,7 @@ class LLMJudge:
             )
         self.client = anthropic.Anthropic(api_key=api_key)
         self.model = model
+        self.verbose = verbose
 
     def evaluate(self, scenario: TestScenario, responses: list[PersonaResponse]) -> JudgeScore:
         """シナリオと応答群を評価してスコアを返す.
@@ -252,11 +293,12 @@ class LLMJudge:
         Returns:
             JudgeScore
         """
+        system_prompt = JUDGE_SYSTEM_PROMPT_VERBOSE if self.verbose else JUDGE_SYSTEM_PROMPT_BRIEF
         user_prompt = _build_judge_prompt(scenario, responses)
         message = self.client.messages.create(
             model=self.model,
-            max_tokens=256,
-            system=JUDGE_SYSTEM_PROMPT,
+            max_tokens=512 if self.verbose else 256,
+            system=system_prompt,
             messages=[{"role": "user", "content": user_prompt}],
         )
         raw = message.content[0].text.strip()
@@ -265,6 +307,9 @@ class LLMJudge:
             human_likeness_score=float(data["human_likeness_score"]),
             style_variation_rate=float(data["style_variation_rate"]),
             timing_naturalness=float(data["timing_naturalness"]),
+            reason_human_likeness=data.get("reason_human_likeness", ""),
+            reason_style_variation=data.get("reason_style_variation", ""),
+            improvement_suggestion=data.get("improvement_suggestion", ""),
         )
 
 
@@ -336,10 +381,12 @@ class TuringTestRunner:
         config_dir: str | Path | None = None,
         runs_per_scenario: int = 5,
         use_judge: bool = True,
+        verbose: bool = False,
     ) -> None:
         self.config_dir = Path(config_dir) if config_dir else PROJECT_ROOT / "config"
         self.runs_per_scenario = runs_per_scenario
-        self.judge = LLMJudge() if use_judge else None
+        self.verbose = verbose
+        self.judge = LLMJudge(verbose=verbose) if use_judge else None
         self.results: list[ScenarioResult] = []
         self._timing_analyzer = TimingDistributionAnalyzer()
 
@@ -517,12 +564,19 @@ class TuringTestRunner:
                 "styles": [resp.style_used.value for resp in r.responses],
                 "emotions": [resp.emotion_state.value for resp in r.responses],
             }
+            if self.verbose:
+                entry["generated_texts"] = [resp.content for resp in r.responses]
             if r.judge_score:
-                entry["judge_score"] = {
+                score_entry: dict[str, Any] = {
                     "human_likeness_score": r.judge_score.human_likeness_score,
                     "style_variation_rate": r.judge_score.style_variation_rate,
                     "timing_naturalness": r.judge_score.timing_naturalness,
                 }
+                if r.judge_score.reason_human_likeness:
+                    score_entry["reason_human_likeness"] = r.judge_score.reason_human_likeness
+                    score_entry["reason_style_variation"] = r.judge_score.reason_style_variation
+                    score_entry["improvement_suggestion"] = r.judge_score.improvement_suggestion
+                entry["judge_score"] = score_entry
             report["per_scenario"].append(entry)
 
         return report
@@ -580,8 +634,8 @@ class TuringTestRunner:
             print(f"\n  [Per-Scenario Details]")
             for entry in per:
                 score_str = ""
-                if "judge_score" in entry:
-                    js = entry["judge_score"]
+                js = entry.get("judge_score")
+                if js:
                     score_str = (f" | HL={js['human_likeness_score']:.0f} "
                                  f"SV={js['style_variation_rate']:.2f} "
                                  f"TN={js['timing_naturalness']:.0f}")
@@ -589,7 +643,19 @@ class TuringTestRunner:
                 print(f"    {entry['scenario_id']} [{entry['language']}/{entry['platform']}] "
                       f"styles={styles_unique}/{len(entry['styles'])} unique{score_str}")
 
-        print()
+                # Verbose: show generated texts and judge reasons
+                if "generated_texts" in entry:
+                    for i, text in enumerate(entry["generated_texts"]):
+                        preview = text[:80].replace("\n", " ")
+                        if len(text) > 80:
+                            preview += "..."
+                        print(f"      run {i+1}: \"{preview}\"")
+                if js and js.get("reason_human_likeness"):
+                    print(f"      [HL reason]     {js['reason_human_likeness']}")
+                    print(f"      [SV reason]     {js['reason_style_variation']}")
+                    print(f"      [suggestion]    {js['improvement_suggestion']}")
+                    print()
+
         print("=" * 60)
 
 
@@ -604,6 +670,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Human Persona Turing Test Benchmark")
     parser.add_argument("--runs", type=int, default=5, help="Runs per scenario (default: 5)")
     parser.add_argument("--no-judge", action="store_true", help="Skip LLM judge (offline mode)")
+    parser.add_argument("--verbose", action="store_true", help="Show generated texts and judge reasons")
     parser.add_argument("--output", type=str, default=None, help="JSON output file path")
     parser.add_argument("--config-dir", type=str, default=None, help="Config directory path")
     args = parser.parse_args()
@@ -612,6 +679,7 @@ def main() -> None:
         config_dir=args.config_dir,
         runs_per_scenario=args.runs,
         use_judge=not args.no_judge,
+        verbose=args.verbose,
     )
     runner.run_all()
     report = runner.generate_report()
