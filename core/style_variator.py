@@ -56,6 +56,57 @@ class StyleVariator:
     history: list[StyleType] = field(default_factory=list)
     max_history: int = 5
     uncertainty_rate: float = 0.15
+    _last_filler: str = field(default="", repr=False)
+    _last_structure: str = field(default="", repr=False)
+
+    # Language-specific filler words (empty string = no filler for natural variation)
+    FILLERS: dict[str, list[str]] = field(default_factory=lambda: {
+        "ja": ["えーと、", "そうですね、", "うーん、", "あ、", "ちょっと待って、", "んー、", ""],
+        "en": ["Hmm, ", "Yeah, ", "So, ", "Oh, ", "Actually, ", "Well, ", ""],
+        "es": ["Bueno, ", "A ver, ", "Pues, ", "Oye, ", "Mira, ", ""],
+    }, repr=False)
+
+    # Message structure patterns to break greeting→acknowledgment→question monotony
+    STRUCTURES: dict[str, list[str]] = field(default_factory=lambda: {
+        "ja": [
+            "acknowledgment_only",       # 承認のみ（質問しない）
+            "question_first",            # 質問から入る
+            "empathy_then_question",     # 共感→質問
+            "filler_then_substance",     # フィラー→本題
+            "conclusion_then_detail",    # 結論→補足
+            "reaction_then_topic",       # リアクション→話題展開
+        ],
+        "en": [
+            "acknowledgment_only",
+            "question_first",
+            "empathy_then_question",
+            "filler_then_substance",
+            "conclusion_then_detail",
+            "reaction_then_topic",
+        ],
+        "es": [
+            "acknowledgment_only",
+            "question_first",
+            "empathy_then_question",
+            "filler_then_substance",
+            "conclusion_then_detail",
+            "reaction_then_topic",
+        ],
+    }, repr=False)
+
+    def get_filler(self, language: str) -> str:
+        """言語に応じたフィラー語をランダムに返す."""
+        fillers = self.FILLERS.get(language, self.FILLERS["en"])
+        filler = random.choice(fillers)
+        self._last_filler = filler
+        return filler
+
+    def get_structure_pattern(self, language: str) -> str:
+        """メッセージ構造パターンをランダムに選択する."""
+        structures = self.STRUCTURES.get(language, self.STRUCTURES["en"])
+        structure = random.choice(structures)
+        self._last_structure = structure
+        return structure
 
     def select_style(self, context: dict[str, Any] | None = None) -> StyleType:
         """文脈を考慮して文体パターンを選択する.

@@ -92,10 +92,16 @@ class HumanPersonaBase:
         lang = self._config_raw.get("language", "en")
         culture = self._config_raw.get("culture", {})
         culture_ctx = culture.get("culture_context", "low")
+        emotion_state = self.emotion.current_state
+        exchange_count = self.emotion.exchange_count
 
         # 文体テンプレートを取得
         template = self.style.get_template(style) or ""
         style_label = style.value
+
+        # フィラーと構造パターンを取得
+        filler = self.style.get_filler(lang)
+        structure = self.style.get_structure_pattern(lang)
 
         # 言語別の基本指示
         if lang == "ja":
@@ -116,47 +122,109 @@ class HumanPersonaBase:
                 "Never hint that you are an AI."
             )
 
-        # トーン指示
+        # --- 敬語レベルの動的制御 ---
         formality = tone.get("formality", 0.5)
         warmth = tone.get("warmth", 0.5)
         caution = tone.get("caution", 0.5)
 
-        tone_desc = []
-        if formality > 0.7:
-            tone_desc.append("formal and polite" if lang == "en" else
-                             "丁寧でフォーマル" if lang == "ja" else "formal y cortés")
-        elif formality < 0.4:
-            tone_desc.append("casual and relaxed" if lang == "en" else
-                             "カジュアルでリラックス" if lang == "ja" else "casual y relajado")
-        if warmth > 0.6:
-            tone_desc.append("warm and friendly" if lang == "en" else
-                             "温かく親しみやすい" if lang == "ja" else "cálido y amigable")
-        if caution > 0.7:
-            tone_desc.append("careful and measured" if lang == "en" else
-                             "慎重で丁寧" if lang == "ja" else "cuidadoso y mesurado")
-
-        # 文化コンテキスト指示
-        if culture_ctx == "high":
-            culture_inst = (
-                "Use indirect, context-aware communication. "
-                "Read between the lines and respond considerately."
-                if lang == "en" else
-                "間接的で文脈を重視したコミュニケーションをしてください。"
-                "行間を読み、配慮ある返信を心がけてください。"
-                if lang == "ja" else
-                "Usa comunicación indirecta y contextual. "
-                "Lee entre líneas y responde con consideración."
-            )
+        if lang == "ja":
+            if emotion_state == EmotionState.FORMAL:
+                keigo_inst = (
+                    "丁寧体（です・ます調）で返信してください。"
+                    "ただし過度な敬語は不自然なので避けること。"
+                )
+                if exchange_count == 0:
+                    keigo_inst += "初回なので「ご連絡ありがとうございます」で始めてもOKですが、必須ではありません。"
+                else:
+                    keigo_inst += "「ご連絡ありがとうございます」は初回以外では絶対に使わないでください。"
+            elif emotion_state in (EmotionState.WARMING, EmotionState.RELIEVED):
+                keigo_inst = (
+                    "やや砕けた丁寧体で返信してください。"
+                    "「〜ですね」「〜かなと」「〜ですかね？」のような柔らかい表現を使ってください。"
+                    "「ご連絡ありがとうございます」は使わないでください。"
+                )
+            elif emotion_state == EmotionState.TRUSTED:
+                keigo_inst = (
+                    "カジュアルな丁寧体で返信してください。"
+                    "「〜ですね」「了解です」「いいですね！」のような軽い表現を積極的に使ってください。"
+                )
+            else:  # TENSE
+                keigo_inst = (
+                    "丁寧だが硬すぎない表現で返信してください。"
+                    "慎重さを見せつつも、過度にかしこまらないこと。"
+                )
+        elif lang == "es":
+            if emotion_state == EmotionState.FORMAL:
+                keigo_inst = "Usa 'usted' y tono profesional. No seas excesivamente formal."
+            elif emotion_state in (EmotionState.WARMING, EmotionState.RELIEVED, EmotionState.TRUSTED):
+                keigo_inst = "Usa 'tú' y tono cálido pero profesional."
+            else:
+                keigo_inst = "Mantén un tono profesional pero cercano."
         else:
-            culture_inst = (
-                "Be direct and clear. Get to the point quickly."
-                if lang == "en" else
-                "直接的で明確に。要点をすぐに伝えてください。"
-                if lang == "ja" else
-                "Sé directo y claro. Ve al grano rápidamente."
+            keigo_inst = ""
+
+        # --- トーンミラーリング (EN/ES) ---
+        mirror_inst = ""
+        if lang == "en":
+            mirror_inst = (
+                "IMPORTANT: Match the formality level of the user's message. "
+                "If they use casual language ('Hey', 'what's up'), respond casually. "
+                "If they're formal, be formal. "
+                "Never open with 'Thanks for reaching out' unless it's the very first exchange. "
+                "Never open with 'Thanks for checking in' or 'Thanks for asking'."
+            )
+        elif lang == "es":
+            mirror_inst = (
+                "IMPORTANTE: Adapta tu nivel de formalidad al del usuario. "
+                "Si usan lenguaje casual, responde casualmente."
             )
 
-        # 文体パターン指示
+        # --- 構造バリエーション強制 ---
+        structure_instructions = {
+            "ja": {
+                "acknowledgment_only": "承認だけで返信してください。質問はしないこと。",
+                "question_first": "質問や確認から入って、その後に自分の考えを述べてください。",
+                "empathy_then_question": "まず相手の状況に共感してから、必要な質問をしてください。",
+                "filler_then_substance": "考えている感じを出してから本題に入ってください。",
+                "conclusion_then_detail": "結論を先に述べてから、補足説明を加えてください。",
+                "reaction_then_topic": "短いリアクションから入って、話題を展開してください。",
+            },
+            "en": {
+                "acknowledgment_only": "Just acknowledge. Don't ask any questions.",
+                "question_first": "Lead with a question or clarification, then share your thoughts.",
+                "empathy_then_question": "Show empathy for their situation, then ask what you need.",
+                "filler_then_substance": "Start with a thinking-out-loud moment, then get to the point.",
+                "conclusion_then_detail": "State your conclusion first, then add supporting details.",
+                "reaction_then_topic": "Start with a brief reaction, then move the conversation forward.",
+            },
+            "es": {
+                "acknowledgment_only": "Solo confirma. No hagas preguntas.",
+                "question_first": "Comienza con una pregunta, luego comparte tu perspectiva.",
+                "empathy_then_question": "Muestra empatía, luego haz tus preguntas.",
+                "filler_then_substance": "Empieza pensando en voz alta, luego ve al punto.",
+                "conclusion_then_detail": "Da tu conclusión primero, luego los detalles.",
+                "reaction_then_topic": "Empieza con una reacción breve, luego avanza la conversación.",
+            },
+        }
+        lang_structures = structure_instructions.get(lang, structure_instructions["en"])
+        structure_inst = lang_structures.get(structure, "")
+
+        anti_pattern_inst = {
+            "ja": (
+                "重要: 毎回「挨拶→承認→質問」の順番にしないでください。"
+                "返信の構造を毎回変えてください。"
+            ),
+            "en": (
+                "IMPORTANT: Do NOT always follow greeting→acknowledgment→question structure. "
+                "Vary your message structure. Sometimes skip the greeting entirely."
+            ),
+            "es": (
+                "IMPORTANTE: NO sigas siempre la estructura saludo→reconocimiento→pregunta. "
+                "Varía la estructura del mensaje."
+            ),
+        }
+
+        # --- 文体パターン指示 ---
         style_instructions = {
             "ja": {
                 "confirmation": "相手の意図を確認する形で返信してください。",
@@ -183,17 +251,27 @@ class HumanPersonaBase:
         lang_styles = style_instructions.get(lang, style_instructions["en"])
         style_inst = lang_styles.get(style_label, "")
 
-        # 不確実表現
+        # --- フィラー注入指示 ---
+        filler_inst = ""
+        if filler:
+            if lang == "ja":
+                filler_inst = f"返信の冒頭に「{filler.strip()}」を自然に入れてください（義務ではなく、文脈に合えば）。"
+            elif lang == "es":
+                filler_inst = f'Si es natural, empieza con "{filler.strip()}" al inicio de tu respuesta.'
+            else:
+                filler_inst = f'If it feels natural, start your reply with "{filler.strip()}".'
+
+        # --- 不確実表現 ---
         uncertainty_inst = ""
         if insert_uncertainty:
             if lang == "ja":
                 uncertainty_inst = "返信に「たぶん」「おそらく」「…かもしれません」のような不確実表現を自然に1つ入れてください。"
             elif lang == "es":
-                uncertainty_inst = 'Incluye naturalmente una expresión de incertidumbre como "creo que", "me parece", "tal vez".'
+                uncertainty_inst = 'Incluye naturalmente una expresión como "creo que", "me parece", "tal vez".'
             else:
                 uncertainty_inst = 'Naturally include one hedging phrase like "I think", "probably", "not 100% sure".'
 
-        # テンプレート例示
+        # --- テンプレート例示 ---
         template_inst = ""
         if template:
             if lang == "ja":
@@ -203,14 +281,41 @@ class HumanPersonaBase:
             else:
                 template_inst = f'Use this expression pattern as reference (do not copy verbatim): "{template}"'
 
-        parts = [base, culture_inst]
-        if tone_desc:
-            joiner = "、" if lang == "ja" else ", "
-            parts.append(f"Tone: {joiner.join(tone_desc)}." if lang == "en" else
-                         f"トーン: {joiner.join(tone_desc)}。" if lang == "ja" else
-                         f"Tono: {joiner.join(tone_desc)}.")
+        # --- 文化コンテキスト ---
+        if culture_ctx == "high":
+            culture_inst = (
+                "Use indirect, context-aware communication. "
+                "Read between the lines and respond considerately."
+                if lang == "en" else
+                "間接的で文脈を重視したコミュニケーションをしてください。"
+                "行間を読み、配慮ある返信を心がけてください。"
+                if lang == "ja" else
+                "Usa comunicación indirecta y contextual. "
+                "Lee entre líneas y responde con consideración."
+            )
+        else:
+            culture_inst = (
+                "Be direct and clear. Get to the point quickly."
+                if lang == "en" else
+                "直接的で明確に。要点をすぐに伝えてください。"
+                if lang == "ja" else
+                "Sé directo y claro. Ve al grano rápidamente."
+            )
+
+        # --- 組み立て ---
+        parts = [base]
+        if keigo_inst:
+            parts.append(keigo_inst)
+        if mirror_inst:
+            parts.append(mirror_inst)
+        parts.append(culture_inst)
+        parts.append(anti_pattern_inst.get(lang, anti_pattern_inst["en"]))
+        if structure_inst:
+            parts.append(f"Structure: {structure_inst}" if lang == "en" else structure_inst)
         if style_inst:
             parts.append(style_inst)
+        if filler_inst:
+            parts.append(filler_inst)
         if uncertainty_inst:
             parts.append(uncertainty_inst)
         if template_inst:
