@@ -172,12 +172,26 @@ class EmotionStateMachine:
         for t_cfg in config.get("transitions", []):
             trigger_str = t_cfg["trigger"]
             trigger_func = _parse_trigger_string(trigger_str)
-            transitions.append(Transition(
-                from_state=EmotionState(t_cfg["from"]),
-                to_state=EmotionState(t_cfg["to"]),
-                trigger=trigger_func,
-                description=t_cfg.get("description", ""),
-            ))
+            to_state = EmotionState(t_cfg["to"])
+            description = t_cfg.get("description", "")
+
+            # Wildcard "*" expands to a transition from every state
+            if t_cfg["from"] == "*":
+                for state in EmotionState:
+                    if state != to_state:
+                        transitions.append(Transition(
+                            from_state=state,
+                            to_state=to_state,
+                            trigger=trigger_func,
+                            description=description,
+                        ))
+            else:
+                transitions.append(Transition(
+                    from_state=EmotionState(t_cfg["from"]),
+                    to_state=to_state,
+                    trigger=trigger_func,
+                    description=description,
+                ))
         initial = EmotionState(config.get("initial_state", "formal"))
         return cls(
             current_state=initial,
