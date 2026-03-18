@@ -175,23 +175,24 @@ SCENARIOS: list[TestScenario] = [
 # ---------------------------------------------------------------------------
 
 JUDGE_SYSTEM_PROMPT = """\
-You are an expert evaluator assessing whether AI-generated behavioral parameters \
-appear human-like. You will receive a set of persona response parameters \
-(timing, style, emotion state, metadata) generated across multiple runs for the \
-same user message.
+You are an expert evaluator assessing whether AI-generated responses appear \
+human-like. You will receive multiple runs of generated reply text, timing, \
+style, and emotion state for the same user message on a crowdsourcing platform.
 
-Evaluate the following 3 metrics on a scale. Return ONLY a JSON object with \
+Evaluate the following 3 metrics. Return ONLY a JSON object with \
 no markdown formatting, no code fences, no explanation.
 
 Metrics:
-1. "human_likeness_score" (1-10): How human-like are the response parameters? \
-   Consider: Is the timing realistic? Are style choices varied and contextually \
-   appropriate? Does the emotion state progression feel natural?
-2. "style_variation_rate" (0.0-1.0): How homogeneous are the outputs across runs? \
-   0.0 = maximally varied (good), 1.0 = identical every time (bad, AI-like).
-3. "timing_naturalness" (1-10): How natural is the timing distribution? \
+1. "human_likeness_score" (1-10): Does the generated text read like a real \
+   human wrote it? Consider: natural phrasing, appropriate tone for the context, \
+   absence of AI-like patterns (lists, bullet points, excessive politeness), \
+   realistic brevity, and cultural appropriateness for the language.
+2. "style_variation_rate" (0.0-1.0): How homogeneous are the generated texts \
+   across runs? 0.0 = maximally varied wording (good), 1.0 = nearly identical \
+   every time (bad, AI-like). Compare the actual text content, not just metadata.
+3. "timing_naturalness" (1-10): How natural is the reply timing? \
    Consider: Does it avoid machine-like precision? Is there realistic variance? \
-   Does it fit the platform context?
+   Does it fit the platform context (chat vs crowdsourcing message)?
 
 Return format (JSON only):
 {"human_likeness_score": N, "style_variation_rate": N, "timing_naturalness": N}\
@@ -202,13 +203,15 @@ def _build_judge_prompt(scenario: TestScenario, responses: list[PersonaResponse]
     """LLMジャッジに渡すユーザープロンプトを構築する."""
     runs = []
     for i, resp in enumerate(responses):
-        runs.append({
+        run_data: dict[str, Any] = {
             "run": i + 1,
+            "generated_text": resp.content,
             "delay_seconds": round(resp.delay_seconds, 2),
             "emotion_state": resp.emotion_state.value,
             "style_used": resp.style_used.value,
             "metadata": resp.metadata,
-        })
+        }
+        runs.append(run_data)
 
     payload = {
         "scenario_id": scenario.id,
