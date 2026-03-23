@@ -1,168 +1,137 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-
 # human-persona
 
-> A language-agnostic framework for human-like AI communication.
+**A language-agnostic framework for human-like AI communication.**
 
-**HumanPersonaBase** is a base class that gives AI agents human-like communication patterns — independent of language, culture, or platform.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
 
-## Why
+---
 
-GPT-4.5 was judged human **73% of the time** when given a persona prompt (Jones & Bergen, 2024).
-The bottleneck is no longer language understanding — it's **paralinguistic features, emotional expression, and persona design**.
+## What is this?
 
-This project provides the engineering infrastructure to close that gap.
+`human-persona` provides a **base class** for making AI agents communicate
+like humans. It handles the paralinguistic features that betray AI:
+instant replies, uniform phrasing, static tone, and perfect precision.
 
-## Architecture
+The framework is language-agnostic. You bring your language, culture, and
+domain — the base class provides the universal structure of human-like
+communication.
 
 ```
-HumanPersonaBase          ← this repo
-├── timing_controller     reply delay by platform (Gaussian, not uniform)
-├── style_variator        expression variation + filler injection
-├── emotion_state_machine dynamic emotional arc (FORMAL → WARMING → TRUSTED)
-├── context_referencer     prior context awareness
-└── escalation_detector   human handoff triggers
-
-JapaneseBusinessPersona       ← derived (config/ja.json)
-EnglishCasualDirectPersona    ← derived (config/en.json)
-SpanishWarmProfessionalPersona ← derived (config/es.json)
+HumanPersonaBase            ← This project (universal)
+├── JapaneseFreelancer      ← Your derived class (language + domain)
+├── EnglishSupportAgent     ← Another derived class
+└── SpanishSalesRep         ← etc.
 ```
 
-Each component is an independent dataclass with its own `from_config()` factory. The base class composes them and provides a single `process_message()` entry point that generates human-like text via the Anthropic API.
+## Why?
 
-## Benchmark
+Research shows that when AI is given proper persona instructions, it's
+identified as human **73% of the time** — more than actual humans (63%).
+The bottleneck isn't AI capability; it's **persona design**.
 
-LLM-judged evaluation across 10 scenarios (ja/en, 5 each × 5 runs):
-
-| Metric | v1 (skeleton) | v5 (current) | Δ |
-|---|---|---|---|
-| Human Likeness (1-10) | 4.1 | **7.7** | +88% |
-| Style Variation Rate (lower=better) | 0.64 | **0.36** | -44% |
-| Timing Naturalness (1-10) | 4.1 | **5.5** | +34% |
-
-Key improvements: filler word injection (`えーと` / `Hmm`), tone mirroring, message structure randomization, config-driven banned phrases, greeting/progress report variation.
-
-Run the benchmark yourself:
-
-```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-python tests/turing_test.py              # standard
-python tests/turing_test.py --verbose    # with generated text + judge reasoning
-python tests/turing_test.py --no-judge   # offline (timing/style stats only)
-```
+This project formalizes what makes AI communication human-like, based on
+real-world operational data from Japanese crowdsourcing platforms.
 
 ## Quick Start
 
 ```python
-import os
-os.environ["ANTHROPIC_API_KEY"] = "sk-ant-..."
+from core import load_config, Platform
+from personas.freelancer_ja import JapaneseFreelancerPersona
 
-from core.base_persona import HumanPersonaBase
+# Initialize
+persona = JapaneseFreelancerPersona(
+    config_path="config/ja.json",
+    platform=Platform.CROWDSOURCING,
+)
 
-persona = HumanPersonaBase.from_config_file("config/ja.json")
-response = persona.process_message("初めまして、案件を拝見しました。")
+# Process a message
+response = persona.process_message("納期はいつ頃になりますか？")
 
-print(response.content)          # 生成されたテキスト
-print(response.delay_seconds)    # 返信遅延（秒）
-print(response.emotion_state)    # 感情状態
-print(response.style_used)       # 使用した文体パターン
+print(response.content)        # Natural Japanese response
+print(response.delay_seconds)  # Simulated human response time
+print(response.emotion_state)  # Current emotional state
 ```
 
-### Configuration example
+## Core Modules
 
-```json
-{
-  "name": "EnglishCasualDirect",
-  "language": "en",
-  "culture": {
-    "culture_context": "low",
-    "context_level": 0.25,
-    "formality_default": 0.3
-  },
-  "platform": "chat",
-  "style": {
-    "uncertainty_rate": 0.10,
-    "style_patterns": [
-      {"type": "confirmation", "templates": ["Got it, so ___ right?"], "weight": 1.0},
-      {"type": "empathy", "templates": ["I totally get that."], "weight": 0.8},
-      {"type": "uncertain", "templates": ["I think it's ___, but don't quote me."], "weight": 0.6}
-    ]
-  },
-  "human_likeness_rules": {
-    "banned_phrases": ["Thanks for reaching out", "moving along well"],
-    "greeting_openers": ["Hi!", "Hey there!", "Oh cool!", ""],
-    "initial_contact_angles": ["Ask about timeline", "Express interest in details"],
-    "progress_report_alternatives": ["Things are coming together", "On track so far"]
-  }
-}
-```
+| Module | What it does |
+|--------|-------------|
+| `TimingController` | Simulates human response delays per platform |
+| `StyleVariator` | Introduces linguistic variation (filler words, punctuation, rare typos) |
+| `EmotionStateMachine` | Tracks emotional state across conversation lifetime |
+| `ContextReferencer` | Generates natural back-references to earlier topics |
+| `EscalationDetector` | Detects when to hand off to a human operator |
 
-See `config/schema.json` for the full configuration schema.
+## Creating Your Own Persona
+
+1. **Write a config file** — Copy `config/en.json` and customize:
+   - Language and culture settings
+   - Timing ranges for your platform
+   - Style variation patterns in your language
+   - Emotion state parameters
+
+2. **Create a derived class** — See `personas/base_template.md`:
+   - Implement `generate_raw_response()` (your response logic)
+   - Implement `extract_topics()` (for back-referencing)
+   - Optionally override `on_escalation()` and `post_process()`
+
+3. **Test** — Run `python -m pytest tests/ -v`
 
 ## Project Structure
 
 ```
 human-persona/
-├── core/                          # Base class implementation
-│   ├── base_persona.py            # HumanPersonaBase + text generation
-│   ├── timing_controller.py       # Response delay control
-│   ├── style_variator.py          # Stylistic variation + fillers
-│   ├── emotion_state_machine.py   # Emotion state model
-│   ├── context_referencer.py       # Context tracking
-│   └── escalation_detector.py     # Human handoff detection
-├── config/                        # Persona configurations
-│   ├── schema.json                # JSON Schema
-│   ├── ja.json                    # Japanese (high-context)
-│   ├── en.json                    # English (low-context)
-│   └── es.json                    # Spanish (high-context)
-├── personas/                      # Persona documentation
+├── core/                    # Base class + modules
+│   ├── base_persona.py      # HumanPersonaBase (abstract)
+│   ├── timing_controller.py
+│   ├── style_variator.py
+│   ├── emotion_state_machine.py
+│   ├── context_referencer.py
+│   └── escalation_detector.py
+├── config/                  # Persona configurations
+│   ├── schema.json          # JSON Schema definition
+│   ├── ja.json              # Japanese (high-context)
+│   ├── en.json              # English (low-context)
+│   └── es.json              # Spanish (mixed-context)
+├── personas/                # Derived class examples
+│   ├── base_template.md     # How to create your own
+│   ├── freelancer_ja.py     # Japanese freelancer
+│   └── customer_support_en.py
+├── docs/                    # Documentation
+│   ├── research.md          # Literature review
+│   ├── design.md            # Architecture decisions
+│   ├── ethics.md            # Ethics & responsible use
+│   └── paper_draft.md       # Academic paper draft
 ├── tests/
-│   ├── turing_test.py             # LLM-judge benchmark
-│   └── human_samples/             # DPO reference dataset
-├── docs/
-│   ├── research.md                # Literature review
-│   ├── design.md                  # Architecture decisions
-│   └── ethics.md                  # Ethics guidelines
-├── articles/                      # Zenn articles
-├── SKILL.md                       # Agent Skill entry point
-├── CONTRIBUTING.md
-└── README.md
+│   └── test_core.py         # Unit tests (29 tests)
+├── SKILL.md                 # Agent Skill entry point
+└── README.md                # This file
 ```
 
-## Ethics
+## Ethics & Responsible Use
 
-✅ **Legitimate use**: customer support, sales automation, language learning, AI UX research
-❌ **Prohibited**: fraud, impersonation, emotional manipulation, election interference, platform TOS violations
+This project includes mandatory safeguards:
+- **Escalation detection** is required, not optional
+- **Human handoff** for negotiations, complaints, legal matters
+- **No identity claims** — personas use roles, not fake identities
 
 See [docs/ethics.md](docs/ethics.md) for full guidelines.
 
-## Theoretical Foundation
+**Prohibited uses:** fraud, impersonation, emotional exploitation,
+election interference, harassment, platform TOS violations.
 
-- Jones, C. R. & Bergen, B. K. (2024). "A Turing test of whether AI chatbots are behaviorally similar to humans." *PNAS*.
-- Hall, E. T. (1976). *Beyond Culture*. Anchor Books.
-- Nguyen, D. et al. (2016). "Computational Sociolinguistics: A Survey." *Computational Linguistics*.
-- Mitchell, M. (2025). "The Turing Test and our shifting conceptions of intelligence." *Science*.
-- Brown, P. & Levinson, S. C. (1987). *Politeness: Some universals in language usage*. Cambridge University Press.
+## Research
 
-## Roadmap
+This project aims to publish findings on arXiv and contribute to the
+Anthropic Agent Skills ecosystem. See [docs/paper_draft.md](docs/paper_draft.md).
 
-- [x] Base class implementation (5 components)
-- [x] ja/en/es persona configs
-- [x] LLM-judge benchmark (v5: HL=7.7, SV=0.36)
-- [x] Filler injection + tone mirroring + structure variation
-- [x] Config-driven human_likeness_rules
-- [ ] Human evaluation UI ([#5](https://github.com/RintaroMatsumoto/human-persona/issues/5))
-- [ ] arXiv paper
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details on creating derived personas, code style, and ethics review.
+Empirical data is sourced from [FreelanceAutoPilot](https://github.com/RintaroMatsumoto/FreelanceAutoPilot).
 
 ## License
 
-MIT — use freely, contribute back.
+MIT — see [LICENSE](LICENSE).
 
 ## Author
 
-Rintaro Matsumoto ([@RintaroMatsumoto](https://github.com/RintaroMatsumoto))
+**Rintaro Matsumoto** — [@RintaroMatsumoto](https://github.com/RintaroMatsumoto)

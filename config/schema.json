@@ -1,203 +1,415 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "HumanPersona Configuration",
-  "description": "派生クラス用の設定スキーマ。言語・文化・タイミングを外部定義する。",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/RintaroMatsumoto/human-persona/config/schema.json",
+  "title": "HumanPersona Configuration Schema",
+  "description": "Language-agnostic schema for defining human-like AI persona behavior. Derived personas inherit from this structure.",
   "type": "object",
-  "required": ["name", "language", "culture", "timing", "style", "escalation"],
+  "required": ["meta", "timing", "style", "emotion", "escalation"],
   "properties": {
-    "name": {
-      "type": "string",
-      "description": "ペルソナの識別名"
-    },
-    "language": {
-      "type": "string",
-      "description": "ISO 639-1 言語コード (例: ja, en, es)",
-      "pattern": "^[a-z]{2}$"
-    },
-    "culture": {
+    "meta": {
       "type": "object",
-      "description": "文化的パラメータ",
+      "description": "Persona metadata — identity and cultural context.",
+      "required": ["persona_id", "language", "context_culture"],
       "properties": {
-        "culture_context": {
+        "persona_id": {
           "type": "string",
-          "enum": ["high", "low"],
-          "description": "ハイコンテキスト文化 (high) またはローコンテキスト文化 (low)"
+          "description": "Unique identifier for this persona configuration.",
+          "pattern": "^[a-z0-9_-]+$",
+          "examples": ["freelancer_ja", "support_en", "sales_es"]
         },
-        "context_level": {
-          "type": "number",
-          "minimum": 0.0,
-          "maximum": 1.0,
-          "description": "コンテキストレベルの数値表現 (0.0=ローコンテキスト, 1.0=ハイコンテキスト)"
+        "language": {
+          "type": "string",
+          "description": "ISO 639-1 language code.",
+          "pattern": "^[a-z]{2}$",
+          "examples": ["ja", "en", "es"]
+        },
+        "context_culture": {
+          "type": "string",
+          "enum": ["high", "low", "mixed"],
+          "description": "Hall's high/low context culture classification. 'high' = implicit communication (e.g. Japanese), 'low' = explicit communication (e.g. American English), 'mixed' = context-dependent."
         },
         "formality_default": {
-          "type": "number",
-          "minimum": 0.0,
-          "maximum": 1.0,
-          "description": "デフォルトのフォーマリティレベル"
+          "type": "string",
+          "enum": ["formal", "semi_formal", "casual"],
+          "default": "semi_formal",
+          "description": "Default formality level at conversation start."
         },
-        "indirect_expression_rate": {
-          "type": "number",
-          "minimum": 0.0,
-          "maximum": 1.0,
-          "description": "間接的表現の使用率"
+        "display_name": {
+          "type": "string",
+          "description": "Human-readable persona name for logging/debug.",
+          "examples": ["日本語フリーランサー", "English Support Agent"]
         },
-        "silence_tolerance": {
-          "type": "number",
-          "minimum": 0.0,
-          "maximum": 1.0,
-          "description": "沈黙（返信遅延）の許容度"
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "default": "0.1.0"
         }
-      },
-      "required": ["culture_context", "context_level"]
+      }
     },
-    "platform": {
-      "type": "string",
-      "enum": ["chat", "crowdsourcing_message", "email"],
-      "default": "chat",
-      "description": "対象プラットフォーム"
-    },
+
     "timing": {
       "type": "object",
-      "description": "返信速度制御の設定",
+      "description": "Response timing configuration per platform. Humans don't reply instantly.",
+      "required": ["platforms", "active_hours"],
       "properties": {
-        "platform_timing": {
+        "platforms": {
           "type": "object",
-          "properties": {
-            "chat": {
-              "type": "object",
-              "properties": {
-                "min_sec": { "type": "number", "minimum": 0 },
-                "max_sec": { "type": "number", "minimum": 0 }
-              }
-            },
-            "crowdsourcing_message": {
-              "type": "object",
-              "properties": {
-                "min_sec": { "type": "number", "minimum": 0 },
-                "max_sec": { "type": "number", "minimum": 0 }
-              }
-            },
-            "email": {
-              "type": "object",
-              "properties": {
-                "min_hour": { "type": "number", "minimum": 0 },
-                "max_hour": { "type": "number", "minimum": 0 }
-              }
-            },
-            "active_hours": {
-              "type": "string",
-              "pattern": "^\\d{2}:\\d{2}-\\d{2}:\\d{2}$",
-              "default": "08:00-22:00"
-            },
-            "night_queue": {
-              "type": "boolean",
-              "default": true
-            }
-          }
-        }
-      }
-    },
-    "style": {
-      "type": "object",
-      "description": "文体揺らぎの設定",
-      "properties": {
-        "uncertainty_rate": {
-          "type": "number",
-          "minimum": 0.0,
-          "maximum": 1.0,
-          "default": 0.15,
-          "description": "不確実表現の挿入確率"
-        },
-        "style_patterns": {
-          "type": "array",
-          "items": {
+          "description": "Platform-specific timing ranges in seconds.",
+          "additionalProperties": {
             "type": "object",
-            "required": ["type", "templates"],
+            "required": ["min_delay", "max_delay"],
             "properties": {
-              "type": {
-                "type": "string",
-                "enum": ["confirmation", "empathy", "deferral", "transition", "uncertain"]
-              },
-              "templates": {
-                "type": "array",
-                "items": { "type": "string" }
-              },
-              "weight": {
+              "min_delay": {
                 "type": "number",
                 "minimum": 0,
-                "default": 1.0
+                "description": "Minimum response delay in seconds."
+              },
+              "max_delay": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Maximum response delay in seconds."
+              },
+              "typing_indicator": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether to show typing indicator during delay."
               }
             }
+          },
+          "examples": [{
+            "chat": { "min_delay": 30, "max_delay": 180, "typing_indicator": true },
+            "crowdsourcing": { "min_delay": 300, "max_delay": 900 },
+            "email": { "min_delay": 3600, "max_delay": 28800 }
+          }]
+        },
+        "active_hours": {
+          "type": "object",
+          "required": ["start", "end"],
+          "properties": {
+            "start": {
+              "type": "string",
+              "pattern": "^\\d{2}:\\d{2}$",
+              "description": "Active hours start (HH:MM, 24h format)."
+            },
+            "end": {
+              "type": "string",
+              "pattern": "^\\d{2}:\\d{2}$",
+              "description": "Active hours end (HH:MM, 24h format)."
+            },
+            "timezone": {
+              "type": "string",
+              "default": "UTC",
+              "description": "IANA timezone identifier.",
+              "examples": ["Asia/Tokyo", "America/New_York", "Europe/Madrid"]
+            }
           }
+        },
+        "night_queue": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, messages received outside active hours are queued and sent at next active window."
+        },
+        "message_length_factor": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 1.0,
+          "description": "Multiplier for delay based on message length. Longer messages → longer 'reading' time."
         }
       }
     },
+
+    "style": {
+      "type": "object",
+      "description": "Linguistic style variation settings. Uniformity is the #1 tell of AI.",
+      "required": ["variation_patterns"],
+      "properties": {
+        "variation_patterns": {
+          "type": "object",
+          "description": "Named pattern categories with example expressions. Keys are pattern types, values are arrays of template strings.",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 2
+          },
+          "examples": [{
+            "confirmation": ["〇〇ということですね", "〇〇で合っていますか？", "〇〇と理解しました"],
+            "empathy": ["それは大変でしたね", "お気持ちわかります", "なるほど、そうだったんですね"],
+            "hedging": ["たぶん", "おそらく", "〜かもしれません", "〜と思います"],
+            "transition": ["話は変わりますが", "ところで", "別件ですが"]
+          }]
+        },
+        "typo_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.1,
+          "default": 0.005,
+          "description": "Probability of introducing a plausible typo per character. Keep very low."
+        },
+        "punctuation_variance": {
+          "type": "boolean",
+          "default": true,
+          "description": "Vary punctuation style (e.g. sometimes omit periods, use '...' vs '…')."
+        },
+        "sentence_length_variance": {
+          "type": "object",
+          "properties": {
+            "min_ratio": {
+              "type": "number",
+              "default": 0.6,
+              "description": "Minimum sentence length as ratio of average."
+            },
+            "max_ratio": {
+              "type": "number",
+              "default": 1.5,
+              "description": "Maximum sentence length as ratio of average."
+            }
+          }
+        },
+        "filler_words": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Language-specific filler words/phrases to occasionally insert.",
+          "examples": [["えーと", "あの", "そうですね"], ["well", "um", "you know"]]
+        },
+        "emoji_policy": {
+          "type": "string",
+          "enum": ["never", "rare", "moderate", "frequent"],
+          "default": "rare",
+          "description": "Frequency of emoji/emoticon usage."
+        }
+      }
+    },
+
     "emotion": {
       "type": "object",
-      "description": "感情状態機械の設定",
+      "description": "Emotion state machine configuration. Humans' tone shifts over conversation lifetime.",
+      "required": ["initial_state", "states", "transitions"],
       "properties": {
         "initial_state": {
           "type": "string",
-          "enum": ["formal", "warming", "tense", "relieved", "trusted"],
-          "default": "formal"
+          "description": "Starting emotional state for new conversations.",
+          "examples": ["polite_distant"]
+        },
+        "states": {
+          "type": "object",
+          "description": "Named emotional states with behavioral parameters.",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["formality", "warmth", "verbosity"],
+            "properties": {
+              "formality": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "0 = very casual, 1 = very formal."
+              },
+              "warmth": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "0 = cold/professional, 1 = warm/friendly."
+              },
+              "verbosity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "0 = terse, 1 = verbose."
+              },
+              "caution": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "default": 0.5,
+                "description": "0 = bold/direct, 1 = very cautious/hedging."
+              },
+              "response_delay_multiplier": {
+                "type": "number",
+                "minimum": 0.5,
+                "maximum": 3.0,
+                "default": 1.0,
+                "description": "Multiplier applied to base timing. Tense states → slower replies."
+              }
+            }
+          },
+          "examples": [{
+            "polite_distant": { "formality": 0.9, "warmth": 0.3, "verbosity": 0.6, "caution": 0.7 },
+            "warming_up": { "formality": 0.7, "warmth": 0.5, "verbosity": 0.5, "caution": 0.5 },
+            "comfortable": { "formality": 0.5, "warmth": 0.7, "verbosity": 0.4, "caution": 0.3 },
+            "tense": { "formality": 0.8, "warmth": 0.2, "verbosity": 0.7, "caution": 0.9, "response_delay_multiplier": 1.5 },
+            "grateful": { "formality": 0.6, "warmth": 0.9, "verbosity": 0.5, "caution": 0.2 },
+            "efficient": { "formality": 0.4, "warmth": 0.5, "verbosity": 0.2, "caution": 0.2 }
+          }]
         },
         "transitions": {
           "type": "array",
+          "description": "Rules for state transitions based on triggers.",
           "items": {
             "type": "object",
             "required": ["from", "to", "trigger"],
             "properties": {
-              "from": { "type": "string" },
-              "to": { "type": "string" },
-              "trigger": { "type": "string" },
-              "description": { "type": "string" }
+              "from": {
+                "type": "string",
+                "description": "Source state name."
+              },
+              "to": {
+                "type": "string",
+                "description": "Target state name."
+              },
+              "trigger": {
+                "type": "string",
+                "description": "Event or condition that triggers this transition.",
+                "examples": ["turn_count >= 3", "problem_detected", "problem_resolved", "turn_count >= 10"]
+              },
+              "probability": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "default": 1.0,
+                "description": "Probability of transition firing when trigger is met. < 1.0 adds natural unpredictability."
+              }
             }
           }
+        },
+        "decay_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.1,
+          "description": "Rate at which emotion intensity decays toward neutral per turn."
         }
       }
     },
-    "escalation": {
+
+    "context_reference": {
       "type": "object",
-      "description": "エスカレーション検知の設定",
+      "description": "How the persona references earlier parts of the conversation to show 'active listening'.",
       "properties": {
-        "max_chat_turns": {
+        "reference_probability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.4,
+          "description": "Probability of referencing a previous message element per response."
+        },
+        "reference_templates": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Template strings for back-references. {topic} is replaced with extracted topic.",
+          "examples": [
+            ["先ほどの{topic}の件ですが", "おっしゃる通り{topic}ですね", "{topic}とのことで、承知しました"],
+            ["Regarding {topic} you mentioned", "As you noted about {topic}", "Coming back to {topic}"]
+          ]
+        },
+        "max_lookback_turns": {
           "type": "integer",
           "minimum": 1,
-          "default": 3
-        },
-        "escalation_rules": {
+          "maximum": 20,
+          "default": 5,
+          "description": "How many previous turns to consider for back-references."
+        }
+      }
+    },
+
+    "escalation": {
+      "type": "object",
+      "description": "Conditions under which the AI should hand off to a human operator.",
+      "required": ["triggers"],
+      "properties": {
+        "triggers": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["reason", "keywords"],
+            "required": ["type", "action"],
             "properties": {
-              "reason": {
+              "type": {
                 "type": "string",
                 "enum": [
-                  "negotiation", "call_request", "extended_chat",
-                  "complaint", "meeting_request", "identity_check", "custom"
-                ]
-              },
-              "keywords": {
-                "type": "array",
-                "items": { "type": "string" }
+                  "negotiation",
+                  "call_request",
+                  "extended_chitchat",
+                  "complaint",
+                  "meeting_request",
+                  "identity_verification",
+                  "legal_mention",
+                  "custom_keyword"
+                ],
+                "description": "Category of escalation trigger."
               },
               "threshold": {
                 "type": "integer",
-                "minimum": 1,
-                "default": 1
+                "default": 1,
+                "description": "Number of occurrences before triggering (e.g. chitchat_turns >= 3)."
               },
-              "priority": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 5,
-                "default": 3
+              "keywords": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Custom keywords that trigger escalation (for 'custom_keyword' type)."
               },
-              "description": { "type": "string" }
+              "action": {
+                "type": "string",
+                "enum": ["notify_human", "pause_and_notify", "transfer_immediately"],
+                "description": "What to do when triggered."
+              },
+              "message_to_human": {
+                "type": "string",
+                "description": "Template message sent to the human operator on escalation."
+              }
             }
           }
+        },
+        "fallback_message": {
+          "type": "string",
+          "description": "Message sent to the counterpart while waiting for human operator.",
+          "examples": [
+            "少々お時間をいただいてもよろしいでしょうか。確認して折り返します。",
+            "Let me check on that and get back to you shortly."
+          ]
+        }
+      }
+    },
+
+    "ambiguity": {
+      "type": "object",
+      "description": "Intentional imperfection settings. Overly precise answers betray AI.",
+      "properties": {
+        "hedge_probability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.5,
+          "default": 0.15,
+          "description": "Probability of adding hedging language to factual statements."
+        },
+        "approximation_rules": {
+          "type": "object",
+          "properties": {
+            "time_estimates": {
+              "type": "boolean",
+              "default": true,
+              "description": "Add '程度' / 'approximately' to time estimates."
+            },
+            "numeric_rounding": {
+              "type": "boolean",
+              "default": true,
+              "description": "Round precise numbers to human-friendly approximations."
+            },
+            "certainty_downgrade": {
+              "type": "boolean",
+              "default": true,
+              "description": "Replace 'will' with 'should' / 'probably', etc."
+            }
+          }
+        },
+        "self_correction_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.1,
+          "default": 0.02,
+          "description": "Rate of self-corrections ('あ、違いました' / 'Actually, I meant...')."
         }
       }
     }
-  }
+  },
+
+  "additionalProperties": false
 }

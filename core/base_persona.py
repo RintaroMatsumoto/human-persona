@@ -1,515 +1,433 @@
-"""HumanPersonaBase: 人間らしいAI振る舞いの基底クラス.
+"""
+HumanPersonaBase — Language-agnostic base class for human-like AI communication.
 
-言語・文化・属性に依存しない普遍的構造を提供する。
-具体的な言語・ペルソナは派生クラスで定義する。
+This module provides the foundational abstraction for generating responses
+that exhibit human communication patterns: variable timing, style fluctuation,
+emotional state evolution, contextual back-referencing, intentional ambiguity,
+and escalation detection.
+
+All language/culture-specific behavior is delegated to configuration (config/*.json)
+and derived persona classes. The base class itself is culturally neutral.
+
+Architecture:
+    HumanPersonaBase (this class)
+    ├── TimingController      — response delay simulation
+    ├── StyleVariator         — linguistic variation engine
+    ├── EmotionStateMachine   — affective state tracking
+    ├── ContextReferencer     — conversation memory & back-referencing
+    └── EscalationDetector    — human handoff trigger detection
+
+Reference:
+    Jones & Bergen (2024). "A Turing test of whether AI chatbots are
+    behaviorally similar to humans." PNAS.
+
+Author: Rintaro Matsumoto (RintaroMatsumoto)
+License: MIT
 """
 
 from __future__ import annotations
 
 import json
-import os
+import random
+import time
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from enum import Enum, auto
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
-import anthropic
+from .timing_controller import TimingController
+from .style_variator import StyleVariator
+from .emotion_state_machine import EmotionStateMachine
+from .context_referencer import ContextReferencer
+from .escalation_detector import EscalationDetector
 
-from core.context_referencer import ContextReferencer
-from core.emotion_state_machine import EmotionState, EmotionStateMachine
-from core.escalation_detector import (
-    EscalationDetector,
-    EscalationReason,
-    EscalationResult,
-)
-from core.style_variator import StyleType, StyleVariator
-from core.timing_controller import Platform, TimingController
 
+# ---------------------------------------------------------------------------
+# Data structures
+# ---------------------------------------------------------------------------
 
 @dataclass
-class PersonaResponse:
-    """ペルソナの応答結果.
-
-    Attributes:
-        content: 応答テキスト
-        delay_seconds: 返信までの遅延秒数
-        emotion_state: 現在の感情状態
-        style_used: 使用した文体パターン
-        escalation: エスカレーション判定結果（該当なしなら None）
-        metadata: 追加メタデータ
-    """
-
+class Message:
+    """A single message in a conversation."""
+    role: str  # "user" or "persona"
     content: str
-    delay_seconds: float
-    emotion_state: EmotionState
-    style_used: StyleType
-    escalation: EscalationResult | None = None
+    timestamp: float = field(default_factory=time.time)
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class HumanPersonaBase:
-    """人間らしいAI振る舞いの基底クラス.
+class PersonaResponse:
+    """Output of the persona pipeline."""
+    content: str
+    delay_seconds: float
+    emotion_state: str
+    escalation_triggered: bool = False
+    escalation_type: Optional[str] = None
+    escalation_action: Optional[str] = None
+    debug: dict[str, Any] = field(default_factory=dict)
 
-    すべてのコンポーネントを統合し、人間らしい応答を生成する。
-    派生クラスは言語・文化固有のパラメータを注入する。
 
-    Attributes:
-        name: ペルソナ名（識別用）
-        timing: 返信速度コントローラー
-        style: 文体揺らぎジェネレーター
-        emotion: 感情状態機械
-        context: 前文脈参照マネージャー
-        escalation: エスカレーションディテクター
-        platform: 現在のプラットフォーム
+class Platform(Enum):
+    """Supported communication platforms."""
+    CHAT = auto()
+    CROWDSOURCING = auto()
+    EMAIL = auto()
+    CUSTOM = auto()
+
+
+# ---------------------------------------------------------------------------
+# Configuration loader
+# ---------------------------------------------------------------------------
+
+def load_config(config_path: str | Path) -> dict[str, Any]:
+    """Load and validate a persona configuration JSON file.
+
+    Args:
+        config_path: Path to a persona config JSON (e.g. config/ja.json).
+
+    Returns:
+        Parsed configuration dictionary.
+
+    Raises:
+        FileNotFoundError: If config file does not exist.
+        json.JSONDecodeError: If config is not valid JSON.
+        ValueError: If required top-level keys are missing.
+    """
+    path = Path(config_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Config not found: {path}")
+
+    with open(path, "r", encoding="utf-8") as f:
+        config = json.load(f)
+
+    required_keys = {"meta", "timing", "style", "emotion", "escalation"}
+    missing = required_keys - set(config.keys())
+    if missing:
+        raise ValueError(f"Config missing required keys: {missing}")
+
+    return config
+
+
+# ---------------------------------------------------------------------------
+# Base class
+# ---------------------------------------------------------------------------
+
+class HumanPersonaBase(ABC):
+    """Abstract base class for human-like AI persona behavior.
+
+    This class orchestrates the full response pipeline:
+    1. Receive incoming message
+    2. Detect escalation conditions
+    3. Update emotional state
+    4. Generate response content (delegated to subclass)
+    5. Apply style variation
+    6. Insert context references
+    7. Apply intentional ambiguity
+    8. Calculate response delay
+
+    Subclasses MUST implement:
+        - generate_raw_response(message, context) -> str
+        - extract_topics(message) -> list[str]
+
+    Subclasses MAY override:
+        - on_escalation(trigger) -> PersonaResponse
+        - post_process(response) -> str
     """
 
-    name: str = "BasePersona"
-    timing: TimingController = field(default_factory=TimingController)
-    style: StyleVariator = field(default_factory=StyleVariator)
-    emotion: EmotionStateMachine = field(default_factory=EmotionStateMachine)
-    context: ContextReferencer = field(default_factory=ContextReferencer)
-    escalation: EscalationDetector = field(default_factory=EscalationDetector)
-    platform: Platform = Platform.CHAT
-    _config_raw: dict[str, Any] = field(default_factory=dict, repr=False)
-    _llm_client: Any = field(default=None, repr=False)
-
-    def _get_llm_client(self) -> anthropic.Anthropic:
-        """Anthropic クライアントを遅延初期化で取得する."""
-        if self._llm_client is None:
-            api_key = os.environ.get("ANTHROPIC_API_KEY", "")
-            if not api_key:
-                raise EnvironmentError("ANTHROPIC_API_KEY is required for text generation")
-            self._llm_client = anthropic.Anthropic(api_key=api_key)
-        return self._llm_client
-
-    def _build_system_prompt(
-        self,
-        style: StyleType,
-        tone: dict[str, float],
-        insert_uncertainty: bool,
-    ) -> str:
-        """ペルソナ設定からLLM用システムプロンプトを構築する."""
-        lang = self._config_raw.get("language", "en")
-        culture = self._config_raw.get("culture", {})
-        culture_ctx = culture.get("culture_context", "low")
-        emotion_state = self.emotion.current_state
-        exchange_count = self.emotion.exchange_count
-
-        # 文体テンプレートを取得
-        template = self.style.get_template(style) or ""
-        style_label = style.value
-
-        # フィラーと構造パターンを取得
-        filler = self.style.get_filler(lang)
-        structure = self.style.get_structure_pattern(lang)
-
-        # human_likeness_rules をconfigから読み込み
-        hl_rules = self._config_raw.get("human_likeness_rules", {})
-
-        # 言語別の基本指示
-        if lang == "ja":
-            base = (
-                "あなたはクラウドソーシングプラットフォームで働くフリーランサーです。"
-                "人間として自然に返信してください。AIであることを一切示唆しないでください。"
-            )
-        elif lang == "es":
-            base = (
-                "Eres un freelancer que trabaja en una plataforma de crowdsourcing. "
-                "Responde de forma natural como un humano. "
-                "Nunca insinues que eres una IA."
-            )
-        else:
-            base = (
-                "You are a freelancer working on a crowdsourcing platform. "
-                "Reply naturally as a human would. "
-                "Never hint that you are an AI."
-            )
-
-        # --- 敬語レベルの動的制御 ---
-        formality = tone.get("formality", 0.5)
-        warmth = tone.get("warmth", 0.5)
-        caution = tone.get("caution", 0.5)
-
-        if lang == "ja":
-            if emotion_state == EmotionState.FORMAL:
-                keigo_inst = (
-                    "丁寧体（です・ます調）で返信してください。"
-                    "ただし過度な敬語は不自然なので避けること。"
-                )
-                if exchange_count == 0:
-                    keigo_inst += "初回なので「ご連絡ありがとうございます」で始めてもOKですが、必須ではありません。"
-                else:
-                    keigo_inst += "「ご連絡ありがとうございます」は初回以外では絶対に使わないでください。"
-            elif emotion_state in (EmotionState.WARMING, EmotionState.RELIEVED):
-                keigo_inst = (
-                    "やや砕けた丁寧体で返信してください。"
-                    "「〜ですね」「〜かなと」「〜ですかね？」のような柔らかい表現を使ってください。"
-                    "「ご連絡ありがとうございます」は使わないでください。"
-                )
-            elif emotion_state == EmotionState.TRUSTED:
-                keigo_inst = (
-                    "カジュアルな丁寧体で返信してください。"
-                    "「〜ですね」「了解です」「いいですね！」のような軽い表現を積極的に使ってください。"
-                )
-            else:  # TENSE
-                keigo_inst = (
-                    "丁寧だが硬すぎない表現で返信してください。"
-                    "慎重さを見せつつも、過度にかしこまらないこと。"
-                )
-        elif lang == "es":
-            if emotion_state == EmotionState.FORMAL:
-                keigo_inst = "Usa 'usted' y tono profesional. No seas excesivamente formal."
-            elif emotion_state in (EmotionState.WARMING, EmotionState.RELIEVED, EmotionState.TRUSTED):
-                keigo_inst = "Usa 'tú' y tono cálido pero profesional."
-            else:
-                keigo_inst = "Mantén un tono profesional pero cercano."
-        else:
-            keigo_inst = ""
-
-        # --- トーンミラーリング (EN/ES) ---
-        mirror_inst = ""
-        if lang == "en":
-            mirror_inst = (
-                "IMPORTANT: Match the formality level of the user's message. "
-                "If they use casual language ('Hey', 'what's up'), respond casually. "
-                "If they're formal, be formal. "
-                "Never open with 'Thanks for reaching out' unless it's the very first exchange. "
-                "Never open with 'Thanks for checking in' or 'Thanks for asking'."
-            )
-        elif lang == "es":
-            mirror_inst = (
-                "IMPORTANTE: Adapta tu nivel de formalidad al del usuario. "
-                "Si usan lenguaje casual, responde casualmente."
-            )
-
-        # --- 構造バリエーション強制 ---
-        structure_instructions = {
-            "ja": {
-                "acknowledgment_only": "承認だけで返信してください。質問はしないこと。",
-                "question_first": "質問や確認から入って、その後に自分の考えを述べてください。",
-                "empathy_then_question": "まず相手の状況に共感してから、必要な質問をしてください。",
-                "filler_then_substance": "考えている感じを出してから本題に入ってください。",
-                "conclusion_then_detail": "結論を先に述べてから、補足説明を加えてください。",
-                "reaction_then_topic": "短いリアクションから入って、話題を展開してください。",
-            },
-            "en": {
-                "acknowledgment_only": "Just acknowledge. Don't ask any questions.",
-                "question_first": "Lead with a question or clarification, then share your thoughts.",
-                "empathy_then_question": "Show empathy for their situation, then ask what you need.",
-                "filler_then_substance": "Start with a thinking-out-loud moment, then get to the point.",
-                "conclusion_then_detail": "State your conclusion first, then add supporting details.",
-                "reaction_then_topic": "Start with a brief reaction, then move the conversation forward.",
-            },
-            "es": {
-                "acknowledgment_only": "Solo confirma. No hagas preguntas.",
-                "question_first": "Comienza con una pregunta, luego comparte tu perspectiva.",
-                "empathy_then_question": "Muestra empatía, luego haz tus preguntas.",
-                "filler_then_substance": "Empieza pensando en voz alta, luego ve al punto.",
-                "conclusion_then_detail": "Da tu conclusión primero, luego los detalles.",
-                "reaction_then_topic": "Empieza con una reacción breve, luego avanza la conversación.",
-            },
-        }
-        lang_structures = structure_instructions.get(lang, structure_instructions["en"])
-        structure_inst = lang_structures.get(structure, "")
-
-        anti_pattern_inst = {
-            "ja": (
-                "重要: 毎回「挨拶→承認→質問」の順番にしないでください。"
-                "返信の構造を毎回変えてください。"
-            ),
-            "en": (
-                "IMPORTANT: Do NOT always follow greeting→acknowledgment→question structure. "
-                "Vary your message structure. Sometimes skip the greeting entirely."
-            ),
-            "es": (
-                "IMPORTANTE: NO sigas siempre la estructura saludo→reconocimiento→pregunta. "
-                "Varía la estructura del mensaje."
-            ),
-        }
-
-        # --- 文体パターン指示 ---
-        style_instructions = {
-            "ja": {
-                "confirmation": "相手の意図を確認する形で返信してください。",
-                "empathy": "相手の気持ちに共感を示してから本題に入ってください。",
-                "deferral": "すぐに回答せず、確認が必要な姿勢を見せてください。",
-                "transition": "自然に話題を展開してください。",
-                "uncertain": "やや曖昧な表現を混ぜて、人間らしい不確実さを出してください。",
-            },
-            "en": {
-                "confirmation": "Confirm the other person's intent before answering.",
-                "empathy": "Show empathy first, then address the main point.",
-                "deferral": "Indicate you need to check before giving a definitive answer.",
-                "transition": "Naturally steer the conversation forward.",
-                "uncertain": "Include some hedging language to sound naturally uncertain.",
-            },
-            "es": {
-                "confirmation": "Confirma la intención del otro antes de responder.",
-                "empathy": "Muestra empatía primero, luego aborda el punto principal.",
-                "deferral": "Indica que necesitas verificar antes de dar una respuesta definitiva.",
-                "transition": "Dirige la conversación de forma natural.",
-                "uncertain": "Incluye lenguaje de cobertura para sonar naturalmente incierto.",
-            },
-        }
-        lang_styles = style_instructions.get(lang, style_instructions["en"])
-        style_inst = lang_styles.get(style_label, "")
-
-        # --- フィラー注入指示 ---
-        filler_inst = ""
-        if filler:
-            if lang == "ja":
-                filler_inst = f"返信の冒頭に「{filler.strip()}」を自然に入れてください（義務ではなく、文脈に合えば）。"
-            elif lang == "es":
-                filler_inst = f'Si es natural, empieza con "{filler.strip()}" al inicio de tu respuesta.'
-            else:
-                filler_inst = f'If it feels natural, start your reply with "{filler.strip()}".'
-
-        # --- 不確実表現 ---
-        uncertainty_inst = ""
-        if insert_uncertainty:
-            if lang == "ja":
-                uncertainty_inst = "返信に「たぶん」「おそらく」「…かもしれません」のような不確実表現を自然に1つ入れてください。"
-            elif lang == "es":
-                uncertainty_inst = 'Incluye naturalmente una expresión como "creo que", "me parece", "tal vez".'
-            else:
-                uncertainty_inst = 'Naturally include one hedging phrase like "I think", "probably", "not 100% sure".'
-
-        # --- テンプレート例示 ---
-        template_inst = ""
-        if template:
-            if lang == "ja":
-                template_inst = f"以下の表現パターンを参考にしてください（そのままコピーしないこと）: 「{template}」"
-            elif lang == "es":
-                template_inst = f'Usa este patrón como referencia (no copies literalmente): "{template}"'
-            else:
-                template_inst = f'Use this expression pattern as reference (do not copy verbatim): "{template}"'
-
-        # --- 文化コンテキスト ---
-        if culture_ctx == "high":
-            culture_inst = (
-                "Use indirect, context-aware communication. "
-                "Read between the lines and respond considerately."
-                if lang == "en" else
-                "間接的で文脈を重視したコミュニケーションをしてください。"
-                "行間を読み、配慮ある返信を心がけてください。"
-                if lang == "ja" else
-                "Usa comunicación indirecta y contextual. "
-                "Lee entre líneas y responde con consideración."
-            )
-        else:
-            culture_inst = (
-                "Be direct and clear. Get to the point quickly."
-                if lang == "en" else
-                "直接的で明確に。要点をすぐに伝えてください。"
-                if lang == "ja" else
-                "Sé directo y claro. Ve al grano rápidamente."
-            )
-
-        # --- 組み立て ---
-        parts = [base]
-        if keigo_inst:
-            parts.append(keigo_inst)
-        if mirror_inst:
-            parts.append(mirror_inst)
-        parts.append(culture_inst)
-        parts.append(anti_pattern_inst.get(lang, anti_pattern_inst["en"]))
-        if structure_inst:
-            parts.append(f"Structure: {structure_inst}" if lang == "en" else structure_inst)
-        if style_inst:
-            parts.append(style_inst)
-        if filler_inst:
-            parts.append(filler_inst)
-        if uncertainty_inst:
-            parts.append(uncertainty_inst)
-        if template_inst:
-            parts.append(template_inst)
-
-        # --- human_likeness_rules: 禁止フレーズ ---
-        banned = hl_rules.get("banned_phrases", [])
-        if banned:
-            import random as _rnd
-            phrases_str = ", ".join(f'"{p}"' for p in banned)
-            if lang == "ja":
-                parts.append(f"以下のフレーズは絶対に使わないでください: {phrases_str}")
-            elif lang == "es":
-                parts.append(f"Nunca uses estas frases: {phrases_str}")
-            else:
-                parts.append(f"NEVER use these phrases: {phrases_str}")
-
-        # --- human_likeness_rules: 挨拶バリエーション ---
-        greeting_openers = hl_rules.get("greeting_openers", [])
-        if greeting_openers and exchange_count == 0:
-            import random as _rnd
-            opener = _rnd.choice(greeting_openers)
-            if opener:
-                if lang == "ja":
-                    parts.append(f"初回挨拶として「{opener}」を使ってください（毎回同じ挨拶の繰り返し禁止）。")
-                else:
-                    parts.append(f'For this first message, open with "{opener}" (never repeat the same greeting).')
-            else:
-                if lang == "ja":
-                    parts.append("挨拶なしでいきなり本題から入ってください。")
-                else:
-                    parts.append("Skip any greeting and jump straight into substance.")
-
-        # --- human_likeness_rules: 初回接触の切り口バリエーション ---
-        contact_angles = hl_rules.get("initial_contact_angles", [])
-        if contact_angles and exchange_count == 0:
-            import random as _rnd
-            angle = _rnd.choice(contact_angles)
-            if lang == "ja":
-                parts.append(f"初回メッセージの切り口: {angle}（毎回異なる観点で返信すること）。")
-            else:
-                parts.append(f"Angle for this first reply: {angle}. Never use the same approach twice.")
-
-        # --- human_likeness_rules: ポジティブ応答バリエーション ---
-        positive_alts = hl_rules.get("positive_response_alternatives", [])
-        if positive_alts:
-            import random as _rnd
-            alt = _rnd.choice(positive_alts)
-            if lang == "ja":
-                parts.append(
-                    f"ポジティブなフィードバックへの返信では、毎回異なる表現を使ってください。"
-                    f"今回の参考表現: 「{alt}」（そのままコピー禁止、自分の言葉で言い換えること）。"
-                )
-            else:
-                parts.append(
-                    f"When responding to positive feedback, always use different expressions. "
-                    f'Reference for this reply: "{alt}" (rephrase in your own words, do not copy).'
-                )
-
-        # --- human_likeness_rules: 進捗報告バリエーション (EN) ---
-        progress_alts = hl_rules.get("progress_report_alternatives", [])
-        if progress_alts:
-            import random as _rnd
-            alt = _rnd.choice(progress_alts)
-            parts.append(
-                f"When reporting progress, never use generic phrases. "
-                f'Reference for this reply: "{alt}" (rephrase naturally, do not copy verbatim).'
-            )
-
-        # 短文制約
-        if lang == "ja":
-            parts.append("返信は1〜3文で簡潔に。長文禁止。")
-        elif lang == "es":
-            parts.append("Responde en 1-3 oraciones. Sé conciso.")
-        else:
-            parts.append("Reply in 1-3 sentences. Keep it concise.")
-
-        return "\n".join(parts)
-
-    def _generate_text(self, user_message: str, system_prompt: str) -> str:
-        """Anthropic API を呼び出してテキストを生成する."""
-        client = self._get_llm_client()
-        message = client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=300,
-            system=system_prompt,
-            messages=[{"role": "user", "content": user_message}],
-        )
-        return message.content[0].text.strip()
-
-    def process_message(self, user_message: str, topics: list[str] | None = None) -> PersonaResponse:
-        """ユーザーメッセージを処理し、人間らしい応答テキストを生成する.
+    def __init__(self, config: dict[str, Any], platform: Platform = Platform.CHAT):
+        """Initialize persona with configuration.
 
         Args:
-            user_message: ユーザーからのメッセージ
-            topics: メッセージから抽出されたトピック
+            config: Parsed persona configuration dictionary.
+            platform: Communication platform for timing calibration.
+        """
+        self._config = config
+        self._platform = platform
+        self._conversation: list[Message] = []
+        self._turn_count: int = 0
+
+        # Initialize sub-components
+        self._timing = TimingController(
+            config.get("timing", {}),
+            platform.name.lower(),
+        )
+        self._style = StyleVariator(config.get("style", {}))
+        self._emotion = EmotionStateMachine(config.get("emotion", {}))
+        self._context = ContextReferencer(config.get("context_reference", {}))
+        self._escalation = EscalationDetector(config.get("escalation", {}))
+
+    # -- Properties ----------------------------------------------------------
+
+    @property
+    def persona_id(self) -> str:
+        return self._config.get("meta", {}).get("persona_id", "unknown")
+
+    @property
+    def language(self) -> str:
+        return self._config.get("meta", {}).get("language", "en")
+
+    @property
+    def culture_context(self) -> str:
+        return self._config.get("meta", {}).get("context_culture", "low")
+
+    @property
+    def current_emotion(self) -> str:
+        return self._emotion.current_state
+
+    @property
+    def turn_count(self) -> int:
+        return self._turn_count
+
+    @property
+    def conversation_history(self) -> list[Message]:
+        return list(self._conversation)
+
+    # -- Abstract methods (subclass contract) --------------------------------
+
+    @abstractmethod
+    def generate_raw_response(
+        self,
+        message: str,
+        context: list[Message],
+    ) -> str:
+        """Generate the core response content.
+
+        This is where the actual LLM call or template logic lives.
+        The base class handles all human-likeness transformations around it.
+
+        Args:
+            message: The incoming user message text.
+            context: Recent conversation history for reference.
 
         Returns:
-            PersonaResponse（応答テキスト・タイミング・文体・感情状態を含む）
+            Raw response string before style/ambiguity processing.
         """
-        # 1. 文脈に追加
-        self.context.add_turn("user", user_message, topics)
+        ...
 
-        # 2. エスカレーション判定
-        escalation_result = self.escalation.evaluate(user_message)
-        if escalation_result.should_escalate:
-            _PROBLEM_REASONS = {EscalationReason.COMPLAINT, EscalationReason.NEGOTIATION}
-            if escalation_result.reason in _PROBLEM_REASONS:
-                self.emotion.process_event("problem_detected")
-            return PersonaResponse(
-                content="",
-                delay_seconds=0,
-                emotion_state=self.emotion.current_state,
-                style_used=StyleType.CONFIRMATION,
-                escalation=escalation_result,
-            )
+    @abstractmethod
+    def extract_topics(self, message: str) -> list[str]:
+        """Extract key topics/entities from a message.
 
-        # 3. 感情状態を更新
-        self.emotion.process_event("exchange")
+        Used by ContextReferencer to generate natural back-references.
 
-        # 4. 返信遅延を計算
-        delay = self.timing.calculate_delay(self.platform)
+        Args:
+            message: Message text to analyze.
 
-        # 5. 文体パターンを選択
-        tone = self.emotion.get_tone_modifier()
-        style = self.style.select_style(context={"tone": tone})
-        insert_uncertainty = self.style.should_insert_uncertainty()
+        Returns:
+            List of topic strings found in the message.
+        """
+        ...
 
-        # 6. システムプロンプトを構築してテキスト生成
-        system_prompt = self._build_system_prompt(style, tone, insert_uncertainty)
-        content = self._generate_text(user_message, system_prompt)
+    # -- Overridable hooks ---------------------------------------------------
 
-        # 7. 応答コンテキストを構築
-        consistency = self.context.get_consistency_context()
+    def on_escalation(
+        self,
+        trigger_type: str,
+        action: str,
+        message: str,
+    ) -> PersonaResponse:
+        """Handle an escalation event.
+
+        Default behavior: return the configured fallback message.
+        Override for custom escalation logic (e.g. Slack notification).
+
+        Args:
+            trigger_type: Category of escalation trigger.
+            action: Configured action (notify_human, pause_and_notify, etc.).
+            message: The message that triggered escalation.
+
+        Returns:
+            PersonaResponse with escalation metadata.
+        """
+        fallback = self._config.get("escalation", {}).get(
+            "fallback_message",
+            "I'll need to check on that and get back to you.",
+        )
+        delay = self._timing.calculate_delay(len(fallback))
 
         return PersonaResponse(
-            content=content,
+            content=fallback,
             delay_seconds=delay,
-            emotion_state=self.emotion.current_state,
-            style_used=style,
+            emotion_state=self._emotion.current_state,
+            escalation_triggered=True,
+            escalation_type=trigger_type,
+            escalation_action=action,
+        )
+
+    def post_process(self, response: str) -> str:
+        """Final transformation hook before returning response.
+
+        Override for language-specific post-processing
+        (e.g. honorific adjustment, character-width normalization).
+
+        Args:
+            response: Processed response text.
+
+        Returns:
+            Final response text.
+        """
+        return response
+
+    # -- Core pipeline -------------------------------------------------------
+
+    def process_message(self, message: str) -> PersonaResponse:
+        """Full persona response pipeline.
+
+        This is the main entry point. Call this with each incoming message.
+
+        Pipeline stages:
+            1. Record incoming message
+            2. Check escalation conditions
+            3. Update emotion state
+            4. Generate raw response
+            5. Apply style variation
+            6. Insert context references
+            7. Apply ambiguity
+            8. Post-process (subclass hook)
+            9. Calculate timing delay
+            10. Record outgoing message
+
+        Args:
+            message: Incoming message text.
+
+        Returns:
+            PersonaResponse containing the final response and metadata.
+        """
+        # 1. Record incoming
+        incoming = Message(role="user", content=message)
+        self._conversation.append(incoming)
+        self._turn_count += 1
+
+        # 2. Escalation check (before generating response)
+        esc_result = self._escalation.check(
+            message=message,
+            turn_count=self._turn_count,
+            conversation=self._conversation,
+        )
+        if esc_result is not None:
+            return self.on_escalation(
+                trigger_type=esc_result["type"],
+                action=esc_result["action"],
+                message=message,
+            )
+
+        # 3. Update emotion state
+        self._emotion.update(
+            message=message,
+            turn_count=self._turn_count,
+        )
+
+        # 4. Generate raw response
+        recent_context = self._conversation[-10:]  # last 10 messages
+        raw_response = self.generate_raw_response(message, recent_context)
+
+        # 5. Apply style variation
+        styled = self._style.apply(
+            text=raw_response,
+            emotion_params=self._emotion.current_params,
+        )
+
+        # 6. Insert context references
+        topics = self.extract_topics(message)
+        referenced = self._context.apply(
+            text=styled,
+            topics=topics,
+            conversation=self._conversation,
+        )
+
+        # 7. Apply ambiguity
+        ambiguity_config = self._config.get("ambiguity", {})
+        ambiguous = self._apply_ambiguity(referenced, ambiguity_config)
+
+        # 8. Post-process (subclass hook)
+        final_text = self.post_process(ambiguous)
+
+        # 9. Calculate delay
+        emotion_multiplier = self._emotion.current_params.get(
+            "response_delay_multiplier", 1.0
+        )
+        delay = self._timing.calculate_delay(
+            message_length=len(message),
+            multiplier=emotion_multiplier,
+        )
+
+        # 10. Record outgoing
+        outgoing = Message(
+            role="persona",
+            content=final_text,
             metadata={
-                "tone_modifier": tone,
-                "consistency_context": consistency,
-                "should_reference_previous": self.context.should_reference_previous(),
-                "insert_uncertainty": insert_uncertainty,
+                "emotion_state": self._emotion.current_state,
+                "delay_seconds": delay,
+                "style_applied": True,
+            },
+        )
+        self._conversation.append(outgoing)
+
+        return PersonaResponse(
+            content=final_text,
+            delay_seconds=delay,
+            emotion_state=self._emotion.current_state,
+            debug={
+                "raw_response": raw_response,
+                "turn_count": self._turn_count,
+                "topics_extracted": topics,
             },
         )
 
-    def get_system_prompt_context(self) -> dict[str, Any]:
-        """LLMのシステムプロンプトに注入する文脈情報を返す.
+    # -- Internal helpers ----------------------------------------------------
 
-        Returns:
-            感情状態・文体指示・文脈参照情報を含む辞書
+    def _apply_ambiguity(self, text: str, config: dict[str, Any]) -> str:
+        """Apply intentional imperfection to response text.
+
+        Adds hedging, approximations, and occasional self-corrections
+        to avoid the uncanny precision of AI-generated text.
         """
-        tone = self.emotion.get_tone_modifier()
+        hedge_prob = config.get("hedge_probability", 0.15)
+        self_correction_rate = config.get("self_correction_rate", 0.02)
+
+        result = text
+
+        # Self-correction injection (very rare)
+        if random.random() < self_correction_rate:
+            result = self._inject_self_correction(result)
+
+        return result
+
+    def _inject_self_correction(self, text: str) -> str:
+        """Inject a natural self-correction into the text.
+
+        This is a base implementation; derived classes should override
+        with language-appropriate corrections.
+        """
+        # Base implementation is a no-op; language-specific subclasses
+        # provide actual self-correction patterns
+        return text
+
+    # -- Serialization -------------------------------------------------------
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialize persona state for persistence."""
         return {
-            "persona_name": self.name,
-            "emotion_state": self.emotion.current_state.value,
-            "tone": tone,
-            "recent_topics": self.context.get_recent_topics(),
-            "exchange_count": self.emotion.exchange_count,
-            "should_reference_previous": self.context.should_reference_previous(),
+            "persona_id": self.persona_id,
+            "turn_count": self._turn_count,
+            "emotion_state": self._emotion.current_state,
+            "conversation_length": len(self._conversation),
+            "platform": self._platform.name,
         }
 
     def reset(self) -> None:
-        """全コンポーネントを初期状態にリセットする."""
-        self.emotion.reset()
-        self.context.history.clear()
-        self.escalation.reset_chat_counter()
-        self.style.history.clear()
+        """Reset persona to initial state (new conversation)."""
+        self._conversation.clear()
+        self._turn_count = 0
+        self._emotion.reset()
+        self._context.reset()
 
-    @classmethod
-    def from_config_file(cls, config_path: str | Path) -> HumanPersonaBase:
-        """設定ファイルからインスタンスを生成する.
-
-        Args:
-            config_path: JSON設定ファイルのパス
-
-        Returns:
-            設定に基づく HumanPersonaBase インスタンス
-        """
-        path = Path(config_path)
-        with path.open("r", encoding="utf-8") as f:
-            config = json.load(f)
-
-        return cls(
-            name=config.get("name", "BasePersona"),
-            timing=TimingController.from_config(config.get("timing", {})),
-            style=StyleVariator.from_config(config.get("style", {})),
-            emotion=EmotionStateMachine.from_config(config.get("emotion", {})),
-            escalation=EscalationDetector.from_config(config.get("escalation", {})),
-            platform=Platform(config.get("platform", "chat")),
-            _config_raw=config,
+    def __repr__(self) -> str:
+        return (
+            f"<{self.__class__.__name__} "
+            f"id={self.persona_id!r} "
+            f"lang={self.language!r} "
+            f"turn={self._turn_count} "
+            f"emotion={self.current_emotion!r}>"
         )
