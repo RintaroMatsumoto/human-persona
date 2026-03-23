@@ -29,6 +29,11 @@
   },
   "style": {
     "uncertainty_rate": 0.10,
+    "sentence_length_variance": {
+      "min_ratio": 0.22,
+      "max_ratio": 1.78
+    },
+    "filler_rate": 0.334,
     "style_patterns": [
       {
         "type": "confirmation",
@@ -151,6 +156,17 @@
       "Great to know you're pleased",
       "Awesome, glad you like it"
     ]
+  },
+  "ambiguity": {
+    "hedge_probability": 0.0817,
+    "self_correction_rate": 0.043
+  },
+  "dpo_calibration": {
+    "_note": "Values derived from HumanLLMs/Human-Like-DPO-Dataset (n=10,884)",
+    "verbosity_words_per_sentence": 13.53,
+    "cushion_rate": 0.1578,
+    "filler_rate": 0.334,
+    "sentence_length_cv": 0.634
   },
   "escalation": {
     "max_chat_turns": 5,

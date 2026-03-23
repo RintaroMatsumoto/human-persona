@@ -153,16 +153,17 @@
         },
         "sentence_length_variance": {
           "type": "object",
+          "description": "Empirical: Human-Like CV=0.63 vs Formal CV=0.43 (DPO dataset, n=10,884, p<0.001).",
           "properties": {
             "min_ratio": {
               "type": "number",
-              "default": 0.6,
-              "description": "Minimum sentence length as ratio of average."
+              "default": 0.22,
+              "description": "Minimum sentence length as ratio of average. Empirical value from DPO Human-Like distribution."
             },
             "max_ratio": {
               "type": "number",
-              "default": 1.5,
-              "description": "Maximum sentence length as ratio of average."
+              "default": 1.78,
+              "description": "Maximum sentence length as ratio of average. Empirical value from DPO Human-Like distribution."
             }
           }
         },
@@ -377,8 +378,8 @@
           "type": "number",
           "minimum": 0,
           "maximum": 0.5,
-          "default": 0.15,
-          "description": "Probability of adding hedging language to factual statements."
+          "default": 0.08,
+          "description": "Probability of adding hedging language per sentence. Empirical: Human-Like=0.082 vs Formal=0.017 (DPO dataset, n=10,884, p<0.001)."
         },
         "approximation_rules": {
           "type": "object",
@@ -404,8 +405,8 @@
           "type": "number",
           "minimum": 0,
           "maximum": 0.1,
-          "default": 0.02,
-          "description": "Rate of self-corrections ('あ、違いました' / 'Actually, I meant...')."
+          "default": 0.043,
+          "description": "Rate of self-corrections per sentence. Empirical: Human-Like=0.043 vs Formal=0.001 (DPO dataset, n=10,884, p<0.001)."
         }
       }
     }

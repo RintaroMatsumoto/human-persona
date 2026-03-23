@@ -29,6 +29,10 @@
   },
   "style": {
     "uncertainty_rate": 0.18,
+    "sentence_length_variance": {
+      "min_ratio": 0.22,
+      "max_ratio": 1.78
+    },
     "style_patterns": [
       {
         "type": "confirmation",
@@ -138,6 +142,10 @@
       "",
       ""
     ]
+  },
+  "ambiguity": {
+    "hedge_probability": 0.08,
+    "self_correction_rate": 0.043
   },
   "escalation": {
     "max_chat_turns": 3,
