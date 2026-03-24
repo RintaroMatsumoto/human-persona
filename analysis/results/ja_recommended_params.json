@@ -1,0 +1,9 @@
+{
+  "hedge_probability": 0.089,
+  "self_correction_rate": 0.0106,
+  "sentence_length_cv": 0.4298,
+  "morphemes_per_sentence": 12.31,
+  "kanji_ratio_casual": 0.2825,
+  "filler_rate": 0.0385,
+  "cushion_rate": 0.002
+}
