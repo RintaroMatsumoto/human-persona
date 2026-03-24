@@ -43,15 +43,17 @@ HEDGE_PATTERNS: list[str] = [
 ]
 
 SELF_CORRECTION_PATTERNS: list[str] = [
-    r"\bactually\b", r"\bi mean\b", r"\bwell,", r"\bsorry,",
     r"\blet me rephrase\b", r"\bcorrection\b", r"\bwait,", r"\bno,",
-    r"\brather,",
+    r"\brather,", r"\bsorry,",
+    # NOTE: 'actually', 'i mean', 'well,' removed to avoid double-counting
+    # with FILLER_PATTERNS (see Issue #8 validation)
 ]
 
 FILLER_PATTERNS: list[str] = [
     r"\bwell\b", r"\bso\b", r"\byou know\b", r"\bi mean\b", r"\blike\b",
-    r"\bbasically\b", r"\bactually\b", r"\bhonestly\b", r"\bright\b",
-    r"\bokay\b",
+    r"\bbasically\b", r"\bactually\b", r"\bhonestly\b", r"\bokay\b",
+    # NOTE: 'right' removed — conflicts with SHORT_INTERJECTIONS and
+    # has high false-positive rate in normal text
 ]
 
 CUSHION_PATTERNS: list[str] = [

@@ -12,8 +12,9 @@ Strategy:
     5. Score against Human-Like and Formal reference distributions
 
 Score definition (per metric):
-    score = |persona_mean - formal_mean| / |humanlike_mean - formal_mean|
-    Clipped to [0.0, 1.0]. 1.0 = matches Human-Like, 0.0 = matches Formal.
+    score = 1.0 - |persona_mean - humanlike_mean| / |humanlike_mean - formal_mean|
+    Clipped to [0.0, 1.0]. 1.0 = matches Human-Like exactly, 0.0 = off by full range.
+    Penalizes both undershoot AND overshoot symmetrically.
 
 Modes:
     --mode local  : Use DPO dataset's 'rejected' field (no API, instant)
@@ -78,6 +79,16 @@ METRIC_WEIGHTS: dict[str, float] = {
 REFERENCE_FILE = Path(__file__).parent.parent / "analysis" / "results" / "full_statistics.json"
 
 
+def _lowercase_first(text: str) -> str:
+    """Lowercase the first character, but preserve 'I' and 'I\\'...' pronouns."""
+    if not text:
+        return text
+    # Don't lowercase standalone "I" or "I'" (I'm, I'll, I've, etc.)
+    if text[0] == "I" and (len(text) == 1 or not text[1].isalpha()):
+        return text
+    return text[0].lower() + text[1:]
+
+
 # ---------------------------------------------------------------------------
 # Pipeline transformations (human-persona core logic)
 # ---------------------------------------------------------------------------
@@ -113,10 +124,13 @@ class HumanPersonaPipeline:
         self._cushion_rate = dpo.get("cushion_rate", 0.1578)
         self._max_words_per_sentence = dpo.get("verbosity_words_per_sentence", 13.53)
 
+        # Filler words — must match FILLER_PATTERNS in metrics.py (no overlap
+        # with SELF_CORRECTION_PATTERNS or HEDGE_PATTERNS)
         self._fillers = [
             "Well, ", "So, ", "You know, ", "I mean, ", "Like, ",
-            "Basically, ", "Actually, ", "Honestly, ", "Right, ", "Okay, ",
+            "Basically, ", "Actually, ", "Honestly, ", "Okay, ",
         ]
+        # Hedges — must match HEDGE_PATTERNS only
         self._hedges = [
             "I think ", "probably ", "maybe ", "sort of ", "kind of ",
             "I guess ", "I believe ",
@@ -125,11 +139,12 @@ class HumanPersonaPipeline:
             "Sure, ", "Of course, ", "Great question! ",
             "I understand. ", "Good point. ",
         ]
+        # Self-corrections — each triggers exactly 1 SELF_CORRECTION_PATTERN match
         self._corrections = [
-            "well, actually, ",
-            "I mean, ",
-            "wait, let me rephrase — ",
-            "sorry, what I meant was ",
+            "wait, ",           # matches 'wait,'
+            "sorry, ",          # matches 'sorry,'
+            "rather, ",         # matches 'rather,'
+            "no, ",             # matches 'no,'
         ]
 
     def apply(self, text: str, rng: random.Random | None = None) -> str:
@@ -144,7 +159,7 @@ class HumanPersonaPipeline:
         # 2. Cushion injection (at start of response)
         if rng.random() < self._cushion_rate:
             cushion = rng.choice(self._cushions)
-            result = cushion + result[0].lower() + result[1:] if result else result
+            result = cushion + _lowercase_first(result) if result else result
 
         # 3. Filler insertion (per sentence)
         sentences = split_sentences(result)
@@ -154,7 +169,7 @@ class HumanPersonaPipeline:
                 rate = self._filler_rate * 0.5 if i == 0 else self._filler_rate
                 if rng.random() < rate:
                     filler = rng.choice(self._fillers)
-                    sent = filler + sent[0].lower() + sent[1:] if sent else sent
+                    sent = filler + _lowercase_first(sent)
                 new_sentences.append(sent)
             result = " ".join(new_sentences)
 
@@ -165,20 +180,47 @@ class HumanPersonaPipeline:
             for sent in sentences:
                 if rng.random() < self._hedge_prob:
                     hedge = rng.choice(self._hedges)
-                    sent = hedge + sent[0].lower() + sent[1:] if sent else sent
+                    sent = hedge + _lowercase_first(sent)
                 new_sentences.append(sent)
             result = " ".join(new_sentences)
 
-        # 5. Self-correction injection (rare)
-        if rng.random() < self._self_correction_rate:
-            sentences = split_sentences(result)
-            if len(sentences) >= 2:
-                idx = rng.randint(1, len(sentences) - 1)
-                correction = rng.choice(self._corrections)
-                sentences[idx] = correction + sentences[idx][0].lower() + sentences[idx][1:]
-                result = " ".join(sentences)
+        # 5. Self-correction injection (per sentence, targeting ~0.043/sentence)
+        #    Rate slightly above target to compensate for first-sentence skip
+        sentences = split_sentences(result)
+        if len(sentences) >= 2:
+            correction_rate = self._self_correction_rate * 1.3
+            new_sentences = [sentences[0]]
+            for sent in sentences[1:]:
+                if rng.random() < correction_rate:
+                    correction = rng.choice(self._corrections)
+                    sent = correction + _lowercase_first(sent)
+                new_sentences.append(sent)
+            result = " ".join(new_sentences)
+
+        # 6. Short interjection insertion (increases sentence length CV)
+        result = self._inject_short_interjections(result, rng)
 
         return result
+
+    _SHORT_INTERJECTIONS = [
+        "Hmm.", "Yeah.", "Right.", "Sure.", "Okay.",
+        "Got it.", "Makes sense.", "Fair enough.", "True.",
+    ]
+
+    def _inject_short_interjections(self, text: str, rng: random.Random) -> str:
+        """Insert short 1-3 word interjections to increase sentence length variance."""
+        sentences = split_sentences(text)
+        if len(sentences) < 3:
+            return text
+
+        # Insert 1-2 short interjections between sentences
+        n_inserts = rng.randint(0, min(2, len(sentences) // 3))
+        for _ in range(n_inserts):
+            interjection = rng.choice(self._SHORT_INTERJECTIONS)
+            pos = rng.randint(1, len(sentences) - 1)
+            sentences.insert(pos, interjection)
+
+        return " ".join(sentences)
 
     # Conjunctions / relative markers where we can split a long sentence.
     _SPLIT_PATTERN = re.compile(
@@ -188,7 +230,7 @@ class HumanPersonaPipeline:
 
     def _split_long_sentences(self, text: str, rng: random.Random) -> str:
         """Split sentences that exceed the target words-per-sentence."""
-        threshold = int(self._max_words_per_sentence)  # match target directly
+        threshold = int(self._max_words_per_sentence)
         sentences = split_sentences(text)
         new_sentences: list[str] = []
 
@@ -319,14 +361,14 @@ def compute_score(
 ) -> float:
     """Compute normalized score for a single metric.
 
-    score = |persona_mean - formal_mean| / |humanlike_mean - formal_mean|
-    Clipped to [0.0, 1.0].
+    score = 1.0 - |persona_mean - humanlike_mean| / |humanlike_mean - formal_mean|
+    Clipped to [0.0, 1.0]. Penalizes both undershoot and overshoot.
     """
     denominator = abs(humanlike_mean - formal_mean)
     if denominator < 1e-9:
         return 1.0  # no difference between human and formal
-    raw = abs(persona_mean - formal_mean) / denominator
-    return min(raw, 1.0)
+    error = abs(persona_mean - humanlike_mean) / denominator
+    return max(0.0, 1.0 - error)
 
 
 def compute_overall_score(scores: dict[str, float]) -> float:

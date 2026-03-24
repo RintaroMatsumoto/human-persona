@@ -1,6 +1,6 @@
 # DPO Benchmark Evaluation Report
 
-**Date:** 2026-03-24 11:12 UTC
+**Date:** 2026-03-24 11:23 UTC
 **Model:** local (DPO rejected)
 **Sample Size:** 500
 **Seed:** 42
@@ -11,16 +11,16 @@
 
 | Metric | Raw API | +Pipeline | Human-Like Target | Score (Raw) | Score (+Pipeline) |
 |--------|---------|-----------|-------------------|-------------|-------------------|
-| Sentence Length CV | 0.4374 | 0.5317 | 0.6340 | 0.028 | 0.494 |
-| Hedge Rate | 0.0175 | 0.0940 | 0.0817 | 0.003 | 1.000 |
-| Self-Correction Rate | 0.0011 | 0.1032 | 0.0430 | 0.006 | 1.000 |
-| Words/Sentence | 18.2546 | 14.5094 | 13.5262 | 0.009 | 0.794 |
-| Cushion Rate | 0.0240 | 0.1860 | 0.1578 | 0.038 | 1.000 |
-| Filler Rate | 0.0997 | 0.3812 | 0.3340 | 0.004 | 1.000 |
+| Sentence Length CV | 0.4374 | 0.6195 | 0.6340 | 0.028 | 0.928 |
+| Hedge Rate | 0.0175 | 0.0871 | 0.0817 | 0.003 | 0.916 |
+| Self-Correction Rate | 0.0007 | 0.0450 | 0.0430 | 0.000 | 0.954 |
+| Words/Sentence | 18.2546 | 13.5308 | 13.5262 | 0.009 | 0.999 |
+| Cushion Rate | 0.0240 | 0.1780 | 0.1578 | 0.038 | 0.855 |
+| Filler Rate | 0.0994 | 0.3654 | 0.3340 | 0.000 | 0.865 |
 
-**Overall Score (Raw API):** 0.013
-**Overall Score (+Pipeline):** 0.898
-**Pipeline Improvement:** +0.885 (+6729.5%)
+**Overall Score (Raw API):** 0.011
+**Overall Score (+Pipeline):** 0.916
+**Pipeline Improvement:** +0.904 (+7972.6%)
 
 ---
 
@@ -45,6 +45,6 @@
 
 ## Improvement Recommendations
 
-- **Sentence Length CV**: score=0.494, current=0.5317, target=0.6340
-- **Words/Sentence**: score=0.794, current=14.5094, target=13.5262
-- **Hedge Rate**: score=1.000, current=0.0940, target=0.0817
+- **Cushion Rate**: score=0.855, current=0.1780, target=0.1578
+- **Filler Rate**: score=0.865, current=0.3654, target=0.3340
+- **Hedge Rate**: score=0.916, current=0.0871, target=0.0817

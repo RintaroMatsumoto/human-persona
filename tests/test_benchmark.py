@@ -92,7 +92,7 @@ class TestMeasureHedgeRate:
 
 class TestMeasureSelfCorrectionRate:
     def test_with_corrections(self):
-        text = "Well, actually I mean the other thing. Sorry, correction needed."
+        text = "Wait, let me rephrase that. Sorry, correction needed."
         rate = measure_self_correction_rate(text)
         assert rate > 0.0
 
@@ -169,12 +169,23 @@ class TestComputeScore:
         )
         assert 0.4 < score < 0.6
 
-    def test_overshoot_clipped(self):
-        # persona overshoots humanlike → clipped to 1.0
+    def test_overshoot_penalized(self):
+        # persona overshoots humanlike → penalized, NOT clipped to 1.0
         score = compute_score(
             persona_mean=0.800, formal_mean=0.432, humanlike_mean=0.634,
         )
-        assert score == 1.0
+        assert score < 1.0
+        # overshoot by 0.166, range = 0.202 → error = 0.82 → score ≈ 0.18
+        assert score < 0.3
+
+    def test_symmetric_penalty(self):
+        # undershoot and overshoot by same amount → same score
+        target = 0.634
+        formal = 0.432
+        delta = 0.05
+        score_under = compute_score(target - delta, formal, target)
+        score_over = compute_score(target + delta, formal, target)
+        assert abs(score_under - score_over) < 0.01
 
     def test_zero_denominator(self):
         # no difference → returns 1.0
