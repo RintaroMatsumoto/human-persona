@@ -48,6 +48,7 @@ from benchmarks.dpo_benchmark import (
     _load_cache,
     METRIC_WEIGHTS,
     load_reference_stats,
+    parse_args,
 )
 
 
@@ -342,6 +343,36 @@ class TestReportGeneration:
         assert "overall_score" in card
         for metric in METRIC_WEIGHTS:
             assert metric in card["scores"]
+
+
+# ===========================================================================
+# CLI argument parsing
+# ===========================================================================
+
+class TestParseArgs:
+    def test_default_mode_is_local(self):
+        args = parse_args([])
+        assert args.mode == "local"
+
+    def test_mode_local(self):
+        args = parse_args(["--mode", "local"])
+        assert args.mode == "local"
+
+    def test_mode_claude(self):
+        args = parse_args(["--mode", "claude"])
+        assert args.mode == "claude"
+
+    def test_invalid_mode_raises(self):
+        with pytest.raises(SystemExit):
+            parse_args(["--mode", "deepseek"])
+
+    def test_default_model_is_haiku(self):
+        args = parse_args([])
+        assert args.model == "haiku"
+
+    def test_model_override(self):
+        args = parse_args(["--mode", "claude", "--model", "sonnet"])
+        assert args.model == "sonnet"
 
 
 if __name__ == "__main__":

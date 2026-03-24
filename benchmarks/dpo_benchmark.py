@@ -6,7 +6,7 @@ Human-Like distribution from the DPO dataset.
 
 Strategy:
     1. Sample 500 questions from HumanLLMs/Human-Like-DPO-Dataset (seed=42)
-    2. Generate raw API responses (DeepSeek API, OpenAI-compatible)
+    2. Obtain raw responses (local dataset or Claude Code CLI)
     3. Pass through human-persona pipeline transformations
     4. Measure 6 metrics on both raw and pipeline outputs
     5. Score against Human-Like and Formal reference distributions
@@ -15,17 +15,25 @@ Score definition (per metric):
     score = |persona_mean - formal_mean| / |humanlike_mean - formal_mean|
     Clipped to [0.0, 1.0]. 1.0 = matches Human-Like, 0.0 = matches Formal.
 
+Modes:
+    --mode local  : Use DPO dataset's 'rejected' field (no API, instant)
+    --mode claude : Use Claude Code CLI via 'claude -p' (Max plan, no extra cost)
+
 Usage:
-    DEEPSEEK_API_KEY=sk-... python -m benchmarks.dpo_benchmark
+    python -m benchmarks.dpo_benchmark                  # local (default)
+    python -m benchmarks.dpo_benchmark --mode claude    # Claude Code CLI
 """
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import os
 import random
 import re
+import shutil
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
@@ -52,10 +60,9 @@ from analysis.metrics import (
 
 SAMPLE_SIZE = 500
 SEED = 42
-MODEL = "deepseek-chat"
-API_BASE_URL = "https://api.deepseek.com"
 CACHE_DIR = Path(__file__).parent / "cache"
 RESULTS_DIR = Path(__file__).parent / "results"
+CLAUDE_CLI = shutil.which("claude") or os.path.expanduser("~/.local/bin/claude")
 
 # Weighted average weights for overall score
 METRIC_WEIGHTS: dict[str, float] = {
@@ -196,22 +203,25 @@ def _save_cache_entry(key: str, question: str, response: str) -> None:
     fp.write_text(json.dumps(entry, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def generate_api_response(
-    client: Any,
+def generate_claude_response(
     question: str,
     cache: dict[str, str],
+    model: str = "haiku",
 ) -> str:
-    """Generate a response via DeepSeek API (OpenAI-compatible), with caching."""
+    """Generate a response via Claude Code CLI ('claude -p'), with caching."""
     key = _cache_key(question)
     if key in cache:
         return cache[key]
 
-    response = client.chat.completions.create(
-        model=MODEL,
-        max_tokens=512,
-        messages=[{"role": "user", "content": question}],
+    result = subprocess.run(
+        [CLAUDE_CLI, "-p", question, "--model", model],
+        capture_output=True,
+        text=True,
+        timeout=120,
     )
-    text = response.choices[0].message.content
+    if result.returncode != 0:
+        raise RuntimeError(f"claude -p failed: {result.stderr}")
+    text = result.stdout.strip()
     _save_cache_entry(key, question, text)
     cache[key] = text
     return text
@@ -306,13 +316,14 @@ def generate_report(
     pipeline_overall: float,
     ref: dict[str, dict[str, float]],
     sample_size: int,
+    model_name: str = "local",
 ) -> str:
     """Generate markdown benchmark report."""
     lines = [
         "# DPO Benchmark Evaluation Report",
         "",
         f"**Date:** {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
-        f"**Model:** {MODEL}",
+        f"**Model:** {model_name}",
         f"**Sample Size:** {sample_size}",
         f"**Seed:** {SEED}",
         "",
@@ -394,6 +405,7 @@ def generate_scorecard(
     pipeline_overall: float,
     ref: dict[str, dict[str, float]],
     sample_size: int,
+    model_name: str = "local",
 ) -> dict[str, Any]:
     """Generate machine-readable scorecard JSON."""
     scores: dict[str, Any] = {}
@@ -409,7 +421,7 @@ def generate_scorecard(
     return {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "sample_size": sample_size,
-        "model": MODEL,
+        "model": model_name,
         "seed": SEED,
         "scores": scores,
         "overall_score": {
@@ -423,22 +435,36 @@ def generate_scorecard(
 # Main
 # ---------------------------------------------------------------------------
 
-def main() -> None:
-    api_key = os.environ.get("DEEPSEEK_API_KEY")
-    if not api_key:
-        print(
-            "ERROR: DEEPSEEK_API_KEY environment variable is not set.\n"
-            "Set it before running the benchmark:\n"
-            "  export DEEPSEEK_API_KEY=sk-...\n"
-            "  python -m benchmarks.dpo_benchmark",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser(description="DPO Benchmark Evaluation Pipeline")
+    parser.add_argument(
+        "--mode",
+        choices=["local", "claude"],
+        default="local",
+        help="Response source: 'local' uses dataset rejected field (default), "
+             "'claude' uses Claude Code CLI (Max plan, no extra cost)",
+    )
+    parser.add_argument(
+        "--model",
+        default="haiku",
+        help="Claude model for --mode claude (default: haiku). "
+             "Examples: haiku, sonnet, opus",
+    )
+    return parser.parse_args(argv)
 
-    from openai import OpenAI
+
+def main(argv: list[str] | None = None) -> None:
+    args = parse_args(argv)
+    mode = args.mode
+    claude_model = args.model
+    if mode == "local":
+        model_label = "local (DPO rejected)"
+    else:
+        model_label = f"claude -p --model {claude_model} (Max plan)"
+
     from datasets import load_dataset
 
-    client = OpenAI(api_key=api_key, base_url=API_BASE_URL)
     pipeline = HumanPersonaPipeline()
 
     # Load reference data
@@ -454,26 +480,36 @@ def main() -> None:
     indices = rng.sample(range(len(dataset)), SAMPLE_SIZE)
     questions = [dataset[i]["prompt"] for i in indices]
 
-    # Load cache
-    cache = _load_cache()
-    cached_count = sum(1 for q in questions if _cache_key(q) in cache)
-    print(f"Cache: {cached_count}/{SAMPLE_SIZE} responses cached.")
-
-    # Generate responses
-    print("Generating API responses...")
+    # Generate / load raw responses
+    print(f"Mode: {mode} ({model_label})")
     raw_responses: list[str] = []
     pipeline_responses: list[str] = []
     pipeline_rng = random.Random(SEED)
 
-    for i, question in enumerate(questions):
-        if (i + 1) % 50 == 0:
-            print(f"  Progress: {i + 1}/{SAMPLE_SIZE}")
+    if mode == "local":
+        # Use dataset's 'rejected' field directly — no API calls
+        for i, idx in enumerate(indices):
+            if (i + 1) % 50 == 0:
+                print(f"  Progress: {i + 1}/{SAMPLE_SIZE}")
+            raw = dataset[idx]["rejected"]
+            raw_responses.append(raw)
+            transformed = pipeline.apply(raw, rng=pipeline_rng)
+            pipeline_responses.append(transformed)
+    else:
+        # claude mode — use Claude Code CLI
+        cache = _load_cache()
+        cached_count = sum(1 for q in questions if _cache_key(q) in cache)
+        print(f"Cache: {cached_count}/{SAMPLE_SIZE} responses cached.")
 
-        raw = generate_api_response(client, question, cache)
-        raw_responses.append(raw)
+        for i, question in enumerate(questions):
+            if (i + 1) % 50 == 0:
+                print(f"  Progress: {i + 1}/{SAMPLE_SIZE}")
 
-        transformed = pipeline.apply(raw, rng=pipeline_rng)
-        pipeline_responses.append(transformed)
+            raw = generate_claude_response(question, cache, model=claude_model)
+            raw_responses.append(raw)
+
+            transformed = pipeline.apply(raw, rng=pipeline_rng)
+            pipeline_responses.append(transformed)
 
     # Measure metrics
     print("Measuring metrics...")
@@ -513,7 +549,7 @@ def main() -> None:
 
     report = generate_report(
         raw_means, pipeline_means, raw_scores, pipeline_scores,
-        raw_overall, pipeline_overall, ref, SAMPLE_SIZE,
+        raw_overall, pipeline_overall, ref, SAMPLE_SIZE, model_label,
     )
     report_path = RESULTS_DIR / "benchmark_report.md"
     report_path.write_text(report, encoding="utf-8")
@@ -521,7 +557,7 @@ def main() -> None:
 
     scorecard = generate_scorecard(
         raw_means, pipeline_means, raw_scores, pipeline_scores,
-        raw_overall, pipeline_overall, ref, SAMPLE_SIZE,
+        raw_overall, pipeline_overall, ref, SAMPLE_SIZE, model_label,
     )
     scorecard_path = RESULTS_DIR / "scorecard.json"
     scorecard_path.write_text(
