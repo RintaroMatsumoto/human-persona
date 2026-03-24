@@ -1,54 +1,54 @@
 {
-  "timestamp": "2026-03-24T11:09:47.074064+00:00",
+  "timestamp": "2026-03-24T11:12:07.243405+00:00",
   "sample_size": 500,
   "model": "local (DPO rejected)",
   "seed": 42,
   "scores": {
     "sentence_length_cv": {
       "raw": 0.4374,
-      "pipeline": 0.5326,
+      "pipeline": 0.5317,
       "target": 0.634,
       "score_raw": 0.0279,
-      "score_pipeline": 0.4986
+      "score_pipeline": 0.4941
     },
     "hedge_rate": {
       "raw": 0.0175,
-      "pipeline": 0.0949,
+      "pipeline": 0.094,
       "target": 0.0817,
       "score_raw": 0.0028,
       "score_pipeline": 1.0
     },
     "self_correction_rate": {
       "raw": 0.0011,
-      "pipeline": 0.1129,
+      "pipeline": 0.1032,
       "target": 0.043,
       "score_raw": 0.0062,
       "score_pipeline": 1.0
     },
     "words_per_sentence": {
       "raw": 18.2546,
-      "pipeline": 14.477,
+      "pipeline": 14.5094,
       "target": 13.5262,
       "score_raw": 0.0095,
-      "score_pipeline": 0.8008
+      "score_pipeline": 0.794
     },
     "cushion_rate": {
       "raw": 0.024,
-      "pipeline": 0.18,
+      "pipeline": 0.186,
       "target": 0.1578,
       "score_raw": 0.0378,
       "score_pipeline": 1.0
     },
     "filler_rate": {
       "raw": 0.0997,
-      "pipeline": 0.2211,
+      "pipeline": 0.3812,
       "target": 0.334,
       "score_raw": 0.0043,
-      "score_pipeline": 0.5159
+      "score_pipeline": 1.0
     }
   },
   "overall_score": {
     "raw": 0.0132,
-    "pipeline": 0.7962
+    "pipeline": 0.8983
   }
 }

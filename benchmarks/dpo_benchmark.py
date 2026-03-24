@@ -113,7 +113,10 @@ class HumanPersonaPipeline:
         self._cushion_rate = dpo.get("cushion_rate", 0.1578)
         self._max_words_per_sentence = dpo.get("verbosity_words_per_sentence", 13.53)
 
-        self._fillers = ["Hmm, ", "Yeah, ", "So, ", "Oh, ", "Actually, ", "Well, "]
+        self._fillers = [
+            "Well, ", "So, ", "You know, ", "I mean, ", "Like, ",
+            "Basically, ", "Actually, ", "Honestly, ", "Right, ", "Okay, ",
+        ]
         self._hedges = [
             "I think ", "probably ", "maybe ", "sort of ", "kind of ",
             "I guess ", "I believe ",
@@ -148,7 +151,8 @@ class HumanPersonaPipeline:
         if len(sentences) > 1:
             new_sentences = []
             for i, sent in enumerate(sentences):
-                if i > 0 and rng.random() < self._filler_rate:
+                rate = self._filler_rate * 0.5 if i == 0 else self._filler_rate
+                if rng.random() < rate:
                     filler = rng.choice(self._fillers)
                     sent = filler + sent[0].lower() + sent[1:] if sent else sent
                 new_sentences.append(sent)
