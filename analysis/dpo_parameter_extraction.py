@@ -18,134 +18,37 @@ Data source: HumanLLMs/Human-Like-DPO-Dataset (10,884 samples)
 from __future__ import annotations
 
 import json
-import re
-import statistics
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 from scipy import stats
 
-try:
-    import textstat
-    HAS_TEXTSTAT = True
-except ImportError:
-    HAS_TEXTSTAT = False
-
-
-# ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
-
-HEDGE_PATTERNS = [
-    r"\bprobably\b", r"\bmaybe\b", r"\bi think\b", r"\bmight\b",
-    r"\bperhaps\b", r"\blikely\b", r"\bi guess\b", r"\bsort of\b",
-    r"\bkind of\b", r"\bseems like\b", r"\bi believe\b", r"\bnot sure\b",
-    r"\bpossibly\b", r"\bi suppose\b", r"\baround\b", r"\bapproximately\b",
-    r"\broughly\b", r"\bmore or less\b",
-]
-
-SELF_CORRECTION_PATTERNS = [
-    r"\bactually\b", r"\bi mean\b", r"\bwell,", r"\bsorry,",
-    r"\blet me rephrase\b", r"\bcorrection\b", r"\bwait,", r"\bno,",
-    r"\brather,",
-]
-
-FILLER_PATTERNS = [
-    r"\bwell\b", r"\bso\b", r"\byou know\b", r"\bi mean\b", r"\blike\b",
-    r"\bbasically\b", r"\bactually\b", r"\bhonestly\b", r"\bright\b",
-    r"\bokay\b",
-]
-
-CUSHION_PATTERNS = [
-    r"\bthanks\b", r"\bthank you\b", r"\bgreat question\b",
-    r"\bi understand\b", r"\bgood point\b", r"\bthat's a great\b",
-    r"\bi appreciate\b", r"\bsure\b", r"\bof course\b", r"\babsolutely\b",
-]
-
-
-# ---------------------------------------------------------------------------
-# Text utilities
-# ---------------------------------------------------------------------------
-
-def split_sentences(text: str) -> list[str]:
-    """Split text into sentences using punctuation boundaries."""
-    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
-    return [s for s in sentences if len(s.strip()) > 0]
-
-
-def count_pattern_matches(text: str, patterns: list[str]) -> int:
-    """Count total matches of regex patterns in text."""
-    text_lower = text.lower()
-    return sum(len(re.findall(p, text_lower)) for p in patterns)
-
-
-def word_count(text: str) -> int:
-    """Count words in text."""
-    return len(text.split())
-
-
-# ---------------------------------------------------------------------------
-# Metric extractors
-# ---------------------------------------------------------------------------
-
-def calc_sentence_length_variance(text: str) -> float | None:
-    """Calculate coefficient of variation of sentence lengths (chars)."""
-    sentences = split_sentences(text)
-    if len(sentences) < 2:
-        return None
-    lengths = [len(s) for s in sentences]
-    mean = statistics.mean(lengths)
-    if mean == 0:
-        return None
-    return statistics.stdev(lengths) / mean
-
-
-def calc_hedge_rate(text: str) -> float:
-    """Calculate hedging expression rate (per sentence)."""
-    sentences = split_sentences(text)
-    if not sentences:
-        return 0.0
-    matches = count_pattern_matches(text, HEDGE_PATTERNS)
-    return matches / len(sentences)
-
-
-def calc_self_correction_rate(text: str) -> float:
-    """Calculate self-correction marker rate (per sentence)."""
-    sentences = split_sentences(text)
-    if not sentences:
-        return 0.0
-    matches = count_pattern_matches(text, SELF_CORRECTION_PATTERNS)
-    return matches / len(sentences)
+# Import shared metrics (Phase A refactor)
+from analysis.metrics import (
+    split_sentences,
+    count_pattern_matches,
+    word_count,
+    measure_sentence_length_cv as calc_sentence_length_variance,
+    measure_hedge_rate as calc_hedge_rate,
+    measure_self_correction_rate as calc_self_correction_rate,
+    measure_words_per_sentence,
+    measure_flesch_score,
+    measure_cushion_rate as calc_cushion_rate,
+    measure_filler_rate as calc_filler_rate,
+    HEDGE_PATTERNS,
+    SELF_CORRECTION_PATTERNS,
+    FILLER_PATTERNS,
+    CUSHION_PATTERNS,
+)
 
 
 def calc_verbosity(text: str) -> dict[str, float]:
     """Calculate verbosity metrics: words per sentence + Flesch score."""
-    sentences = split_sentences(text)
-    if not sentences:
-        return {"words_per_sentence": 0.0, "flesch_reading_ease": 0.0}
-
-    wps = word_count(text) / len(sentences)
-    fre = textstat.flesch_reading_ease(text) if HAS_TEXTSTAT else 0.0
-    return {"words_per_sentence": wps, "flesch_reading_ease": fre}
-
-
-def calc_cushion_rate(text: str) -> bool:
-    """Check if response opens with a cushion expression."""
-    sentences = split_sentences(text)
-    if not sentences:
-        return False
-    first = sentences[0].lower()
-    return any(re.search(p, first) for p in CUSHION_PATTERNS)
-
-
-def calc_filler_rate(text: str) -> float:
-    """Calculate filler/discourse marker rate (per sentence)."""
-    sentences = split_sentences(text)
-    if not sentences:
-        return 0.0
-    matches = count_pattern_matches(text, FILLER_PATTERNS)
-    return matches / len(sentences)
+    return {
+        "words_per_sentence": measure_words_per_sentence(text),
+        "flesch_reading_ease": measure_flesch_score(text),
+    }
 
 
 # ---------------------------------------------------------------------------

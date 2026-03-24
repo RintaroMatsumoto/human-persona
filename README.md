@@ -103,8 +103,16 @@ human-persona/
 │   ├── design.md            # Architecture decisions
 │   ├── ethics.md            # Ethics & responsible use
 │   └── paper_draft.md       # Academic paper draft
+├── analysis/                # DPO dataset analysis
+│   ├── metrics.py           # Shared metrics module (7 metrics)
+│   ├── dpo_parameter_extraction.py
+│   └── results/             # Phase B analysis results
+├── benchmarks/              # Pipeline evaluation
+│   ├── dpo_benchmark.py     # 500-sample benchmark vs DPO dataset
+│   └── results/             # Benchmark reports & scorecard
 ├── tests/
-│   └── test_core.py         # Unit tests (29 tests)
+│   ├── test_dpo_analysis.py # DPO analysis tests (28 tests)
+│   └── test_benchmark.py    # Benchmark tests (39 tests)
 ├── SKILL.md                 # Agent Skill entry point
 └── README.md                # This file
 ```
@@ -121,12 +129,42 @@ See [docs/ethics.md](docs/ethics.md) for full guidelines.
 **Prohibited uses:** fraud, impersonation, emotional exploitation,
 election interference, harassment, platform TOS violations.
 
+## Benchmark
+
+human-persona includes a statistical benchmark that evaluates pipeline output
+against the [HumanLLMs/Human-Like-DPO-Dataset](https://huggingface.co/datasets/HumanLLMs/Human-Like-DPO-Dataset)
+(10,884 samples).
+
+**6 metrics** are measured and scored on a 0–1 scale
+(1.0 = matches Human-Like distribution, 0.0 = matches Formal/AI distribution):
+
+| Metric | Weight | Human-Like | Formal |
+|--------|--------|-----------|--------|
+| Sentence Length CV | 1.0 | 0.634 | 0.432 |
+| Hedge Rate | 1.5 | 0.082 | 0.017 |
+| Self-Correction Rate | 1.0 | 0.043 | 0.001 |
+| Words/Sentence | 1.0 | 13.5 | 18.3 |
+| Cushion Rate | 1.0 | 15.8% | 1.9% |
+| Filler Rate | 1.5 | 0.334 | 0.101 |
+
+### Running the benchmark
+
+```bash
+# Requires DEEPSEEK_API_KEY (OpenAI-compatible)
+export DEEPSEEK_API_KEY=sk-...
+python -m benchmarks.dpo_benchmark
+```
+
+Results are saved to `benchmarks/results/`:
+- `benchmark_report.md` — Human-readable comparison table
+- `scorecard.json` — Machine-readable scores for CI/CD regression testing
+
+API responses are cached in `benchmarks/cache/` to minimize cost on re-runs.
+
 ## Research
 
 This project aims to publish findings on arXiv and contribute to the
 Anthropic Agent Skills ecosystem. See [docs/paper_draft.md](docs/paper_draft.md).
-
-Empirical data is sourced from [FreelanceAutoPilot](https://github.com/RintaroMatsumoto/FreelanceAutoPilot).
 
 ## License
 
