@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-03-24T10:38:41.483737+00:00",
+  "sample_size": 500,
+  "model": "deepseek-chat",
+  "seed": 42,
+  "scores": {
+    "sentence_length_cv": {
+      "raw": 0.6863,
+      "pipeline": 0.6757,
+      "target": 0.634,
+      "score_raw": 1.0,
+      "score_pipeline": 1.0
+    },
+    "hedge_rate": {
+      "raw": 0.0586,
+      "pipeline": 0.1307,
+      "target": 0.0817,
+      "score_raw": 0.6406,
+      "score_pipeline": 1.0
+    },
+    "self_correction_rate": {
+      "raw": 0.0038,
+      "pipeline": 0.1054,
+      "target": 0.043,
+      "score_raw": 0.0711,
+      "score_pipeline": 1.0
+    },
+    "words_per_sentence": {
+      "raw": 17.6647,
+      "pipeline": 17.9906,
+      "target": 13.5262,
+      "score_raw": 0.1331,
+      "score_pipeline": 0.0648
+    },
+    "cushion_rate": {
+      "raw": 0.194,
+      "pipeline": 0.28,
+      "target": 0.1578,
+      "score_raw": 1.0,
+      "score_pipeline": 1.0
+    },
+    "filler_rate": {
+      "raw": 0.1702,
+      "pipeline": 0.3117,
+      "target": 0.334,
+      "score_raw": 0.2979,
+      "score_pipeline": 0.9044
+    }
+  },
+  "overall_score": {
+    "raw": 0.516,
+    "pipeline": 0.8459
+  }
+}

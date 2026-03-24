@@ -452,7 +452,7 @@ def main() -> None:
 
     rng = random.Random(SEED)
     indices = rng.sample(range(len(dataset)), SAMPLE_SIZE)
-    questions = [dataset[i]["question"] for i in indices]
+    questions = [dataset[i]["prompt"] for i in indices]
 
     # Load cache
     cache = _load_cache()
