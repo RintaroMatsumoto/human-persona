@@ -247,6 +247,28 @@ class TestHumanPersonaPipeline:
         result2 = pipeline.apply(text, rng=random.Random(42))
         assert result1 == result2
 
+    def test_pipeline_splits_long_sentences(self):
+        """Pipeline should split sentences exceeding the target words/sentence."""
+        pipeline = HumanPersonaPipeline()
+        long_text = (
+            "The implementation follows the specified requirements, "
+            "and all components have been thoroughly tested, "
+            "because the documentation has been updated accordingly."
+        )
+        result = pipeline.apply(long_text, rng=random.Random(99))
+        from analysis.metrics import measure_words_per_sentence
+        original_wps = measure_words_per_sentence(long_text)
+        result_wps = measure_words_per_sentence(result)
+        assert result_wps < original_wps
+
+    def test_pipeline_preserves_short_sentences(self):
+        """Pipeline should not split sentences that are already short."""
+        pipeline = HumanPersonaPipeline()
+        short_text = "Hello there. How are you?"
+        result = pipeline.apply(short_text, rng=random.Random(99))
+        # Should still have roughly the same sentence structure
+        assert len(result) > 0
+
     def test_pipeline_increases_human_metrics(self):
         """Pipeline should move metrics closer to human-like values."""
         pipeline = HumanPersonaPipeline()

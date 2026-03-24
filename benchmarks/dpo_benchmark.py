@@ -111,6 +111,7 @@ class HumanPersonaPipeline:
 
         dpo = self._config.get("dpo_calibration", {})
         self._cushion_rate = dpo.get("cushion_rate", 0.1578)
+        self._max_words_per_sentence = dpo.get("verbosity_words_per_sentence", 13.53)
 
         self._fillers = ["Hmm, ", "Yeah, ", "So, ", "Oh, ", "Actually, ", "Well, "]
         self._hedges = [
@@ -133,12 +134,16 @@ class HumanPersonaPipeline:
         rng = rng or random.Random()
         result = text
 
-        # 1. Cushion injection (at start of response)
+        # 1. Sentence splitting (shorten long sentences FIRST so later
+        #    stages operate on the correct sentence count)
+        result = self._split_long_sentences(result, rng)
+
+        # 2. Cushion injection (at start of response)
         if rng.random() < self._cushion_rate:
             cushion = rng.choice(self._cushions)
             result = cushion + result[0].lower() + result[1:] if result else result
 
-        # 2. Filler insertion (per sentence)
+        # 3. Filler insertion (per sentence)
         sentences = split_sentences(result)
         if len(sentences) > 1:
             new_sentences = []
@@ -149,7 +154,7 @@ class HumanPersonaPipeline:
                 new_sentences.append(sent)
             result = " ".join(new_sentences)
 
-        # 3. Hedge injection
+        # 4. Hedge injection
         sentences = split_sentences(result)
         if sentences:
             new_sentences = []
@@ -160,7 +165,7 @@ class HumanPersonaPipeline:
                 new_sentences.append(sent)
             result = " ".join(new_sentences)
 
-        # 4. Self-correction injection (rare)
+        # 5. Self-correction injection (rare)
         if rng.random() < self._self_correction_rate:
             sentences = split_sentences(result)
             if len(sentences) >= 2:
@@ -170,6 +175,65 @@ class HumanPersonaPipeline:
                 result = " ".join(sentences)
 
         return result
+
+    # Conjunctions / relative markers where we can split a long sentence.
+    _SPLIT_PATTERN = re.compile(
+        r',\s*(?:and|but|so|because|since|although|though|which|where|while|however|yet)\s',
+        re.IGNORECASE,
+    )
+
+    def _split_long_sentences(self, text: str, rng: random.Random) -> str:
+        """Split sentences that exceed the target words-per-sentence."""
+        threshold = int(self._max_words_per_sentence)  # match target directly
+        sentences = split_sentences(text)
+        new_sentences: list[str] = []
+
+        for sent in sentences:
+            if len(sent.split()) <= threshold:
+                new_sentences.append(sent)
+                continue
+
+            # Find split points at conjunctions after a comma
+            parts = self._try_split(sent, threshold)
+            new_sentences.extend(parts)
+
+        return " ".join(new_sentences)
+
+    def _try_split(self, sent: str, threshold: int) -> list[str]:
+        """Try to split a single sentence at conjunction boundaries."""
+        matches = list(self._SPLIT_PATTERN.finditer(sent))
+        if not matches:
+            return [sent]
+
+        # Pick the split point closest to the middle
+        mid = len(sent) // 2
+        best = min(matches, key=lambda m: abs(m.start() - mid))
+
+        left = sent[:best.start()].rstrip(",").strip()
+        right = sent[best.end():].strip()
+
+        # Capitalize the right fragment
+        if right:
+            right = right[0].upper() + right[1:]
+
+        # End the left fragment with a period if it doesn't have one
+        if left and left[-1] not in ".!?":
+            left += "."
+
+        parts: list[str] = []
+        # Recursively split if still too long
+        if len(left.split()) > threshold:
+            parts.extend(self._try_split(left, threshold))
+        else:
+            parts.append(left)
+
+        if len(right.split()) > threshold:
+            parts.extend(self._try_split(right, threshold))
+        else:
+            if right:
+                parts.append(right)
+
+        return parts
 
 
 # ---------------------------------------------------------------------------
