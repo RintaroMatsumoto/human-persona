@@ -52,6 +52,23 @@ human-persona/
 └── .github/ISSUE_TEMPLATE/
 ```
 
+## 方針転換（2025-03-25 決定）
+
+### humanize/pipeline.py の凍結
+- `humanize/pipeline.py` は凍結。現状のまま保存するが、プロダクション利用はしない。
+- 理由: core/ の既存アーキテクチャ（HumanPersonaBase, StyleVariator, EmotionStateMachine 等）を完全に無視して作られた。レジスター（formal/business/casual）の区別なし、日本語の敬語体系（尊敬語/謙譲語/丁寧語）へのアプローチなし。
+- 教訓: **既存プロジェクトに新しいコードを書く前に、既存アーキテクチャを全部読むこと。**
+
+### FreelanceAutoPilot との連携方針
+- **M1-M2（提案文フェーズ）**: ポストプロセッシングではなく、Claude のシステムプロンプトにペルソナ指示を組み込む方式を採用（proposal_gen.py に実装済み: b893604）。
+- **M3-M4（メッセージングフェーズ）**: クライアントとの継続的なやり取りが発生する段階で、human-persona の core/ アーキテクチャを本格活用。EmotionStateMachine（感情遷移）、ContextReferencer（文脈参照）、TimingController（応答タイミング）が真価を発揮する。
+- pipeline.py の再設計はM3-M4開始時に行う。その際は core/ の基盤の上に構築すること。
+
+### 判断根拠
+- 提案文は1回きりの生成であり、感情遷移や文脈蓄積が不要。プロンプトレベルの制御で十分。
+- human-persona の真の価値は「継続的な会話における人間らしさ」にある。単発テキスト変換はスコープ外。
+- DPO ベンチマークの機械評価だけでは設計判断に不十分。Human Eval 未実施。
+
 ## 次回やること
 1. dev.to記事の公開確認（ダッシュボードから手動公開が必要かも）
 2. Hacker News投稿（docs/articles/hackernews_en.md の内容をSubmitページに貼る）
@@ -59,3 +76,5 @@ human-persona/
 4. tests/ にテストを実装（turing_test.py, consistency_test.py, platform_timing_test.py）
 5. config/ja_business.json の実設定ファイル作成
 6. dev.to APIキーの再生成（会話履歴に露出したため）
+7. M3-M4 開始時: humanize/pipeline.py を core/ ベースで再設計（レジスター・敬語体系対応）
+8. Human Eval の実施（DPO ベンチマーク補完）
