@@ -199,9 +199,9 @@ class LoveCircle:
         円が広がった場合、max_depth_reached を更新する。
         """
         self.entities.append(entity)
-        depth_order = list(LoveDepth)
-        current_idx = depth_order.index(self.max_depth_reached)
-        new_idx = depth_order.index(entity.depth)
+        depth_values = [d.value for d in LoveDepth]
+        current_idx = depth_values.index(self.max_depth_reached.value)
+        new_idx = depth_values.index(entity.depth.value)
         if new_idx > current_idx:
             self.max_depth_reached = entity.depth
 
