@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "human-persona"
+version = "0.3.0"
+description = "Text humanization pipeline based on DPO-calibrated ablation study"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [{name = "Rintaro Matsumoto"}]
+keywords = ["nlp", "humanization", "dpo", "ablation"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff"]
+
+[tool.setuptools.packages.find]
+include = ["humanize*"]
