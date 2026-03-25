@@ -4,11 +4,11 @@
     "max_ratio": 1.78
   },
   "hedge_probability": 0.0817,
-  "self_correction_rate": 0.043,
+  "self_correction_rate": 0.0019,
   "verbosity_human_avg": 13.53,
   "verbosity_formal_avg": 18.3,
   "cushion_rate_human": 0.1578,
   "cushion_rate_formal": 0.0187,
-  "filler_rate_human": 0.334,
-  "filler_rate_formal": 0.1007
+  "filler_rate_human": 0.1652,
+  "filler_rate_formal": 0.0011
 }

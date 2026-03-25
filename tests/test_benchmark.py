@@ -16,6 +16,7 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
+import numpy as np
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -39,6 +40,7 @@ from analysis.metrics import (
 from benchmarks.dpo_benchmark import (
     compute_score,
     compute_overall_score,
+    compute_metric_weights,
     measure_all_metrics,
     HumanPersonaPipeline,
     generate_scorecard,
@@ -46,10 +48,15 @@ from benchmarks.dpo_benchmark import (
     _cache_key,
     _save_cache_entry,
     _load_cache,
-    METRIC_WEIGHTS,
+    METRIC_NAMES,
     load_reference_stats,
     parse_args,
+    cohens_d,
+    bootstrap_ci,
 )
+
+# Build a default weight dict for backward-compatible tests
+_DEFAULT_WEIGHTS = {m: 1.0 for m in METRIC_NAMES}
 
 
 # ===========================================================================
@@ -197,15 +204,18 @@ class TestComputeScore:
 
 class TestComputeOverallScore:
     def test_all_perfect(self):
-        scores = {metric: 1.0 for metric in METRIC_WEIGHTS}
-        assert abs(compute_overall_score(scores) - 1.0) < 0.001
+        scores = {metric: 1.0 for metric in METRIC_NAMES}
+        assert abs(compute_overall_score(scores, _DEFAULT_WEIGHTS) - 1.0) < 0.001
 
     def test_all_zero(self):
-        scores = {metric: 0.0 for metric in METRIC_WEIGHTS}
-        assert abs(compute_overall_score(scores) - 0.0) < 0.001
+        scores = {metric: 0.0 for metric in METRIC_NAMES}
+        assert abs(compute_overall_score(scores, _DEFAULT_WEIGHTS) - 0.0) < 0.001
 
     def test_weighted(self):
-        # hedge_rate and filler_rate have weight 1.5, rest 1.0
+        # With custom weights: hedge=2.0, filler=2.0, rest=1.0
+        weights = {m: 1.0 for m in METRIC_NAMES}
+        weights["hedge_rate"] = 2.0
+        weights["filler_rate"] = 2.0
         scores = {
             "sentence_length_cv": 0.0,
             "hedge_rate": 1.0,
@@ -214,9 +224,9 @@ class TestComputeOverallScore:
             "cushion_rate": 0.0,
             "filler_rate": 1.0,
         }
-        overall = compute_overall_score(scores)
-        # (0*1 + 1*1.5 + 0*1 + 0*1 + 0*1 + 1*1.5) / (1+1.5+1+1+1+1.5) = 3/7
-        expected = 3.0 / 7.0
+        overall = compute_overall_score(scores, weights)
+        # (0*1 + 1*2 + 0*1 + 0*1 + 0*1 + 1*2) / (1+2+1+1+1+2) = 4/8 = 0.5
+        expected = 4.0 / 8.0
         assert abs(overall - expected) < 0.001
 
 
@@ -227,7 +237,7 @@ class TestComputeOverallScore:
 class TestMeasureAllMetrics:
     def test_returns_all_keys(self):
         metrics = measure_all_metrics("Hello world. How are you? I'm fine.")
-        for key in METRIC_WEIGHTS:
+        for key in METRIC_NAMES:
             assert key in metrics
 
     def test_values_are_numeric(self):
@@ -334,7 +344,7 @@ class TestCache:
 class TestLoadReferenceStats:
     def test_loads_all_metrics(self):
         ref = load_reference_stats()
-        for metric in METRIC_WEIGHTS:
+        for metric in METRIC_NAMES:
             assert metric in ref
             assert "humanlike_mean" in ref[metric]
             assert "formal_mean" in ref[metric]
@@ -352,29 +362,44 @@ class TestReportGeneration:
     @pytest.fixture
     def sample_data(self):
         ref = {
-            metric: {"humanlike_mean": 0.5, "formal_mean": 0.1}
-            for metric in METRIC_WEIGHTS
+            metric: {"humanlike_mean": 0.5, "formal_mean": 0.1, "humanlike_std": 0.1, "formal_std": 0.1}
+            for metric in METRIC_NAMES
         }
-        means = {metric: 0.4 for metric in METRIC_WEIGHTS}
-        scores = {metric: 0.75 for metric in METRIC_WEIGHTS}
-        return means, scores, ref
+        means = {metric: 0.4 for metric in METRIC_NAMES}
+        scores = {metric: 0.75 for metric in METRIC_NAMES}
+        weights = {metric: 1.0 for metric in METRIC_NAMES}
+        return means, scores, ref, weights
 
     def test_report_contains_table(self, sample_data):
-        means, scores, ref = sample_data
-        report = generate_report(means, means, scores, scores, 0.75, 0.75, ref, 500)
+        means, scores, ref, weights = sample_data
+        report = generate_report(means, means, scores, scores, 0.75, 0.75, ref, weights, 500)
         assert "| Metric |" in report
         assert "Sentence Length CV" in report
 
+    def test_report_dual_score(self, sample_data):
+        means, scores, ref, weights = sample_data
+        wass_scores = {metric: 0.6 for metric in METRIC_NAMES}
+        ks_results = {metric: {"ks_stat": 0.1, "p_value": 0.5} for metric in METRIC_NAMES}
+        report = generate_report(
+            means, means, scores, scores, 0.75, 0.75, ref, weights, 500,
+            wass_scores=wass_scores, wass_overall=0.6,
+            wass_overall_ci=(0.6, 0.55, 0.65),
+            ks_results=ks_results,
+        )
+        assert "Dual-Score Summary" in report
+        assert "Distribution Alignment" in report
+        assert "KS test" in report
+
     def test_scorecard_structure(self, sample_data):
-        means, scores, ref = sample_data
-        card = generate_scorecard(means, means, scores, scores, 0.75, 0.75, ref, 500)
+        means, scores, ref, weights = sample_data
+        card = generate_scorecard(means, means, scores, scores, 0.75, 0.75, ref, weights, 500)
         assert "timestamp" in card
         assert "sample_size" in card
         assert card["sample_size"] == 500
         assert "model" in card
         assert "scores" in card
         assert "overall_score" in card
-        for metric in METRIC_WEIGHTS:
+        for metric in METRIC_NAMES:
             assert metric in card["scores"]
 
 
@@ -406,6 +431,65 @@ class TestParseArgs:
     def test_model_override(self):
         args = parse_args(["--mode", "claude", "--model", "sonnet"])
         assert args.model == "sonnet"
+
+
+# ===========================================================================
+# Statistical functions (v2)
+# ===========================================================================
+
+class TestCohensD:
+    def test_identical_groups(self):
+        a = np.array([1.0, 2.0, 3.0])
+        assert abs(cohens_d(a, a)) < 0.01
+
+    def test_different_groups(self):
+        a = np.array([10.0, 11.0, 12.0])
+        b = np.array([0.0, 1.0, 2.0])
+        d = cohens_d(a, b)
+        assert d > 5.0  # very large effect
+
+    def test_small_group(self):
+        a = np.array([1.0])
+        b = np.array([2.0])
+        assert cohens_d(a, b) == 0.0  # too small
+
+
+class TestBootstrapCI:
+    def test_basic(self):
+        vals = np.array([1.0, 2.0, 3.0, 4.0, 5.0] * 20)
+        mean, lo, hi = bootstrap_ci(vals, n_bootstrap=500)
+        assert 2.5 < mean < 3.5
+        assert lo < mean < hi
+        assert hi - lo < 1.5  # CI should be reasonable
+
+    def test_deterministic(self):
+        vals = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+        r1 = bootstrap_ci(vals, seed=42)
+        r2 = bootstrap_ci(vals, seed=42)
+        assert r1 == r2
+
+
+class TestComputeMetricWeights:
+    def test_returns_all_metrics(self):
+        ref = {
+            m: {"humanlike_mean": 0.5, "humanlike_std": 0.1,
+                "formal_mean": 0.1, "formal_std": 0.1}
+            for m in METRIC_NAMES
+        }
+        weights = compute_metric_weights(ref)
+        for m in METRIC_NAMES:
+            assert m in weights
+            assert weights[m] > 0
+
+    def test_higher_effect_size_gets_higher_weight(self):
+        ref = {m: {"humanlike_mean": 0.5, "humanlike_std": 0.1,
+                    "formal_mean": 0.4, "formal_std": 0.1}
+               for m in METRIC_NAMES}
+        # Make hedge_rate have much larger effect size
+        ref["hedge_rate"]["humanlike_mean"] = 0.9
+        ref["hedge_rate"]["formal_mean"] = 0.1
+        weights = compute_metric_weights(ref)
+        assert weights["hedge_rate"] > weights["sentence_length_cv"]
 
 
 if __name__ == "__main__":

@@ -1,54 +1,150 @@
 {
-  "timestamp": "2026-03-24T11:23:38.434789+00:00",
+  "version": "2.0",
+  "timestamp": "2026-03-25T02:46:24.014700+00:00",
+  "evaluation_mode": "holdout_80_20",
   "sample_size": 500,
   "model": "local (DPO rejected)",
   "seed": 42,
+  "bootstrap_n": 1000,
   "scores": {
     "sentence_length_cv": {
-      "raw": 0.4374,
-      "pipeline": 0.6195,
-      "target": 0.634,
-      "score_raw": 0.0279,
-      "score_pipeline": 0.9285
+      "raw": 0.4246,
+      "pipeline": 0.628,
+      "target": 0.6333,
+      "score_raw": 0.0,
+      "score_pipeline": 0.9737,
+      "weight": 1.1618,
+      "ci_95": [
+        0.614,
+        0.641
+      ],
+      "wasserstein": 0.0225,
+      "cohens_d": 1.0864
     },
     "hedge_rate": {
-      "raw": 0.0175,
-      "pipeline": 0.0871,
-      "target": 0.0817,
-      "score_raw": 0.0028,
-      "score_pipeline": 0.9163
+      "raw": 0.0187,
+      "pipeline": 0.0887,
+      "target": 0.0818,
+      "score_raw": 0.02,
+      "score_pipeline": 0.8923,
+      "weight": 0.8747,
+      "ci_95": [
+        0.0813,
+        0.0967
+      ],
+      "wasserstein": 0.0117,
+      "cohens_d": 0.8179
     },
     "self_correction_rate": {
-      "raw": 0.0007,
-      "pipeline": 0.045,
-      "target": 0.043,
+      "raw": 0.0006,
+      "pipeline": 0.0023,
+      "target": 0.0019,
       "score_raw": 0.0,
-      "score_pipeline": 0.9539
+      "score_pipeline": 0.6014,
+      "weight": 0.0968,
+      "ci_95": [
+        0.0011,
+        0.0039
+      ],
+      "wasserstein": 0.0006,
+      "cohens_d": 0.0905
     },
     "words_per_sentence": {
-      "raw": 18.2546,
-      "pipeline": 13.5308,
-      "target": 13.5262,
-      "score_raw": 0.0095,
-      "score_pipeline": 0.999
+      "raw": 18.444,
+      "pipeline": 13.2834,
+      "target": 13.5322,
+      "score_raw": 0.0,
+      "score_pipeline": 0.9481,
+      "weight": 1.4497,
+      "ci_95": [
+        13.0523,
+        13.5225
+      ],
+      "wasserstein": 0.5736,
+      "cohens_d": -1.3556
     },
     "cushion_rate": {
-      "raw": 0.024,
-      "pipeline": 0.178,
-      "target": 0.1578,
-      "score_raw": 0.0378,
-      "score_pipeline": 0.8551
+      "raw": 0.016,
+      "pipeline": 0.156,
+      "target": 0.1572,
+      "score_raw": 0.0,
+      "score_pipeline": 0.9911,
+      "weight": 0.5405,
+      "ci_95": [
+        0.124,
+        0.186
+      ],
+      "wasserstein": 0.026,
+      "cohens_d": 0.5055
     },
     "filler_rate": {
-      "raw": 0.0994,
-      "pipeline": 0.3654,
-      "target": 0.334,
+      "raw": 0.0008,
+      "pipeline": 0.1577,
+      "target": 0.1653,
       "score_raw": 0.0,
-      "score_pipeline": 0.8653
+      "score_pipeline": 0.9538,
+      "weight": 1.8765,
+      "ci_95": [
+        0.148,
+        0.1674
+      ],
+      "wasserstein": 0.0193,
+      "cohens_d": 1.7547
     }
   },
   "overall_score": {
-    "raw": 0.0113,
-    "pipeline": 0.9156
+    "raw": 0.0029,
+    "pipeline": 0.945,
+    "ci_95": [
+      0.902,
+      0.9607
+    ]
+  },
+  "wasserstein_overall": {
+    "score": 0.8643,
+    "ci_95": [
+      0.8114,
+      0.8768
+    ]
+  },
+  "wasserstein_scores": {
+    "sentence_length_cv": 0.8946,
+    "hedge_rate": 0.8082,
+    "self_correction_rate": 0.5338,
+    "words_per_sentence": 0.8775,
+    "cushion_rate": 0.8434,
+    "filler_rate": 0.8846
+  },
+  "ks_tests": {
+    "sentence_length_cv": {
+      "ks_stat": 0.058,
+      "p_value": 0.369905,
+      "pass": true
+    },
+    "hedge_rate": {
+      "ks_stat": 0.098,
+      "p_value": 0.016379,
+      "pass": false
+    },
+    "self_correction_rate": {
+      "ks_stat": 0.01,
+      "p_value": 1.0,
+      "pass": true
+    },
+    "words_per_sentence": {
+      "ks_stat": 0.114,
+      "p_value": 0.00299,
+      "pass": false
+    },
+    "cushion_rate": {
+      "ks_stat": 0.026,
+      "p_value": 0.995953,
+      "pass": true
+    },
+    "filler_rate": {
+      "ks_stat": 0.082,
+      "p_value": 0.069301,
+      "pass": true
+    }
   }
 }

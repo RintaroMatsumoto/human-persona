@@ -12,11 +12,11 @@
 |--------|-------------------|---------------|---|---------|-------------|
 | Sentence Length CV | 0.6340 | 0.4317 | +0.2022 | 0.00e+00 | Yes |
 | Hedge Rate (per sent) | 0.0817 | 0.0174 | +0.0644 | 0.00e+00 | Yes |
-| Self-Correction Rate | 0.0430 | 0.0009 | +0.0422 | 0.00e+00 | Yes |
+| Self-Correction Rate | 0.0019 | 0.0007 | +0.0012 | 8.14e-13 | Yes |
 | Words per Sentence | 13.5262 | 18.2999 | -4.7737 | 0.00e+00 | Yes |
 | Flesch Reading Ease | 70.1061 | 29.4027 | +40.7034 | 0.00e+00 | Yes |
 | Cushion Rate | 0.1578 | 0.0187 | +0.1391 | 2.58e-290 | Yes |
-| Filler Rate (per sent) | 0.3340 | 0.1007 | +0.2333 | 0.00e+00 | Yes |
+| Filler Rate (per sent) | 0.1652 | 0.0011 | +0.1641 | 0.00e+00 | Yes |
 
 ---
 
@@ -38,10 +38,10 @@
 
 ### Self-Correction Rate
 
-- **Human-Like:** mean=0.0430, std=0.0605, median=0.0000
-- **Formal:** mean=0.0009, std=0.0094, median=0.0000
-- **95% CI (Human-Like mean):** [0.0419, 0.0442]
-- **t-statistic:** 71.8326, **p-value:** 0.00e+00
+- **Human-Like:** mean=0.0019, std=0.0153, median=0.0000
+- **Formal:** mean=0.0007, std=0.0085, median=0.0000
+- **95% CI (Human-Like mean):** [0.0016, 0.0022]
+- **t-statistic:** 7.1643, **p-value:** 8.14e-13
 
 ### Words per Sentence
 
@@ -66,10 +66,10 @@
 
 ### Filler Rate (per sent)
 
-- **Human-Like:** mean=0.3340, std=0.1868, median=0.3158
-- **Formal:** mean=0.1007, std=0.1299, median=0.0435
-- **95% CI (Human-Like mean):** [0.3305, 0.3375]
-- **t-statistic:** 106.9868, **p-value:** 0.00e+00
+- **Human-Like:** mean=0.1652, std=0.1311, median=0.1429
+- **Formal:** mean=0.0011, std=0.0104, median=0.0000
+- **95% CI (Human-Like mean):** [0.1628, 0.1677]
+- **t-statistic:** 130.1932, **p-value:** 0.00e+00
 
 ---
 
@@ -82,13 +82,13 @@
     "max_ratio": 1.78
   },
   "hedge_probability": 0.0817,
-  "self_correction_rate": 0.043,
+  "self_correction_rate": 0.0019,
   "verbosity_human_avg": 13.53,
   "verbosity_formal_avg": 18.3,
   "cushion_rate_human": 0.1578,
   "cushion_rate_formal": 0.0187,
-  "filler_rate_human": 0.334,
-  "filler_rate_formal": 0.1007
+  "filler_rate_human": 0.1652,
+  "filler_rate_formal": 0.0011
 }
 ```
 

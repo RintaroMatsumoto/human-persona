@@ -33,7 +33,7 @@
       "min_ratio": 0.22,
       "max_ratio": 1.78
     },
-    "filler_rate": 0.334,
+    "filler_rate": 0.1652,
     "style_patterns": [
       {
         "type": "confirmation",
@@ -159,13 +159,15 @@
   },
   "ambiguity": {
     "hedge_probability": 0.0817,
-    "self_correction_rate": 0.043
+    "self_correction_rate": 0.0013,
+    "_self_correction_note": "Reduced from 0.0019 to 0.0013: source text has ~0.0006 existing self-corrections"
   },
   "dpo_calibration": {
-    "_note": "Values derived from HumanLLMs/Human-Like-DPO-Dataset (n=10,884)",
+    "_note": "Values derived from HumanLLMs/Human-Like-DPO-Dataset (n=10,884), v2 position-aware patterns",
     "verbosity_words_per_sentence": 13.53,
-    "cushion_rate": 0.1578,
-    "filler_rate": 0.334,
+    "cushion_rate": 0.1434,
+    "_cushion_note": "Reduced from 0.1578: source text has ~0.016 existing cushions. Formula: (0.1572-0.016)/(1-0.016)=0.1434",
+    "filler_rate": 0.1652,
     "sentence_length_cv": 0.634
   },
   "escalation": {

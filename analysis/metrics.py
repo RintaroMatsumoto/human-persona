@@ -50,10 +50,25 @@ SELF_CORRECTION_PATTERNS: list[str] = [
 ]
 
 FILLER_PATTERNS: list[str] = [
-    r"\bwell\b", r"\bso\b", r"\byou know\b", r"\bi mean\b", r"\blike\b",
-    r"\bbasically\b", r"\bactually\b", r"\bhonestly\b", r"\bokay\b",
+    # Position-independent fillers (low false-positive rate)
+    r"\byou know\b", r"\bi mean\b", r"\bbasically\b",
+    r"\bactually\b", r"\bhonestly\b", r"\bokay\b",
+    # NOTE: 'well', 'so', 'like' removed from simple word-boundary patterns
+    # due to high false-positive rate (e.g. "I like", "so that", "well done").
+    # These are now detected only at sentence-start+comma via FILLER_START_PATTERNS.
     # NOTE: 'right' removed — conflicts with SHORT_INTERJECTIONS and
-    # has high false-positive rate in normal text
+    # has high false-positive rate in normal text.
+]
+
+# Sentence-start fillers: only count as fillers when at sentence beginning
+# followed by a comma (e.g. "Well, ..." "So, ..." "Like, ...")
+FILLER_START_PATTERNS: list[str] = [
+    r"^(?:well|so|like)\s*,",
+]
+
+# Mid-sentence fillers after comma (e.g. "and, like, ...")
+FILLER_COMMA_PATTERNS: list[str] = [
+    r",\s*(?:like|you know|i mean)\b",
 ]
 
 CUSHION_PATTERNS: list[str] = [
@@ -151,9 +166,24 @@ def measure_cushion_rate(text: str) -> bool:
 
 
 def measure_filler_rate(text: str) -> float:
-    """Calculate filler/discourse marker rate (per sentence)."""
+    """Calculate filler/discourse marker rate (per sentence).
+
+    Uses three pattern tiers to reduce false positives:
+    1. FILLER_PATTERNS — position-independent (always fillers)
+    2. FILLER_START_PATTERNS — sentence-initial + comma only
+    3. FILLER_COMMA_PATTERNS — mid-sentence after comma
+    """
     sentences = split_sentences(text)
     if not sentences:
         return 0.0
-    matches = count_pattern_matches(text, FILLER_PATTERNS)
-    return matches / len(sentences)
+    text_lower = text.lower()
+    count = count_pattern_matches(text, FILLER_PATTERNS)
+    # Sentence-start fillers (per sentence)
+    for sent in sentences:
+        sent_lower = sent.lower().strip()
+        for p in FILLER_START_PATTERNS:
+            count += len(re.findall(p, sent_lower))
+    # Mid-sentence comma fillers
+    for p in FILLER_COMMA_PATTERNS:
+        count += len(re.findall(p, text_lower))
+    return count / len(sentences)
