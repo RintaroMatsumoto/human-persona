@@ -126,7 +126,7 @@ en_02のHLが7→8に改善。
 
 TNだけ5.5止まりで目標の6.0に届いていない。タイミングの自然さはconfigの数値調整より**実際の取引ログ**から学習させないと改善しにくい構造的な問題がある。
 
-次は人間評価UIを作ってZennで公開実験を行う予定（[Issue #5](https://github.com/RintaroMatsumoto/human-persona/issues/5)）。「このメッセージ、人間っぽいですか？」という評価フォームで実データを収集する。
+次はA/Bブラインドテストによる人間評価を実施し、構造スコアの妥当性を検証する予定（[Issue #5](https://github.com/RintaroMatsumoto/human-persona/issues/5)）。
 
 ---
 

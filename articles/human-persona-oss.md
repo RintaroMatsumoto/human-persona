@@ -162,12 +162,12 @@ context = persona.get_system_prompt_context()
 
 **短期**
 - テストスイートの整備（チューリングテスト自動化含む）
-- 評価実験の設計と実施
+- A/Bブラインドテストによる人間評価
 
 **中期**
 - 論文化（arXiv 投稿予定）
   - タイトル: "HumanPersonaBase: A Language-Agnostic Framework for Human-like AI Communication in Professional Contexts"
-  - 設計原則の理論的妥当性と評価実験の結果を報告する
+  - 設計原則の理論的妥当性とベンチマーク結果を報告する
 
 **長期**
 - コミュニティからのフィードバックを反映した派生クラスの拡充

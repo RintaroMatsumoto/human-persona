@@ -31,7 +31,7 @@ identified as human **73% of the time** — more than actual humans (63%).
 The bottleneck isn't AI capability; it's **persona design**.
 
 This project formalizes what makes AI communication human-like, based on
-real-world operational data from Japanese crowdsourcing platforms.
+empirical analysis of the HumanLLMs/Human-Like-DPO-Dataset (10,884 samples).
 
 ## Quick Start
 
