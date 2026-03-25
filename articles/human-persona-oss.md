@@ -6,71 +6,92 @@ topics: ["Python", "AI", "OSS", "チューリングテスト", "NLP"]
 published: true
 ---
 
-## 背景：AIの人間らしさの「本当のボトルネック」
+## きっかけ：AIで書いた文章が、一発でバレた
 
-2024年、Jones & Bergen が PNAS に発表した論文が衝撃的だった。
+ビジネスコミュニケーションをAIで自動化しようとして、最初に書いたプロトタイプの出力がこれだった:
 
-> GPT-4.5 に「人間らしいペルソナ」を指示したところ、
-> **73% の確率で人間と認識された**。実際の人間参加者の認識率を上回った。
+> ご連絡ありがとうございます。本件につきまして、3日以内に納品可能です。詳細な要件をお知らせいただければ、すぐに着手いたします。何かご不明な点がございましたら、お気軽にお申し付けください。
 
-つまり、もう「意味を理解しているかどうか」は問題じゃない。
-AIが人間とばれる原因は別のところにある:
+完璧な日本語。文法的にも敬語的にも非の打ち所がない。そして、**誰が読んでもAIが書いたとわかる。**
 
-- **即レス**: 30秒で返すと AI 確定
-- **文体の均質性**: 毎回同じパターンの丁寧な文章
-- **感情が変わらない**: 3往復目も初回と同じトーン
-- **文脈を無視**: 相手の前の発言を参照しない
-- **完璧すぎる**: 「3日で完成します」と言い切る不自然さ
+なぜわかるのか。3つの致命的なパターンがある:
 
-これらは**パラ言語的特徴**と呼ばれる。言語理解とは別レイヤーの問題だ。
+1. **30秒で返信が来る。** 人間なら考える時間がある
+2. **毎回同じトーン。** 3往復目も初回と同じ丁寧さ
+3. **「お気軽に」で終わる。** 人間はこんなに毎回お気軽に言わない
 
-自分は AI を使ったビジネスコミュニケーションの自動化を試みる中で、この問題に正面からぶつかった。LLM の出力は意味的に正しいが、「人間が書いたっぽくない」。そこで、人間らしさの構造を基底クラスとして設計することにした。
+2024年、Jones & Bergen が PNAS に発表した論文がこの直感を裏付けた。GPT-4.5に「人間らしいペルソナ」を指示したところ、73%の確率で人間と認識された——実際の人間参加者の認識率を上回った。
 
-## 設計思想：なぜ「基底クラス」なのか
+つまり、LLMは十分に賢い。バレる原因は**知性ではなく振る舞い**にある。返信速度、文体のばらつき、感情の変化、文脈への参照——言語学で「パラ言語的特徴」と呼ばれるものだ。
 
-人間らしいコミュニケーションの「構造」は文化を超えて共通する:
-- 返信には時間がかかる
-- 感情は会話を通じて変化する
-- 前の文脈を参照する
-- 対応できない状況では人間に引き継ぐ
+じゃあ、この「振る舞い」を体系的に設計できないか？　そう思って作り始めた。
 
-変わるのは「表現」だけだ。敬語の使い方、曖昧さの許容度、沈黙の意味——これらは文化依存。
+## 最初の失敗：if文の地獄
 
-だから OOP の継承モデルで設計した:
+最初のアプローチはナイーブだった。
+
+```python
+if exchange_count < 3:
+    tone = "formal"
+elif exchange_count < 10:
+    tone = "casual"
+if "クレーム" in message:
+    tone = "careful"
+if time.hour >= 23:
+    delay = 3600  # 翌朝返信
+```
+
+2日でif文が50行を超えた。しかも**言語を変えるたびに全部書き直し**になる。日本語なら「3往復で打ち解ける」が自然だが、英語だと「1往復目からカジュアル」が普通だったりする。スペイン語はどうなる？アラビア語は？
+
+ここで設計を根本から考え直した。
+
+## なぜ「基底クラス」なのか
+
+人間のコミュニケーションを観察すると、**構造**は文化を超えて共通している:
+
+- 返信には時間がかかる（即レスは不自然）
+- 感情は会話を通じて変化する（初回の緊張→徐々に打ち解け）
+- 前の文脈を参照する（「先ほどの件ですが」）
+- 対応できない状況では人に引き継ぐ（クレーム、法的リスク）
+
+変わるのは**パラメータ**だ。「打ち解けるまでの往復数」が3回なのか1回なのか。敬語を使うかどうか。沈黙をどう解釈するか。
+
+だからOOPの継承モデルで設計した:
 
 ```
 HumanPersonaBase（基底クラス）← 構造を定義
 │
-├── JapaneseBusinessPersona      ← 表現を定義（日本語・ハイコンテキスト）
-├── EnglishCustomerSupportPersona ← 表現を定義（英語・ローコンテキスト）
-└── SpanishSalesPersona           ← 表現を定義（スペイン語）
+├── JapaneseBusinessPersona      ← ja.json（3往復で打ち解け、敬語あり）
+├── EnglishCustomerSupportPersona ← en.json（1往復目からカジュアル可）
+└── SpanishSalesPersona           ← es.json（情熱的、感嘆符多め）
 ```
 
-基底クラスは言語にも文化にも依存しない。派生は JSON 設定ファイルだけで作れる。
+言語・文化固有のロジックは**1行もPythonに書かない**。JSONの設定ファイルだけで派生を作れる。if文の地獄から解放された。
 
-## コード解説：5つのコンポーネント
+## 5つのコンポーネント、それぞれの設計判断
 
-### 1. TimingController — 返信速度制御
+### 1. TimingController — なぜ正規分布なのか
+
+最初は均一分布（`random.uniform(30, 180)`）で実装した。動いた。でも不自然だった。
+
+人間の返信時間を実測してみると、**中央値付近に集中し、たまに極端に長い**（電話が来た、席を外した、等）。これは正規分布に近い。
 
 ```python
-@dataclass
-class TimingController:
-    profiles: dict[Platform, TimingProfile]
-    active_start: time
-    active_end: time
-    night_queue: bool = True
-
-    def calculate_delay(self, platform: Platform) -> float:
-        profile = self.profiles.get(platform)
-        midpoint = (profile.min_seconds + profile.max_seconds) / 2
-        spread = (profile.max_seconds - profile.min_seconds) / 4
-        delay = random.gauss(midpoint, spread)
-        return max(profile.min_seconds, min(delay, profile.max_seconds))
+def calculate_delay(self, platform: Platform) -> float:
+    profile = self.profiles.get(platform)
+    midpoint = (profile.min_seconds + profile.max_seconds) / 2
+    spread = (profile.max_seconds - profile.min_seconds) / 4
+    delay = random.gauss(midpoint, spread)
+    return max(profile.min_seconds, min(delay, profile.max_seconds))
 ```
 
-正規分布で遅延を生成する。均一分布だと不自然。深夜はキューに入れて翌朝返信する。
+もう一つ。深夜2時に返信が来たら「この人、起きてるの？」と不安になる。`night_queue` フラグを付けて、営業時間外のメッセージは翌朝のキューに入れるようにした。
 
-### 2. EmotionStateMachine — 感情の時系列変化
+### 2. EmotionStateMachine — 状態遷移を設計する苦しみ
+
+感情の状態遷移をどうモデル化するか。これが一番悩んだ。
+
+最終的に5状態にした:
 
 ```python
 class EmotionState(Enum):
@@ -79,8 +100,13 @@ class EmotionState(Enum):
     TENSE    = "tense"      # 問題発生
     RELIEVED = "relieved"   # 解決後
     TRUSTED  = "trusted"    # 長期取引
+```
 
-# トリガーは Callable で定義（文字列パースではない）
+最初は3状態（formal/casual/tense）だけだった。でも「問題が解決した直後」の独特の空気感——安堵と、でもまだちょっと緊張が残っている感じ——を表現できなかった。RELIEVEDを追加してようやくしっくり来た。
+
+遷移トリガーは文字列マッチではなく**Callable**で定義している。「3往復後に打ち解ける」「問題が起きたら緊張する」をコードレベルで保証するため。
+
+```python
 DEFAULT_TRANSITIONS = [
     Transition(FORMAL, WARMING,
                lambda sm: sm.exchange_count >= 3,
@@ -88,97 +114,50 @@ DEFAULT_TRANSITIONS = [
     Transition(WARMING, TENSE,
                lambda sm: sm._last_event == "problem_detected",
                "問題発生で緊張"),
-    # ...
 ]
 ```
 
-初回は丁寧に、3往復目から少し砕けて、問題が起きたら慎重になる。この動的変化が人間らしさの核心。
+ここの「3」は日本語ビジネスコミュニケーションの観察値。英語なら「1」でもいい。だからJSONで上書きできるようにしてある。
 
-### 3. EscalationDetector → EmotionStateMachine 連鎖
+### 3. EscalationDetector — 「これ以上AIにやらせてはいけない」の判定
 
-```python
-def process_message(self, user_message, topics=None):
-    # エスカレーション判定（最優先）
-    escalation_result = self.escalation.evaluate(user_message)
-    if escalation_result.should_escalate:
-        # クレーム・交渉は感情にも影響する
-        if escalation_result.reason in {COMPLAINT, NEGOTIATION}:
-            self.emotion.process_event("problem_detected")
-        return PersonaResponse(escalation=escalation_result, ...)
+ここは妥協しなかった。AIが対応すべきでない状況を確実に検知する:
 
-    # 通常フロー
-    self.emotion.process_event("exchange")
-    delay = self.timing.calculate_delay(self.platform)
-    style = self.style.select_style()
-    # ...
-```
+- 単価交渉（金額の決裁権はAIにない）
+- 電話要求（AIが電話に出るわけにいかない）
+- クレーム（感情的な対応は人間がすべき）
+- 法的リスク（契約関連の文言）
 
-エスカレーション → 感情遷移の連鎖が自動で発火する。「クレームが来たら緊張する」を設計レベルで保証している。
+エスカレーション判定と感情遷移は**自動連鎖**する。クレームを検知したら、EmotionStateMachineが自動的にTENSE状態に遷移する。人間が引き継いだ時点で、すでに「緊張した」文脈が設定されている。
 
-### 4. StyleVariator — 文体揺らぎ
+### 4. StyleVariator — 同じことを毎回違う言い方で
 
-5パターン（確認型・共感型・保留型・転換型・不確実型）をランダムに選択。直近の履歴で重みを減衰させ、同じパターンの連続を防ぐ。
+5パターン（確認型・共感型・保留型・転換型・不確実型）をランダムに選択する。ただし直近の履歴で重みを減衰させ、同じパターンの連続を防ぐ。
 
-不確実表現の確率的挿入もある。「3日で完成します」ではなく「3日程度かかると思いますが、前後するかもしれません」の方が人間らしい。
+不確実表現の確率的挿入もある。「3日で完成します」と言い切るAIは不自然だ。「3日程度かかると思いますが、前後するかもしれません」——この曖昧さが人間らしい。
 
-### 5. ContextReferencer — 前文脈参照
+### 5. ContextReferencer — 「読んでいる感」の再現
 
-トピックベースで会話を追跡し、「先ほどの〇〇の件ですが」のような参照が自然に出るように情報を提供する。
+「先ほどの〇〇の件ですが」。この一言があるだけで、「この人はちゃんと前のメッセージを読んでいる」と感じる。トピックベースで会話を追跡し、参照情報をLLMに渡す。
 
-## 使い方
+## 重要な設計判断：テキスト生成をしない
+
+`process_message()` は**テキストを生成しない**。返すのは「今の感情状態」「推奨する応答スタイル」「推奨する遅延時間」「エスカレーションの要否」だけ。
 
 ```python
-from core.base_persona import HumanPersonaBase
-
-# JSON 設定ファイルからロード
-persona = HumanPersonaBase.from_config_file("config/ja_business.json")
-
-# メッセージ処理
 response = persona.process_message("納期を前倒しできますか？")
-
-# 結果を LLM のプロンプトに注入
 context = persona.get_system_prompt_context()
-# → {"emotion_state": "warming", "tone": {"formality": 0.6, ...}, ...}
+# → {"emotion_state": "warming", "tone": {"formality": 0.6}, ...}
 ```
 
-`process_message()` はテキスト生成をしない。返信タイミング・文体・感情状態・エスカレーション判定だけを返す。実際のテキスト生成は LLM に委ねる設計。
+この情報をLLMのシステムプロンプトに注入する。テキスト生成はLLMに任せる。
 
-新しい言語・文化のペルソナは JSON を書くだけで追加できる:
-
-```json
-{
-  "name": "JapaneseBusiness",
-  "language": "ja",
-  "culture": { "context_level": 0.8 },
-  "escalation": {
-    "escalation_rules": [
-      { "reason": "negotiation", "keywords": ["単価", "値下げ"], "priority": 1 }
-    ]
-  }
-}
-```
-
-## 今後の計画
-
-**短期**
-- テストスイートの整備（チューリングテスト自動化含む）
-- A/Bブラインドテストによる人間評価
-
-**中期**
-- 論文化（arXiv 投稿予定）
-  - タイトル: "HumanPersonaBase: A Language-Agnostic Framework for Human-like AI Communication in Professional Contexts"
-  - 設計原則の理論的妥当性とベンチマーク結果を報告する
-
-**長期**
-- コミュニティからのフィードバックを反映した派生クラスの拡充
-- 自動ペルソナ生成（対話ログから設定を推論）
-- 音声対応（プロソディ・間のモデル化）
+なぜか。テキスト生成をフレームワーク内でやると、LLMの進化に追従できなくなる。GPT-4がGPT-5になっても、Claude 3がClaude 4になっても、「感情遷移」や「応答タイミング」の構造は変わらない。構造とテキスト生成を分離したことで、LLMを差し替えるだけでフレームワークが使い続けられる。
 
 ## まとめ
 
-AIが人間とばれる原因は「何を言うか」じゃなくて「どう言うか」。
-返信速度、文体の揺らぎ、感情の変化、文脈の参照——これらを基底クラスとして設計し、OSSで公開した。
+AIがバレる原因は「何を言うか」じゃなくて「どう言うか」。返信速度、文体の揺らぎ、感情の変化、文脈の参照——これらを基底クラスとして設計し、OSSで公開した。
+
+作って分かったのは、「人間らしさ」は驚くほど構造化できるということ。そして構造化してみると、**自分が普段いかに無意識にこれらのパターンを使っているか**に気づく。
 
 リポジトリ: [github.com/RintaroMatsumoto/human-persona](https://github.com/RintaroMatsumoto/human-persona)
-
-スター・Issue・PR 歓迎。特に英語やスペイン語の派生ペルソナを作ってくれる人を募集中。
