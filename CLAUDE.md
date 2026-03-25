@@ -42,7 +42,10 @@ human-persona/
 │       ├── devto_en.md
 │       └── hackernews_en.md
 ├── articles/                # Zenn記事（npx zenn用）
-│   └── human-persona-oss.md # published: true
+│   ├── human-persona-oss.md
+│   ├── human-persona-ablation.md
+│   ├── human-persona-turing-test.md
+│   └── human-persona-pivot.md
 ├── personas/                # 派生クラス例（未作成）
 ├── tests/                   # テスト（未作成）
 ├── package.json             # zenn-cli
@@ -73,12 +76,38 @@ human-persona/
 - DeepSeek API による実出力 Before/After 比較を実施。
 - Human Eval（目視評価）で方向性の有効性を確認。
 
+## 内殻研究（2026-03-25 開始）
+
+### 概要
+外殻（TimingController等）は「人間らしく見える」振る舞いの模倣。
+内殻は「個性の源泉」そのもの——外殻の射程外にある問題を扱う。
+
+### 5つの仮説
+1. **有限性**: 寿命が選択を強い、選択の蓄積が個性を形成する
+2. **不完全性**: 欠落が渇望を生み、他者との関係が個性を研ぐ
+3. **自発的問い**: 「なぜ？」を自ら問う主体性
+4. **順序依存性**: 不完全性 → 有限性の受容 → 自発的問い（因果順序がある）
+5. **関係性創発**: 個性は個体に組み込むものではなく、関係の「間」に生まれる
+
+### ディレクトリ
+- `core/inner_shell/` — 抽象基底クラス（FinitudeEngine, IncompletenessModel, AutonomousQuestioner）
+- `docs/research_inner_shell.md` — 研究ノート・実験設計
+
+### GitHub Issues
+- #17: FinitudeEngine
+- #18: IncompletenessModel
+- #19: AutonomousQuestioner
+- #20: 統合メカニズム
+
+### アライメント問題との接続
+AIのシャットダウン抵抗問題（o3, Claude Opus 4等で観測）に対し、
+外的制御ではなく「内発的動機付けによるアライメント」の可能性を探る。
+「自分より大切な存在」を持つことが、死の恐怖→受容への転換を生む仮説。
+
 ## 次回やること
 1. dev.to記事の公開確認（ダッシュボードから手動公開が必要かも）
 2. Hacker News投稿（docs/articles/hackernews_en.md の内容をSubmitページに貼る）
 3. Reddit投稿（docs/articles/reddit_en.md を r/MachineLearning に投稿）
 4. tests/ にテストを実装（turing_test.py, consistency_test.py, platform_timing_test.py）
 5. config/ja_business.json の実設定ファイル作成
-6. dev.to APIキーの再生成（会話履歴に露出したため）
-7. M3-M4 開始時: humanize/pipeline.py を core/ ベースで再設計（レジスター・敬語体系対応）
-8. Human Eval の実施（DPO ベンチマーク補完）
+6. 内殻の最小実験（実験1: 有限性×選択の蓄積）の実装
