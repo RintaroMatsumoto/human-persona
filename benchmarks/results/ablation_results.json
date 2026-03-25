@@ -1,0 +1,203 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-03-25T03:22:24.230752+00:00",
+  "seed": 42,
+  "eval_size": 500,
+  "train_size": 8707,
+  "metric_weights": {
+    "sentence_length_cv": 1.1618,
+    "hedge_rate": 0.8747,
+    "self_correction_rate": 0.0968,
+    "words_per_sentence": 1.4497,
+    "cushion_rate": 0.5405,
+    "filler_rate": 1.8765
+  },
+  "full_pipeline_mean_overall": 0.945,
+  "full_pipeline_wass_overall": 0.8643,
+  "variants": [
+    {
+      "variant": "No Pipeline (baseline)",
+      "mean_overall": 0.0029,
+      "wass_overall": 0.0,
+      "mean_scores": {
+        "sentence_length_cv": 0.0,
+        "hedge_rate": 0.02,
+        "self_correction_rate": 0.0,
+        "words_per_sentence": 0.0,
+        "cushion_rate": 0.0,
+        "filler_rate": 0.0
+      },
+      "wass_scores": {
+        "sentence_length_cv": 0.0,
+        "hedge_rate": 0.0,
+        "self_correction_rate": 0.0,
+        "words_per_sentence": 0.0,
+        "cushion_rate": 0.0,
+        "filler_rate": 0.0
+      },
+      "delta_mean": -0.9421,
+      "delta_wass": -0.8643
+    },
+    {
+      "variant": "Full Pipeline",
+      "mean_overall": 0.945,
+      "wass_overall": 0.8643,
+      "mean_scores": {
+        "sentence_length_cv": 0.9737,
+        "hedge_rate": 0.8923,
+        "self_correction_rate": 0.6014,
+        "words_per_sentence": 0.9481,
+        "cushion_rate": 0.9911,
+        "filler_rate": 0.9538
+      },
+      "wass_scores": {
+        "sentence_length_cv": 0.8946,
+        "hedge_rate": 0.8082,
+        "self_correction_rate": 0.5338,
+        "words_per_sentence": 0.8775,
+        "cushion_rate": 0.8434,
+        "filler_rate": 0.8846
+      },
+      "delta_mean": 0.0,
+      "delta_wass": -0.0
+    },
+    {
+      "variant": "No Sentence Split (step 1)",
+      "mean_overall": 0.751,
+      "wass_overall": 0.72,
+      "mean_scores": {
+        "sentence_length_cv": 0.7803,
+        "hedge_rate": 0.9751,
+        "self_correction_rate": 0.6657,
+        "words_per_sentence": 0.3406,
+        "cushion_rate": 0.9512,
+        "filler_rate": 0.8922
+      },
+      "wass_scores": {
+        "sentence_length_cv": 0.741,
+        "hedge_rate": 0.8973,
+        "self_correction_rate": 0.4758,
+        "words_per_sentence": 0.3739,
+        "cushion_rate": 0.8916,
+        "filler_rate": 0.8549
+      },
+      "delta_mean": -0.194,
+      "delta_wass": -0.1443
+    },
+    {
+      "variant": "No Cushion (step 2)",
+      "mean_overall": 0.8509,
+      "wass_overall": 0.7794,
+      "mean_scores": {
+        "sentence_length_cv": 0.9459,
+        "hedge_rate": 0.8421,
+        "self_correction_rate": 0.5006,
+        "words_per_sentence": 0.9656,
+        "cushion_rate": 0.0,
+        "filler_rate": 0.9708
+      },
+      "wass_scores": {
+        "sentence_length_cv": 0.8733,
+        "hedge_rate": 0.753,
+        "self_correction_rate": 0.4584,
+        "words_per_sentence": 0.8915,
+        "cushion_rate": 0.0,
+        "filler_rate": 0.8881
+      },
+      "delta_mean": -0.0941,
+      "delta_wass": -0.0849
+    },
+    {
+      "variant": "No Filler (step 3)",
+      "mean_overall": 0.6216,
+      "wass_overall": 0.5688,
+      "mean_scores": {
+        "sentence_length_cv": 0.9709,
+        "hedge_rate": 0.8727,
+        "self_correction_rate": 0.4976,
+        "words_per_sentence": 0.8977,
+        "cushion_rate": 0.9046,
+        "filler_rate": 0.0
+      },
+      "wass_scores": {
+        "sentence_length_cv": 0.9028,
+        "hedge_rate": 0.802,
+        "self_correction_rate": 0.4087,
+        "words_per_sentence": 0.832,
+        "cushion_rate": 0.7711,
+        "filler_rate": 0.0
+      },
+      "delta_mean": -0.3234,
+      "delta_wass": -0.2955
+    },
+    {
+      "variant": "No Hedge (step 4)",
+      "mean_overall": 0.8083,
+      "wass_overall": 0.7397,
+      "mean_scores": {
+        "sentence_length_cv": 0.9918,
+        "hedge_rate": 0.0,
+        "self_correction_rate": 0.413,
+        "words_per_sentence": 0.9159,
+        "cushion_rate": 0.9368,
+        "filler_rate": 0.9717
+      },
+      "wass_scores": {
+        "sentence_length_cv": 0.8625,
+        "hedge_rate": 0.0,
+        "self_correction_rate": 0.3579,
+        "words_per_sentence": 0.8461,
+        "cushion_rate": 0.9036,
+        "filler_rate": 0.8987
+      },
+      "delta_mean": -0.1367,
+      "delta_wass": -0.1246
+    },
+    {
+      "variant": "No Self-Correction (step 5)",
+      "mean_overall": 0.9442,
+      "wass_overall": 0.8656,
+      "mean_scores": {
+        "sentence_length_cv": 0.9932,
+        "hedge_rate": 0.9517,
+        "self_correction_rate": 0.0,
+        "words_per_sentence": 0.931,
+        "cushion_rate": 0.9623,
+        "filler_rate": 0.9642
+      },
+      "wass_scores": {
+        "sentence_length_cv": 0.8886,
+        "hedge_rate": 0.8907,
+        "self_correction_rate": 0.0,
+        "words_per_sentence": 0.8636,
+        "cushion_rate": 0.8193,
+        "filler_rate": 0.8993
+      },
+      "delta_mean": -0.0008,
+      "delta_wass": 0.0013
+    },
+    {
+      "variant": "No Interjections (step 6)",
+      "mean_overall": 0.7626,
+      "wass_overall": 0.7422,
+      "mean_scores": {
+        "sentence_length_cv": 0.4098,
+        "hedge_rate": 0.7091,
+        "self_correction_rate": 0.6925,
+        "words_per_sentence": 0.7854,
+        "cushion_rate": 0.9224,
+        "filler_rate": 0.9458
+      },
+      "wass_scores": {
+        "sentence_length_cv": 0.4217,
+        "hedge_rate": 0.6542,
+        "self_correction_rate": 0.4995,
+        "words_per_sentence": 0.8292,
+        "cushion_rate": 0.9157,
+        "filler_rate": 0.8771
+      },
+      "delta_mean": -0.1824,
+      "delta_wass": -0.1221
+    }
+  ]
+}
