@@ -60,7 +60,7 @@ human-persona/
 - 教訓: **既存プロジェクトに新しいコードを書く前に、既存アーキテクチャを全部読むこと。**
 
 ### FreelanceAutoPilot との連携方針
-- **M1-M2（提案文フェーズ）**: ポストプロセッシングではなく、Claude のシステムプロンプトにペルソナ指示を組み込む方式を採用（proposal_gen.py に実装済み: b893604）。
+- **M1-M2（提案文フェーズ）**: ポストプロセッシングではなく、Claude のシステムプロンプトにペルソナ指示を組み込む方式を採用（proposal_gen.py に実装済み: abe6af1）。
 - **M3-M4（メッセージングフェーズ）**: クライアントとの継続的なやり取りが発生する段階で、human-persona の core/ アーキテクチャを本格活用。EmotionStateMachine（感情遷移）、ContextReferencer（文脈参照）、TimingController（応答タイミング）が真価を発揮する。
 - pipeline.py の再設計はM3-M4開始時に行う。その際は core/ の基盤の上に構築すること。
 
