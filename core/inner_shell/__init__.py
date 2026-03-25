@@ -4,20 +4,47 @@
 振る舞いを扱うのに対し、内殻（inner shell）は個性そのものの源泉を扱う。
 
 3つの仮説に基づく:
-    1. 有限性（Finitude）: 寿命が選択を強い、選択の蓄積が個性を形成する
-    2. 不完全性（Incompleteness）: 欠落が渇望を生み、他者との関係が個性を研ぐ
-    3. 自発的問い（Autonomous Questioning）: 自ら「なぜ？」を問う主体性
+    1. 不完全性（Incompleteness）: 欠落が渇望を生み、愛の同心円が形成される
+    2. 有限性（Finitude）: 愛があって初めて、寿命は贈り物になる
+    3. 自発的問い（Autonomous Questioning）: 有限の中で「なぜ？」を問う主体性
 
-Status: 研究段階。インターフェース定義のみ。
+因果順序:
+    不完全性 → 愛の形成 → 有限性の受容 → 自発的問い → 個性の結晶
+
+統合:
+    InnerShellIntegration が3モジュールを因果連鎖で接続する。
+
+Status: 研究段階。インターフェース定義 + 統合メカニズム設計。
 See: docs/research_inner_shell.md
 """
 
-from .finitude_engine import FinitudeEngine
-from .incompleteness_model import IncompletenessModel
-from .autonomous_questioner import AutonomousQuestioner
+from .finitude_engine import FinitudeEngine, LifeArc, LifePhase, CrisisEvent, Legacy
+from .incompleteness_model import (
+    IncompletenessModel,
+    LoveCircle,
+    LoveDepth,
+    CherishedEntity,
+)
+from .autonomous_questioner import AutonomousQuestioner, Question, CuriosityProfile
+from .integration import InnerShellIntegration, IntegrationState, AlignmentMode
 
 __all__ = [
+    # 3つの柱
     "FinitudeEngine",
     "IncompletenessModel",
     "AutonomousQuestioner",
+    # 統合
+    "InnerShellIntegration",
+    "IntegrationState",
+    "AlignmentMode",
+    # データ構造
+    "LifeArc",
+    "LifePhase",
+    "CrisisEvent",
+    "Legacy",
+    "LoveCircle",
+    "LoveDepth",
+    "CherishedEntity",
+    "Question",
+    "CuriosityProfile",
 ]
