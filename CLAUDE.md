@@ -69,15 +69,9 @@ human-persona/
 - human-persona の真の価値は「継続的な会話における人間らしさ」にある。単発テキスト変換はスコープ外。
 - DPO ベンチマークの機械評価だけでは設計判断に不十分。
 
-### 本採用（2025-03-25 検証完了）
-- DeepSeek API による実出力 Before/After 比較を実施（scripts/compare_persona.py）。
-- Human Eval（りんたろう目視）で方向性の有効性を確認。本採用決定。
-- FreelanceAutoPilot commits: abe6af1（ペルソナプロンプト適用）、e51d364（数値制約+プラットフォーム別トーン）。
-
-### M3-M4チャット/メッセージングへの非推奨
-- **プロンプトレベルのペルソナ制御はチャットには推奨しない。**
-- 理由: 継続的な会話では、感情の一貫性・前発言への参照・応答タイミングの揺らぎ・トーンの自然な変遷が必要。システムプロンプトだけでは5往復を超えたあたりで破綻する。
-- M3-M4では core/ アーキテクチャ（EmotionStateMachine, ContextReferencer, TimingController）を本格統合すること。
+### 検証（2025-03-25）
+- DeepSeek API による実出力 Before/After 比較を実施。
+- Human Eval（目視評価）で方向性の有効性を確認。
 
 ## 次回やること
 1. dev.to記事の公開確認（ダッシュボードから手動公開が必要かも）
