@@ -172,4 +172,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## Author
 
-**Rintaro Matsumoto** — [@RintaroMatsumoto](https://github.com/RintaroMatsumoto)
+**The Author** — [GitHub](https://github.com/RintaroMatsumoto)

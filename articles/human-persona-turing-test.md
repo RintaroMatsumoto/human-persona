@@ -85,7 +85,7 @@ HL: 6.8 / SV: 0.50 / TN: 4.5
 
 ## v4: フィラー挿入・構造バリエーション（HL 7.2）
 
-[Ablation Study](https://zenn.dev/rintaro_m/articles/human-persona-ablation) の結果を受けて、フィラーと構造バリエーションを入れた。
+[Ablation Study](./human-persona-ablation.md) の結果を受けて、フィラーと構造バリエーションを入れた。
 
 ```
 HL: 7.2 / SV: 0.50 / TN: 4.5
@@ -153,7 +153,7 @@ Never open with 'Thanks for reaching out' unless it's the very first message.
 - TN（タイミング自然性）が5.5で目標6.0に届いていない。TimingControllerの値をLLMに伝える方法にまだ改善の余地がある
 - **LLMジャッジ自体の信頼性**。LLMが「人間らしい」と判定しても、実際の人間がそう感じるかは別問題。Human Eval未実施のまま数字だけ追いかけていた反省がある
 
-この反省が、後の[パイプライン凍結の判断](https://zenn.dev/rintaro_m/articles/human-persona-pivot)につながった。
+この反省が、後の[パイプライン凍結の判断](./human-persona-pivot.md)につながった。
 
 ## まとめ
 

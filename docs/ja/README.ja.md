@@ -169,4 +169,4 @@ MIT License
 
 ## 著者
 
-Rintaro Matsumoto ([@RintaroMatsumoto](https://github.com/RintaroMatsumoto))
+著者 ([@RintaroMatsumoto](https://github.com/RintaroMatsumoto))

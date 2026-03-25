@@ -1,6 +1,6 @@
 # HumanPersonaBase: Structural Text Transformation for Human-Like AI Communication
 
-**Authors**: Rintaro Matsumoto
+**Authors**: Anonymous (for review)
 
 ---
 

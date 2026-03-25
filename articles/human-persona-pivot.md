@@ -167,6 +167,6 @@ pipeline.py は前者の問題を後者のツールで解こうとしていた�
 ---
 
 前回の記事:
-- [AIが人間のように振る舞う基底クラスを設計・OSSで公開した](https://zenn.dev/rintaro_m/articles/human-persona-oss)
-- [AIテキストの人間化パイプラインを解剖する：6ステップのAblation Study](https://zenn.dev/rintaro_m/articles/human-persona-ablation)
-- [AIを人間と区別できなくした話：LLMジャッジで測るチューリングテスト実装](https://zenn.dev/rintaro_m/articles/human-persona-turing-test)
+- [AIが人間のように振る舞う基底クラスを設計・OSSで公開した](./human-persona-oss.md)
+- [AIテキストの人間化パイプラインを解剖する：6ステップのAblation Study](./human-persona-ablation.md)
+- [AIを人間と区別できなくした話：LLMジャッジで測るチューリングテスト実装](./human-persona-turing-test.md)

@@ -2,7 +2,7 @@
 name: human-persona
 description: A language-agnostic framework for human-like AI communication. Provides timing control, style variation, emotion state management, context referencing, and escalation detection as a composable base class.
 version: 0.1.0
-author: Rintaro Matsumoto (RintaroMatsumoto)
+author: The Author (RintaroMatsumoto)
 license: MIT
 tags:
   - persona

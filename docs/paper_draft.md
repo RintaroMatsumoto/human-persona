@@ -1,6 +1,6 @@
 # HumanPersonaBase: A Language-Agnostic Framework for Human-like AI Communication in Professional Contexts
 
-**Authors**: Rintaro Matsumoto
+**Authors**: Anonymous (for review)
 
 ---
 

@@ -6,6 +6,7 @@ __pycache__/
 benchmarks/cache/
 data/bccwj/
 human_persona.egg-info/
+CLAUDE.md
 
 # Temp scripts from debug sessions
 check_git.py

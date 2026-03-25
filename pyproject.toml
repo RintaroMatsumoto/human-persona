@@ -9,7 +9,7 @@ description = "Text humanization pipeline based on DPO-calibrated ablation study
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.11"
-authors = [{name = "Rintaro Matsumoto"}]
+authors = [{name = "The Author"}]
 keywords = ["nlp", "humanization", "dpo", "ablation"]
 
 [project.optional-dependencies]
