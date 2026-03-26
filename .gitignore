@@ -46,3 +46,17 @@ verify_types.py
 run_mypy.sh
 run_mypy.bat
 do_commit.bat
+add_types.py
+analyze_core.py
+core_analysis.txt
+create_issue.py
+docs/PACKAGING.md
+examine_types.py
+examine_types2.py
+examples_mutual_recognition.py
+examples_output.txt
+extract_file.py
+read_and_save.py
+read_core_files.py
+test_sleep_cycle_import.py
+type_analysis.txt
