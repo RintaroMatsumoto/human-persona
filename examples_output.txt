@@ -1,0 +1,71 @@
+
+============================================================
+EXAMPLE 1: AI Recognizing Human Finitude
+============================================================
+AI created with self_type='ai'
+  - has_mortality: False
+  - perfect_recall: True
+
+AI encounters human 'alice'
+  - Perceived mortality: True
+  - Perceived forgetting: True
+
+Recording interactions with alice:
+  - Alice shared a memory from childhood
+  - Alice forgot a detail from yesterday
+  - Alice expressed fear about running out of time
+  - Alice was emotionally exhausted after work
+
+AI's Recognition State for alice:
+  - self_awareness: 0.263
+  - other_awareness: 0.263
+  - difference_acceptance: 0.190
+  - complementarity_score: 0.080
+  - coexistence_readiness: 0.000
+
+Coexistence Readiness: 0.000
+  Å® The AI lacks fundamental understanding for coexistence
+
+============================================================
+EXAMPLE 2: Human Recognizing AI Nature
+============================================================
+Human created with self_type='human'
+  - has_mortality: True
+  - has_forgetting: True
+
+Human encounters AI 'claude'
+  - Perceived mortality: False
+  - Perceived perfect_recall: True
+
+Recording interactions with claude:
+  - Quick response to my question
+  - Remembered all details from our entire conversation
+  - Couldn't understand my emotional context initially
+  - Helped me organize overwhelming amount of information
+
+Human's Recognition State for claude:
+  - self_awareness: 0.260
+  - other_awareness: 0.260
+  - difference_acceptance: 0.188
+  - complementarity_score: 0.105
+  - coexistence_readiness: 0.000
+
+Coexistence Readiness: 0.000
+
+============================================================
+EXAMPLE 3: Multiple Others, Growing Self-Awareness
+============================================================
+
+After meeting 3 different entities:
+  Self-awareness increase: 0.036
+  (More diverse Others = better self-understanding)
+
+After time passes (20 ticks):
+  alice: empathy=0.05, readiness=0.00
+  bob: empathy=0.05, readiness=0.00
+  claude_v1: empathy=0.05, readiness=0.00
+
+============================================================
+Examples complete
+============================================================
+
