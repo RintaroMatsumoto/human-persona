@@ -19,7 +19,7 @@ communication.
 
 ```
 HumanPersonaBase            ← This project (universal)
-├── JapaneseFreelancer      ← Your derived class (language + domain)
+├── JapaneseBusinessCasual  ← Your derived class (language + culture)
 ├── EnglishSupportAgent     ← Another derived class
 └── SpanishSalesRep         ← etc.
 ```
@@ -36,13 +36,13 @@ empirical analysis of the HumanLLMs/Human-Like-DPO-Dataset (10,884 samples).
 ## Quick Start
 
 ```python
-from core import load_config, Platform
-from personas.freelancer_ja import JapaneseFreelancerPersona
+from core import HumanPersonaBase, Platform
 
-# Initialize
-persona = JapaneseFreelancerPersona(
+# Create a persona from config
+persona = HumanPersonaBase(
+    persona_id="ja_business_casual",
     config_path="config/ja.json",
-    platform=Platform.CROWDSOURCING,
+    platform=Platform.CHAT,
 )
 
 # Process a message
@@ -93,8 +93,7 @@ human-persona/
 │   └── es.json              # Spanish (mixed-context)
 ├── personas/                # Derived class examples
 │   ├── base_template.md     # How to create your own
-│   ├── freelancer_ja.py     # Japanese freelancer
-│   └── customer_support_en.py
+│   └── english_support.py   # English support agent example
 ├── docs/                    # Documentation
 │   ├── research.md          # Literature review
 │   ├── design.md            # Architecture decisions

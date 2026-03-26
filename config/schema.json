@@ -25,7 +25,7 @@
           "description": "Unique identifier for this persona configuration.",
           "pattern": "^[a-z0-9_-]+$",
           "examples": [
-            "freelancer_ja",
+            "ja_business_casual",
             "support_en",
             "sales_es"
           ]

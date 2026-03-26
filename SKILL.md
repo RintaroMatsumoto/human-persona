@@ -40,7 +40,7 @@ response = persona.process_message("納期について相談させてくださ�
 
 ```json
 {
-  "name": "JapaneseFreelancer",
+  "name": "JapaneseBusinessCasual",
   "language": "ja",
   "culture": {
     "context_level": 0.8,
