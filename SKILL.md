@@ -1,6 +1,6 @@
 ---
 name: human-persona
-description: A language-agnostic framework for human-like AI communication. Provides timing control, style variation, emotion state management, context referencing, and escalation detection as a composable base class.
+description: A language-agnostic framework for human-like AI communication. Provides timing control, style variation, emotion state management, and context referencing as a composable base class.
 version: 0.1.0
 author: The Author (RintaroMatsumoto)
 license: MIT
@@ -30,7 +30,6 @@ response = persona.process_message("納期について相談させてくださ�
 # response.delay_seconds  → 返信までの遅延
 # response.emotion_state  → 現在の感情状態
 # response.style_used     → 選択された文体パターン
-# response.escalation     → エスカレーション判定
 # response.metadata       → LLMプロンプトに注入する文脈情報
 ```
 
@@ -41,7 +40,7 @@ response = persona.process_message("納期について相談させてくださ�
 
 ```json
 {
-  "name": "JapaneseFreelancer",
+  "name": "JapaneseBusinessCasual",
   "language": "ja",
   "culture": {
     "context_level": 0.8,
@@ -67,7 +66,6 @@ context = persona.get_system_prompt_context()
 | `StyleVariator` | 文体揺らぎの生成（均質性の回避） |
 | `EmotionStateMachine` | 感情の時系列変化モデル |
 | `ContextReferencer` | 前文脈の参照・一貫性維持 |
-| `EscalationDetector` | 人間への引き継ぎ判定 |
 
 ## 設計原則
 

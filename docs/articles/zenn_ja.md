@@ -94,34 +94,13 @@ DEFAULT_TRANSITIONS = [
 
 初回は丁寧に、3往復目から少し砕けて、問題が起きたら慎重になる。この動的変化が人間らしさの核心。
 
-### 3. EscalationDetector → EmotionStateMachine 連鎖
-
-```python
-def process_message(self, user_message, topics=None):
-    # エスカレーション判定（最優先）
-    escalation_result = self.escalation.evaluate(user_message)
-    if escalation_result.should_escalate:
-        # クレーム・交渉は感情にも影響する
-        if escalation_result.reason in {COMPLAINT, NEGOTIATION}:
-            self.emotion.process_event("problem_detected")
-        return PersonaResponse(escalation=escalation_result, ...)
-
-    # 通常フロー
-    self.emotion.process_event("exchange")
-    delay = self.timing.calculate_delay(self.platform)
-    style = self.style.select_style()
-    # ...
-```
-
-エスカレーション → 感情遷移の連鎖が自動で発火する。「クレームが来たら緊張する」を設計レベルで保証している。
-
-### 4. StyleVariator — 文体揺らぎ
+### 3. StyleVariator — 文体揺らぎ
 
 5パターン（確認型・共感型・保留型・転換型・不確実型）をランダムに選択。直近の履歴で重みを減衰させ、同じパターンの連続を防ぐ。
 
 不確実表現の確率的挿入もある。「3日で完成します」ではなく「3日程度かかると思いますが、前後するかもしれません」の方が人間らしい。
 
-### 5. ContextReferencer — 前文脈参照
+### 4. ContextReferencer — 前文脈参照
 
 トピックベースで会話を追跡し、「先ほどの〇〇の件ですが」のような参照が自然に出るように情報を提供する。
 
@@ -141,7 +120,7 @@ context = persona.get_system_prompt_context()
 # → {"emotion_state": "warming", "tone": {"formality": 0.6, ...}, ...}
 ```
 
-`process_message()` はテキスト生成をしない。返信タイミング・文体・感情状態・エスカレーション判定だけを返す。実際のテキスト生成は LLM に委ねる設計。
+`process_message()` はテキスト生成をしない。返信タイミング・文体・感情状態だけを返す。実際のテキスト生成は LLM に委ねる設計。
 
 新しい言語・文化のペルソナは JSON を書くだけで追加できる:
 
@@ -149,12 +128,7 @@ context = persona.get_system_prompt_context()
 {
   "name": "JapaneseBusiness",
   "language": "ja",
-  "culture": { "context_level": 0.8 },
-  "escalation": {
-    "escalation_rules": [
-      { "reason": "negotiation", "keywords": ["単価", "値下げ"], "priority": 1 }
-    ]
-  }
+  "culture": { "context_level": 0.8 }
 }
 ```
 

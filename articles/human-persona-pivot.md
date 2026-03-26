@@ -8,7 +8,7 @@ published: true
 
 ## 何が起きたか
 
-[human-persona](https://github.com/RintaroMatsumoto/human-persona) の `core/` には、5つのコンポーネントからなる基底クラスがある。TimingController、StyleVariator、EmotionStateMachine、ContextReferencer、EscalationDetector。言語・文化非依存で設計した、人間らしいAIコミュニケーションのフレームワークだ。
+[human-persona](https://github.com/RintaroMatsumoto/human-persona) の `core/` には、4つのコンポーネントからなる基底クラスがある。TimingController、StyleVariator、EmotionStateMachine、ContextReferencer。言語・文化非依存で設計した、人間らしいAIコミュニケーションのフレームワークだ。
 
 ある日、このフレームワークを使って**実際のプロダクション環境に組み込むための簡易パイプライン**を書いた。`humanize/pipeline.py` ——フィラー注入、タイポ注入、リズム変動の3ステージで構成した後処理パイプラインだ。
 
@@ -76,7 +76,7 @@ pipeline.py はこの区別を一切していない。日本語のフォーマ�
 
 **pipeline.py はこれらの既存アーキテクチャを完全に無視して作られていた。**
 
-なぜ無視したか？ 正直に言うと「手っ取り早く動くものが欲しかった」からだ。core/ の10段階パイプライン（エスカレーション判定 → 感情更新 → 生成 → 文体変動 → 文脈参照 → 曖昧性 → 後処理 → 遅延）を理解するより、3段階の後処理を書く方が速かった。
+なぜ無視したか？ 正直に言うと「手っ取り早く動くものが欲しかった」からだ。core/ のパイプライン（感情更新 → 生成 → 文体変動 → 文脈参照 → 曖昧性 → 後処理 → 遅延）を理解するより、3段階の後処理を書く方が速かった。
 
 速かった。そして間違っていた。
 

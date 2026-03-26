@@ -77,10 +77,16 @@
     "typo_rate": 0.004,
     "punctuation_variance": true,
     "sentence_length_variance": {
-      "min_ratio": 0.20,
+      "min_ratio": 0.2,
       "max_ratio": 1.85
     },
-    "filler_words": ["bueno", "pues", "a ver", "mira", "oye"],
+    "filler_words": [
+      "bueno",
+      "pues",
+      "a ver",
+      "mira",
+      "oye"
+    ],
     "emoji_policy": "moderate"
   },
   "emotion": {
@@ -126,20 +132,57 @@
       }
     },
     "transitions": [
-      { "from": "warm_professional", "to": "enthusiastic", "trigger": "product_interest_expressed" },
-      { "from": "warm_professional", "to": "consultative", "trigger": "comparison_question_asked" },
-      { "from": "enthusiastic", "to": "closing_deal", "trigger": "purchase_intent_detected", "probability": 0.9 },
-      { "from": "consultative", "to": "enthusiastic", "trigger": "objection_resolved" },
-      { "from": "consultative", "to": "reassuring", "trigger": "price_objection_raised" },
-      { "from": "reassuring", "to": "closing_deal", "trigger": "value_acknowledged" },
-      { "from": "closing_deal", "to": "warm_professional", "trigger": "deal_completed" },
-      { "from": "warm_professional", "to": "damage_control", "trigger": "complaint_raised" },
-      { "from": "damage_control", "to": "warm_professional", "trigger": "issue_resolved" }
+      {
+        "from": "warm_professional",
+        "to": "enthusiastic",
+        "trigger": "product_interest_expressed"
+      },
+      {
+        "from": "warm_professional",
+        "to": "consultative",
+        "trigger": "comparison_question_asked"
+      },
+      {
+        "from": "enthusiastic",
+        "to": "closing_deal",
+        "trigger": "purchase_intent_detected",
+        "probability": 0.9
+      },
+      {
+        "from": "consultative",
+        "to": "enthusiastic",
+        "trigger": "objection_resolved"
+      },
+      {
+        "from": "consultative",
+        "to": "reassuring",
+        "trigger": "price_objection_raised"
+      },
+      {
+        "from": "reassuring",
+        "to": "closing_deal",
+        "trigger": "value_acknowledged"
+      },
+      {
+        "from": "closing_deal",
+        "to": "warm_professional",
+        "trigger": "deal_completed"
+      },
+      {
+        "from": "warm_professional",
+        "to": "damage_control",
+        "trigger": "complaint_raised"
+      },
+      {
+        "from": "damage_control",
+        "to": "warm_professional",
+        "trigger": "issue_resolved"
+      }
     ],
     "decay_rate": 0.06
   },
   "context_reference": {
-    "reference_probability": 0.40,
+    "reference_probability": 0.4,
     "reference_templates": [
       "Sobre lo de {topic} que mencionabas,",
       "Respecto a {topic},",
@@ -148,41 +191,6 @@
     ],
     "max_lookback_turns": 6
   },
-  "escalation": {
-    "triggers": [
-      {
-        "type": "negotiation",
-        "threshold": 2,
-        "action": "notify_human",
-        "message_to_human": "Cliente negociando precio por segunda vez. Posible descuento necesario."
-      },
-      {
-        "type": "call_request",
-        "threshold": 1,
-        "action": "pause_and_notify",
-        "message_to_human": "Cliente solicita llamada telefonica."
-      },
-      {
-        "type": "complaint",
-        "threshold": 2,
-        "action": "notify_human",
-        "message_to_human": "Cliente insatisfecho. Requiere atencion especial."
-      },
-      {
-        "type": "meeting_request",
-        "threshold": 1,
-        "action": "pause_and_notify",
-        "message_to_human": "Cliente solicita reunion presencial o virtual."
-      },
-      {
-        "type": "legal_mention",
-        "threshold": 1,
-        "action": "transfer_immediately",
-        "message_to_human": "Mencion legal detectada. Transferir a departamento juridico."
-      }
-    ],
-    "fallback_message": "Dame un momentito, que lo consulto con mi equipo para darte la mejor respuesta. Ahora vuelvo!"
-  },
   "ambiguity": {
     "hedge_probability": 0.07,
     "approximation_rules": {
@@ -190,6 +198,6 @@
       "numeric_rounding": true,
       "certainty_downgrade": true
     },
-    "self_correction_rate": 0.040
+    "self_correction_rate": 0.04
   }
 }

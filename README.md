@@ -19,7 +19,7 @@ communication.
 
 ```
 HumanPersonaBase            ← This project (universal)
-├── JapaneseFreelancer      ← Your derived class (language + domain)
+├── JapaneseBusinessCasual  ← Your derived class (language + culture)
 ├── EnglishSupportAgent     ← Another derived class
 └── SpanishSalesRep         ← etc.
 ```
@@ -36,13 +36,13 @@ empirical analysis of the HumanLLMs/Human-Like-DPO-Dataset (10,884 samples).
 ## Quick Start
 
 ```python
-from core import load_config, Platform
-from personas.freelancer_ja import JapaneseFreelancerPersona
+from core import HumanPersonaBase, Platform
 
-# Initialize
-persona = JapaneseFreelancerPersona(
+# Create a persona from config
+persona = HumanPersonaBase(
+    persona_id="ja_business_casual",
     config_path="config/ja.json",
-    platform=Platform.CROWDSOURCING,
+    platform=Platform.CHAT,
 )
 
 # Process a message
@@ -61,8 +61,6 @@ print(response.emotion_state)  # Current emotional state
 | `StyleVariator` | Introduces linguistic variation (filler words, punctuation, rare typos) |
 | `EmotionStateMachine` | Tracks emotional state across conversation lifetime |
 | `ContextReferencer` | Generates natural back-references to earlier topics |
-| `EscalationDetector` | Detects when to hand off to a human operator |
-
 ## Creating Your Own Persona
 
 1. **Write a config file** — Copy `config/en.json` and customize:
@@ -74,7 +72,7 @@ print(response.emotion_state)  # Current emotional state
 2. **Create a derived class** — See `personas/base_template.md`:
    - Implement `generate_raw_response()` (your response logic)
    - Implement `extract_topics()` (for back-referencing)
-   - Optionally override `on_escalation()` and `post_process()`
+   - Optionally override `post_process()`
 
 3. **Test** — Run `python -m pytest tests/ -v`
 
@@ -87,22 +85,19 @@ human-persona/
 │   ├── timing_controller.py
 │   ├── style_variator.py
 │   ├── emotion_state_machine.py
-│   ├── context_referencer.py
-│   └── escalation_detector.py
+│   └── context_referencer.py
 ├── config/                  # Persona configurations
 │   ├── schema.json          # JSON Schema definition
 │   ├── ja.json              # Japanese (high-context)
 │   ├── en.json              # English (low-context)
 │   └── es.json              # Spanish (mixed-context)
 ├── personas/                # Derived class examples
-│   ├── base_template.md     # How to create your own
-│   ├── freelancer_ja.py     # Japanese freelancer
-│   └── customer_support_en.py
+│   └── base_template.md     # How to create your own persona
 ├── docs/                    # Documentation
 │   ├── research.md          # Literature review
 │   ├── design.md            # Architecture decisions
 │   ├── ethics.md            # Ethics & responsible use
-│   └── paper_draft.md       # Academic paper draft
+│   └── paper_draft_v3.md    # Academic paper draft
 ├── analysis/                # DPO dataset analysis
 │   ├── metrics.py           # Shared metrics module (7 metrics)
 │   ├── dpo_parameter_extraction.py
@@ -120,8 +115,6 @@ human-persona/
 ## Ethics & Responsible Use
 
 This project includes mandatory safeguards:
-- **Escalation detection** is required, not optional
-- **Human handoff** for negotiations, complaints, legal matters
 - **No identity claims** — personas use roles, not fake identities
 
 See [docs/ethics.md](docs/ethics.md) for full guidelines.
@@ -164,7 +157,7 @@ API responses are cached in `benchmarks/cache/` to minimize cost on re-runs.
 ## Research
 
 This project aims to publish findings on arXiv and contribute to the
-Anthropic Agent Skills ecosystem. See [docs/paper_draft.md](docs/paper_draft.md).
+Anthropic Agent Skills ecosystem. See [docs/paper_draft_v3.md](docs/paper_draft_v3.md).
 
 ## License
 

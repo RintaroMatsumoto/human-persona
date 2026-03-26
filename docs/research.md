@@ -73,7 +73,7 @@ Computational Sociolinguistics は、社会的文脈における言語使用を
 基底クラス設計への応用:
 - StyleVariator は register variation の計算的実装に相当
 - EmotionStateMachine は accommodation theory を反映
-- EscalationDetector は politeness theory の逸脱検知を含む
+- EmotionStateMachine は politeness theory の逸脱検知を含む
 
 ---
 
