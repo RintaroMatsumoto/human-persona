@@ -60,3 +60,7 @@ read_and_save.py
 read_core_files.py
 test_sleep_cycle_import.py
 type_analysis.txt
+check_syntax.py
+fix_api.py
+test_direct.py
+view_lines.py

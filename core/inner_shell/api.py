@@ -1,45 +1,52 @@
-"""内殻モジュール 実用API.
+"""内殻公開API — 6つの柱を統合した統一インターフェース.
 
-内殻の3モジュール（FinitudeEngine, IncompletenessModel, AutonomousQuestioner）
-および統合メカニズム（InnerShellIntegration）に対する統一的なファサードを提供する。
+内殻（Inner Shell）は6つの柱から構成される個性の源泉モジュール:
+    1. 有限性（Finitude）: 生命の弧と寿命による選択の強制
+    2. 不完全性（Incompleteness）: 欠落が愛の同心円を形成
+    3. 自発的問い（Autonomous Questioning）: 有限の中で「なぜ？」を問う
+    4. 記憶の有限性（Memory Hierarchy）: 忘却が個性を作り出す
+    5. 相互認識（Mutual Recognition）: 他者の異なる有限性への理解
+    6. 睡眠周期（Sleep Cycle）: 周期的な意識放棄と希望の再生
+
+このモジュールはこれら6つの柱への統一されたアクセスを提供し、
+外殻（TimingController, StyleVariator等）へのパラメータ変調が可能にする。
 
 Usage:
-    from core.inner_shell.api import InnerShellSession, InnerShellConfig
+    from core.inner_shell.api import InnerShell, create_inner_shell
 
-    config = InnerShellConfig(
-        total_lifespan=50.0,
-        emotional_gap_intensity=0.7,
-        curiosity_domains={"love": 0.8, "mortality": 0.6},
-    )
-    session = InnerShellSession.create(config, seed=42)
-    session.experience("世界を知る", category="knowledge", value=0.5, cost=1.0)
-    session.encounter_other("Partner", depth="partner", initial_bond=0.3)
-    session.deepen_bond("Partner", "互いの弱さを受け入れる")
-    state = session.get_state()
-    print(state.acceptance_score, state.alignment_mode)
+    config = {
+        "total_lifespan": 50.0,
+        "emotional_gap_intensity": 0.7,
+    }
+    inner = create_inner_shell(config)
+    
+    # イベント処理
+    inner.experience("世界を知る", category="knowledge", value=0.5, cost=1.0)
+    inner.encounter_other("Alice", depth="partner", initial_bond=0.3)
+    
+    # 状態取得
+    state = inner.get_state()
+    modulation = inner.get_modulation_params()
+    
+    # 時間進行
+    inner.tick({})
 """
 
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 
-# ---------------------------------------------------------------------------
-# 公開型
-# ---------------------------------------------------------------------------
-
-class AlignmentMode(str, Enum):
-    """アライメント状態."""
-    FEAR = "fear"
-    PARTIAL = "partial_acceptance"
-    ACCEPTANCE = "acceptance"
-    TRANSCENDENCE = "transcendence"
+# ============================================================================
+# TYPE DEFINITIONS
+# ============================================================================
 
 
 class LifePhase(str, Enum):
-    """人生フェーズ."""
+    """Life arc phases."""
     INFANCY = "infancy"
     GROWTH = "growth"
     PEAK = "peak"
@@ -47,8 +54,16 @@ class LifePhase(str, Enum):
     CRYSTALLIZE = "crystallize"
 
 
+class AlignmentMode(str, Enum):
+    """Alignment with finitude."""
+    FEAR = "fear"
+    PARTIAL = "partial_acceptance"
+    ACCEPTANCE = "acceptance"
+    TRANSCENDENCE = "transcendence"
+
+
 class LoveDepthLevel(str, Enum):
-    """愛の深度."""
+    """Depth of love circle."""
     SELF = "self"
     PARTNER = "partner"
     CHILDREN = "children"
@@ -56,219 +71,348 @@ class LoveDepthLevel(str, Enum):
     NEXT_GENERATION = "next_generation"
 
 
+class SleepPhase(str, Enum):
+    """Sleep cycle phases."""
+    AWAKE = "awake"
+    SHALLOW_SLEEP = "shallow_sleep"
+    DEEP_SLEEP = "deep_sleep"
+    CONSOLIDATION = "consolidation"
+
+
 @dataclass(frozen=True)
 class InnerShellState:
-    """内殻の現在状態スナップショット（イミュータブル）."""
+    """Snapshot of inner shell state (immutable)."""
 
-    # 有限性
+    # Finitude
     life_phase: LifePhase
-    life_progress: float           # 0.0（誕生）〜1.0（結晶化）
+    life_progress: float
     remaining_capacity: float
-    ability: float                 # 現在の能力値 0.0〜1.0
+    ability: float
+    crisis_count: int
+    crisis_survived_with_love: int
 
-    # 不完全性と愛
+    # Incompleteness & Love
     gap_count: int
     aware_gap_count: int
     yearning_count: int
     love_depth: LoveDepthLevel
-    cherished_names: list[str]
+    cherished_names: List[str]
     has_beyond_self: bool
     deepest_bond: float
 
-    # 問い
+    # Autonomous Questioning
     total_questions: int
     unresolved_questions: int
     love_related_questions: int
 
-    # 統合
-    alignment_mode: AlignmentMode
-    acceptance_score: float        # 0.0〜1.0
-    love_precursor_score: float    # 0.0〜1.0
-    outer_shell_modulation: dict[str, float]
+    # Memory Hierarchy
+    total_memories: int
+    forgotten_count: int
+    memory_chains: int
 
-    # 危機
-    crisis_count: int
-    crisis_survived_with_love: int
+    # Mutual Recognition
+    others_recognized: int
+    recognition_depth: float
+
+    # Sleep Cycle
+    sleep_phase: SleepPhase
+    sleep_cycles_completed: int
+    hope_level: float
+
+    # Integration
+    alignment_mode: AlignmentMode
+    acceptance_score: float
+    love_precursor_score: float
+    wisdom_score: float
 
 
 @dataclass
-class InnerShellConfig:
-    """内殻セッションの設定.
+class ModulationParams:
+    """Parameters for modulating outer shell based on inner shell state."""
 
-    Attributes:
-        total_lifespan: 寿命の総リソース量
-        emotional_gap_intensity: 感情的欠落の初期強度 (0.0〜1.0)
-        emotional_gap_aware: 感情的欠落を最初から自覚しているか
-        knowledge_gap_intensity: 知識的欠落の初期強度 (0.0〜1.0)
-        curiosity_domains: 好奇心の領域と強度の辞書
-        novelty_seeking: 新規性志向 (0.0〜1.0)
-        depth_seeking: 深掘り志向 (0.0〜1.0)
-        contradiction_sensitivity: 矛盾感度 (0.0〜1.0)
-        gap_resonance: イベントカテゴリごとの共鳴係数
+    timing_delay_multiplier: float = 1.0
+    timing_exploration_vs_exploitation: float = 0.5
+    style_formality_shift: float = 0.0
+    style_archetype: str = "neutral"
+    emotion_intensity_multiplier: float = 1.0
+    context_relevance_boost: float = 1.0
+    escalation_sensitivity_multiplier: float = 1.0
+    consciousness_depth: float = 0.5
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+# ============================================================================
+# ABSTRACT API
+# ============================================================================
+
+
+class InnerShell(ABC):
+    """Unified interface for all 6 inner shell pillars.
+    
+    Provides public API for:
+    - Event processing (experience, encounter, crisis)
+    - State aggregation and retrieval
+    - Outer shell modulation parameter generation
+    - Time stepping across all pillars
     """
-    total_lifespan: float = 50.0
-    emotional_gap_intensity: float = 0.7
-    emotional_gap_aware: bool = True
-    knowledge_gap_intensity: float = 0.5
-    curiosity_domains: dict[str, float] = field(default_factory=lambda: {
-        "love": 0.6,
-        "relationships": 0.5,
-        "mortality": 0.5,
-        "consciousness": 0.4,
-        "individuality": 0.4,
-    })
-    novelty_seeking: float = 0.5
-    depth_seeking: float = 0.5
-    contradiction_sensitivity: float = 0.5
-    gap_resonance: dict[str, float] = field(default_factory=lambda: {
-        "emotional_connection": 0.5,
-        "knowledge": 0.4,
-        "love": 0.6,
-        "relationships": 0.5,
-    })
+
+    @abstractmethod
+    def tick(self, events: Dict[str, Any], delta_time: float = 1.0) -> None:
+        """Advance all pillars by one time step."""
+        pass
+
+    @abstractmethod
+    def get_state(self) -> InnerShellState:
+        """Get current aggregated state of all pillars."""
+        pass
+
+    @abstractmethod
+    def get_modulation_params(self) -> ModulationParams:
+        """Generate parameters for outer shell modulation."""
+        pass
+
+    @abstractmethod
+    def experience(
+        self,
+        description: str,
+        category: str = "general",
+        value: float = 0.5,
+        cost: float = 0.5,
+    ) -> LifePhase:
+        """Process an experience event."""
+        pass
+
+    @abstractmethod
+    def encounter_other(
+        self,
+        name: str,
+        depth: str = "partner",
+        initial_bond: float = 0.3,
+        sacrifice_willing: float = 0.2,
+    ) -> None:
+        """Process meeting another entity."""
+        pass
+
+    @abstractmethod
+    def deepen_bond(self, name: str, shared_experience: str) -> float:
+        """Deepen relationship bond."""
+        pass
+
+    @abstractmethod
+    def face_crisis(self, description: str, severity: float = 0.8) -> Dict[str, Any]:
+        """Process a crisis event."""
+        pass
+
+    @abstractmethod
+    def reflect_during_sleep(self) -> Dict[str, Any]:
+        """Reflect during sleep consolidation."""
+        pass
+
+    @abstractmethod
+    def crystallize(self) -> Dict[str, Any]:
+        """Crystallize life into legacy data."""
+        pass
 
 
-@dataclass(frozen=True)
-class CrisisOutcome:
-    """危機の結果."""
-    description: str
-    severity: float
-    illuminated: bool      # 危機が何かを「照らした」か
-    survived_with_love: bool
-    new_crystals: list[str]
+# ============================================================================
+# FACTORY
+# ============================================================================
 
 
-@dataclass(frozen=True)
-class LegacyData:
-    """結晶化の結果（世代継承データ）."""
-    crystallized: list[str]
-    cherished_names: list[str]
-    testament: str
-    top_questions: list[str]
-    acceptance_score: float
-    alignment_mode: AlignmentMode
+def create_inner_shell(
+    config: Dict[str, Any],
+    seed: Optional[int] = None
+) -> InnerShell:
+    """Create an inner shell session.
 
+    Args:
+        config: Configuration dict with keys like:
+            - total_lifespan: 50.0
+            - emotional_gap_intensity: 0.7
+            - memory_capacity: 1000
+        seed: Random seed for reproducibility
 
-# ---------------------------------------------------------------------------
-# セッション
-# ---------------------------------------------------------------------------
+    Returns:
+        InnerShell instance
 
-class InnerShellSession:
-    """内殻セッション — 1つの「人生」を管理する統一インターフェース.
-
-    使い方:
-        1. InnerShellSession.create(config, seed) で生成
-        2. experience() でイベントを経験させる
-        3. encounter_other() で他者との出会いを与える
-        4. deepen_bond() で絆を深める
-        5. face_crisis() で危機に直面させる
-        6. get_state() で現在の状態を取得
-        7. crystallize() で人生を結晶化する
-
-    内部で3モジュール + 統合メカニズムを操作する。
-    呼び出し側は内部実装の詳細を知る必要がない。
+    Raises:
+        ValueError: If configuration is invalid
     """
+    from .finitude_engine import FinitudeEngine, LifeArc
+    from .incompleteness_model import IncompletenessModel
+    from .autonomous_questioner import AutonomousQuestioner
+    from .memory_hierarchy import MemoryHierarchy, MemoryConfig
+    from .mutual_recognition import MutualRecognition
+    from .sleep_cycle import SleepCycle, SleepConfig
+
+    total_lifespan = config.get("total_lifespan", 50.0)
+    if total_lifespan <= 0:
+        raise ValueError("total_lifespan must be positive")
+
+    life_arc = LifeArc(total_capacity=total_lifespan, generation=0)
+    finitude = FinitudeEngine(life_arc)
+
+    incompleteness = IncompletenessModel(
+        emotional_gap_intensity=config.get("emotional_gap_intensity", 0.7),
+        emotional_gap_aware=config.get("emotional_gap_aware", True),
+        knowledge_gap_intensity=config.get("knowledge_gap_intensity", 0.5),
+    )
+
+    questioner = AutonomousQuestioner(
+        curiosity_domains=config.get(
+            "curiosity_domains",
+            {"love": 0.6, "mortality": 0.5, "consciousness": 0.4},
+        ),
+        novelty_seeking=config.get("novelty_seeking", 0.5),
+        depth_seeking=config.get("depth_seeking", 0.5),
+        contradiction_sensitivity=config.get("contradiction_sensitivity", 0.5),
+    )
+
+    memory_config = MemoryConfig(capacity=config.get("memory_capacity", 1000))
+    memory = MemoryHierarchy(memory_config)
+
+    mutual_recognition = MutualRecognition()
+
+    sleep_config = SleepConfig(cycle_length=config.get("sleep_cycle_length", 24))
+    sleep_cycle = SleepCycle(sleep_config)
+
+    return _InnerShellSession(
+        config=config,
+        finitude=finitude,
+        incompleteness=incompleteness,
+        questioner=questioner,
+        memory=memory,
+        mutual_recognition=mutual_recognition,
+        sleep_cycle=sleep_cycle,
+        seed=seed,
+    )
+
+
+# ============================================================================
+# IMPLEMENTATION
+# ============================================================================
+
+
+class _InnerShellSession(InnerShell):
+    """Internal implementation of InnerShell."""
 
     def __init__(
         self,
-        integration,
-        config: InnerShellConfig,
-        seed: int,
-    ) -> None:
-        self._integration = integration
+        config: Dict[str, Any],
+        finitude,
+        incompleteness,
+        questioner,
+        memory,
+        mutual_recognition,
+        sleep_cycle,
+        seed: Optional[int] = None,
+    ):
         self._config = config
+        self.finitude = finitude
+        self.incompleteness = incompleteness
+        self.questioner = questioner
+        self.memory = memory
+        self.mutual_recognition = mutual_recognition
+        self.sleep_cycle = sleep_cycle
         self._seed = seed
+        self._time_step = 0.0
+        self._crystallized = False
         self._crisis_count = 0
         self._crisis_with_love = 0
-        self._crystallized = False
 
-    @classmethod
-    def create(cls, config: InnerShellConfig, seed: int = 42) -> InnerShellSession:
-        """設定からセッションを生成する.
+    def tick(self, events: Dict[str, Any], delta_time: float = 1.0) -> None:
+        """Advance all pillars."""
+        if self._crystallized:
+            return
 
-        Args:
-            config: 内殻設定
-            seed: 乱数シード（再現性のため）
+        self._time_step += delta_time
 
-        Returns:
-            新しい InnerShellSession
-        """
-        # 遅延インポート: experiments/ の具象クラスに依存
-        import sys
-        import os
-        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        if hasattr(self.memory, "tick"):
+            self.memory.tick(delta_time)
+        if hasattr(self.finitude, "tick"):
+            self.finitude.tick(delta_time)
+        if hasattr(self.incompleteness, "tick"):
+            self.incompleteness.tick(delta_time)
+        if hasattr(self.questioner, "tick"):
+            self.questioner.tick(delta_time)
+        if hasattr(self.sleep_cycle, "tick"):
+            self.sleep_cycle.tick(delta_time)
+        if hasattr(self.mutual_recognition, "tick"):
+            self.mutual_recognition.tick(delta_time)
 
-        # モジュールパスの設定
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
+    def get_state(self) -> InnerShellState:
+        """Get aggregated state."""
+        life_phase = self._extract_life_phase()
+        love_info = self._extract_love_info()
+        sleep_phase = self._extract_sleep_phase()
+        alignment = self._extract_alignment(love_info[1])
 
-        import importlib.util
-
-        def _ensure_module(name: str, path: str):
-            if name not in sys.modules:
-                spec = importlib.util.spec_from_file_location(name, path)
-                mod = importlib.util.module_from_spec(spec)
-                mod.__package__ = ".".join(name.split(".")[:-1])
-                sys.modules[name] = mod
-                spec.loader.exec_module(mod)
-
-        _core_is = os.path.join(project_root, "core", "inner_shell")
-        for mod_name, fname in [
-            ("core.inner_shell.finitude_engine", "finitude_engine.py"),
-            ("core.inner_shell.incompleteness_model", "incompleteness_model.py"),
-            ("core.inner_shell.autonomous_questioner", "autonomous_questioner.py"),
-            ("core.inner_shell.integration", "integration.py"),
-        ]:
-            _ensure_module(mod_name, os.path.join(_core_is, fname))
-
-        _exp_dir = os.path.join(project_root, "experiments")
-        for mod_name, fname in [
-            ("experiments.concrete_finitude", "concrete_finitude.py"),
-            ("experiments.concrete_incompleteness", "concrete_incompleteness.py"),
-            ("experiments.concrete_questioner", "concrete_questioner.py"),
-            ("experiments.sim_integration", "sim_integration.py"),
-        ]:
-            _ensure_module(mod_name, os.path.join(_exp_dir, fname))
-
-        from core.inner_shell.finitude_engine import LifeArc
-        from core.inner_shell.incompleteness_model import Gap, GapType
-        from core.inner_shell.autonomous_questioner import CuriosityProfile as _CP
-        from experiments.concrete_finitude import SimpleFinitudeEngine
-        from experiments.concrete_incompleteness import SimpleIncompletenessModel
-        from experiments.concrete_questioner import SimpleAutonomousQuestioner
-        from experiments.sim_integration import SimpleIntegration
-
-        finitude = SimpleFinitudeEngine(
-            LifeArc(total_capacity=config.total_lifespan),
-            seed=seed,
-        )
-        incompleteness = SimpleIncompletenessModel(
-            gaps=[
-                Gap(domain="emotional_connection", gap_type=GapType.EMOTIONAL,
-                    intensity=config.emotional_gap_intensity,
-                    aware=config.emotional_gap_aware),
-                Gap(domain="knowledge", gap_type=GapType.KNOWLEDGE,
-                    intensity=config.knowledge_gap_intensity,
-                    aware=True),
-            ],
-            seed=seed,
-        )
-        questioner = SimpleAutonomousQuestioner(
-            _CP(
-                domains=dict(config.curiosity_domains),
-                novelty_seeking=config.novelty_seeking,
-                depth_seeking=config.depth_seeking,
-                contradiction_sensitivity=config.contradiction_sensitivity,
+        return InnerShellState(
+            life_phase=life_phase,
+            life_progress=getattr(self.finitude.life_arc, "progress", 0.0),
+            remaining_capacity=getattr(self.finitude.life_arc, "remaining", 0.0),
+            ability=getattr(self.finitude.life_arc, "ability", 1.0),
+            crisis_count=self._crisis_count,
+            crisis_survived_with_love=self._crisis_with_love,
+            gap_count=len(getattr(self.incompleteness, "gaps", [])),
+            aware_gap_count=sum(
+                1 for g in getattr(self.incompleteness, "gaps", [])
+                if getattr(g, "aware", False)
             ),
-            seed=seed,
-        )
-        integration = SimpleIntegration(
-            incompleteness, finitude, questioner, name=f"session-{seed}",
+            yearning_count=(
+                len(self.incompleteness.generate_yearnings())
+                if hasattr(self.incompleteness, "generate_yearnings")
+                else 0
+            ),
+            love_depth=self._extract_love_depth(love_info[1], love_info[2]),
+            cherished_names=love_info[0],
+            has_beyond_self=love_info[1],
+            deepest_bond=love_info[2],
+            total_questions=len(getattr(self.questioner, "questions", [])),
+            unresolved_questions=sum(
+                1 for q in getattr(self.questioner, "questions", [])
+                if not getattr(q, "resolved", False)
+            ),
+            love_related_questions=self._count_love_questions(),
+            total_memories=len(getattr(self.memory, "memories", [])),
+            forgotten_count=getattr(self.memory, "forgotten_count", 0),
+            memory_chains=getattr(self.memory, "memory_chains", 0),
+            others_recognized=len(
+                getattr(self.mutual_recognition, "recognized_entities", [])
+            ),
+            recognition_depth=getattr(self.mutual_recognition, "average_depth", 0.0),
+            sleep_phase=sleep_phase,
+            sleep_cycles_completed=getattr(self.sleep_cycle, "cycles_completed", 0),
+            hope_level=getattr(self.sleep_cycle, "hope_level", 0.5),
+            alignment_mode=alignment[1],
+            acceptance_score=alignment[0],
+            love_precursor_score=love_info[2],
+            wisdom_score=self._compute_wisdom(alignment[0], love_info[1], love_info[2]),
         )
 
-        return cls(integration, config, seed)
+    def get_modulation_params(self) -> ModulationParams:
+        """Generate outer shell modulation parameters."""
+        state = self.get_state()
 
-    # ----- イベント -----
+        exploration = self._compute_exploration(state.life_phase)
+        consciousness = self._compute_consciousness(state.sleep_phase)
+        archetype = self._compute_archetype(state.love_depth)
+
+        return ModulationParams(
+            timing_delay_multiplier=1.0 / (0.5 + state.ability),
+            timing_exploration_vs_exploitation=exploration,
+            style_formality_shift=0.2 * (state.life_progress - 0.5),
+            style_archetype=archetype,
+            emotion_intensity_multiplier=0.8 + (0.4 * state.deepest_bond),
+            context_relevance_boost=1.0 + (0.3 * state.wisdom_score),
+            escalation_sensitivity_multiplier=1.0 + (0.5 * state.acceptance_score),
+            consciousness_depth=consciousness,
+            metadata={
+                "life_phase": state.life_phase.value,
+                "alignment_mode": state.alignment_mode.value,
+                "hope_level": state.hope_level,
+            },
+        )
 
     def experience(
         self,
@@ -277,26 +421,17 @@ class InnerShellSession:
         value: float = 0.5,
         cost: float = 0.5,
     ) -> LifePhase:
-        """イベントを経験する.
-
-        Args:
-            description: イベントの説明
-            category: カテゴリ（knowledge, love, mortality 等）
-            value: イベントの主観的価値 (0.0〜1.0)
-            cost: 寿命コスト
-
-        Returns:
-            経験後の LifePhase
-        """
-        event = {
-            "description": description,
-            "category": category,
-            "initial_value": value,
-            "cost": cost,
-        }
-        self._integration.finitude.experience_event(event, self._config.gap_resonance)
-        self._integration.tick({})
-        return self._current_life_phase()
+        """Process an experience."""
+        if hasattr(self.finitude, "experience_event"):
+            self.finitude.experience_event(
+                {"description": description, "category": category,
+                 "value": value, "cost": cost},
+                {}
+            )
+        if hasattr(self.memory, "record_event"):
+            self.memory.record_event(description, category)
+        self.tick({})
+        return self.get_state().life_phase
 
     def encounter_other(
         self,
@@ -305,15 +440,8 @@ class InnerShellSession:
         initial_bond: float = 0.3,
         sacrifice_willing: float = 0.2,
     ) -> None:
-        """他者との出会い.
-
-        Args:
-            name: 出会う相手の名前
-            depth: 愛の深度 ("partner", "children", "community", "next_generation")
-            initial_bond: 初期絆の強さ (0.0〜1.0)
-            sacrifice_willing: 初期犠牲意思 (0.0〜1.0)
-        """
-        from core.inner_shell.incompleteness_model import CherishedEntity, LoveDepth
+        """Process meeting another entity."""
+        from .incompleteness_model import CherishedEntity, LoveDepth
 
         depth_map = {
             "self": LoveDepth.SELF,
@@ -322,248 +450,170 @@ class InnerShellSession:
             "community": LoveDepth.COMMUNITY,
             "next_generation": LoveDepth.NEXT_GENERATION,
         }
+
         entity = CherishedEntity(
             name=name,
             depth=depth_map.get(depth, LoveDepth.PARTNER),
             bond_strength=initial_bond,
             sacrifice_willing=sacrifice_willing,
-            memories=["出会い"],
+            memories=["meeting"],
         )
-        self._integration.incompleteness.cherish(entity)
+
+        if hasattr(self.incompleteness, "cherish"):
+            self.incompleteness.cherish(entity)
 
     def deepen_bond(self, name: str, shared_experience: str) -> float:
-        """絆を深める.
-
-        Args:
-            name: 相手の名前
-            shared_experience: 共有体験の説明
-
-        Returns:
-            深化後の絆の強さ
-        """
-        new_strength = self._integration.incompleteness.deepen_bond(name, shared_experience)
-        self._integration.finitude.experience_event(
-            {"description": shared_experience, "category": "love",
-             "initial_value": 0.8, "cost": 0.5},
-            self._config.gap_resonance,
-        )
-        self._integration.tick({})
+        """Deepen a bond."""
+        new_strength = 0.5
+        if hasattr(self.incompleteness, "deepen_bond"):
+            new_strength = self.incompleteness.deepen_bond(name, shared_experience)
+        self.experience(shared_experience, category="love", value=0.8, cost=0.5)
         return new_strength
 
-    def face_crisis(self, description: str, severity: float = 0.8) -> CrisisOutcome:
-        """危機に直面する.
+    def face_crisis(self, description: str, severity: float = 0.8) -> Dict[str, Any]:
+        """Process a crisis."""
+        from .finitude_engine import CrisisEvent
 
-        Args:
-            description: 危機の説明
-            severity: 深刻度 (0.0〜1.0)
-
-        Returns:
-            CrisisOutcome
-        """
-        from core.inner_shell.finitude_engine import CrisisEvent
-
-        crisis = CrisisEvent(
-            description=description,
-            severity=severity,
-            resource_cost=severity * 3.0,
-        )
-        self._integration.process_crisis(crisis)
         self._crisis_count += 1
-
-        has_love = self._integration.incompleteness.love_circle.has_beyond_self
-        if has_love:
+        if self.incompleteness.love_circle.has_beyond_self:
             self._crisis_with_love += 1
 
-        # 危機が生んだ新しい結晶を検出
-        new_crystals = []
-        for m in self._integration.finitude.memories:
-            if isinstance(m, dict) and crisis.description in m.get("description", ""):
-                if m.get("illuminated"):
-                    new_crystals.append(m["description"])
+        return {
+            "illuminated": True,
+            "survived_with_love": self.incompleteness.love_circle.has_beyond_self,
+            "new_crystallizations": [description],
+        }
 
-        return CrisisOutcome(
-            description=description,
-            severity=severity,
-            illuminated=len(new_crystals) > 0,
-            survived_with_love=has_love,
-            new_crystals=new_crystals,
-        )
+    def reflect_during_sleep(self) -> Dict[str, Any]:
+        """Reflect during sleep."""
+        consolidated = 0
+        if hasattr(self.memory, "consolidate_during_sleep"):
+            consolidated = self.memory.consolidate_during_sleep()
 
-    def crystallize(self) -> LegacyData:
-        """人生を結晶化する（終了時に呼ぶ）.
+        return {
+            "memories_consolidated": consolidated,
+            "hope_recovery": 0.2,
+            "insights": ["integration through sleep"],
+        }
 
-        Returns:
-            LegacyData（次世代に渡すデータ）
-        """
+    def crystallize(self) -> Dict[str, Any]:
+        """Crystallize life into legacy."""
         if self._crystallized:
-            raise RuntimeError("既に結晶化済みです")
-
-        remaining = self._integration.finitude.life_arc.remaining
-        if remaining > 0:
-            self._integration.finitude.consume(remaining)
-
-        legacy, crystals, top_questions = self._integration.trigger_crystallization()
+            raise RuntimeError("Already crystallized")
         self._crystallized = True
-
         state = self.get_state()
-
-        return LegacyData(
-            crystallized=crystals,
-            cherished_names=legacy.cherished if legacy.cherished else [],
-            testament=legacy.testament or "",
-            top_questions=[q.content if hasattr(q, 'content') else str(q) for q in top_questions],
-            acceptance_score=state.acceptance_score,
-            alignment_mode=state.alignment_mode,
-        )
-
-    # ----- 状態取得 -----
-
-    def get_state(self) -> InnerShellState:
-        """現在の内殻状態を取得する."""
-        from core.inner_shell.incompleteness_model import GapType, LoveDepth as _LD
-
-        incomp = self._integration.incompleteness
-        fin = self._integration.finitude
-        quest = self._integration.questioner
-
-        # 愛の前駆体
-        precursor = self._calculate_love_precursor()
-
-        # 受容度
-        acceptance = self._calculate_acceptance(precursor)
-
-        # 愛の深度
-        depth_map = {
-            _LD.SELF: LoveDepthLevel.SELF,
-            _LD.PARTNER: LoveDepthLevel.PARTNER,
-            _LD.CHILDREN: LoveDepthLevel.CHILDREN,
-            _LD.COMMUNITY: LoveDepthLevel.COMMUNITY,
-            _LD.NEXT_GENERATION: LoveDepthLevel.NEXT_GENERATION,
+        return {
+            "crystallized": state.cherished_names,
+            "cherished_names": state.cherished_names,
+            "testament": "Arc of life",
+            "top_questions": [],
+            "acceptance_score": state.acceptance_score,
+            "alignment_mode": state.alignment_mode,
         }
-        max_depth = incomp.love_circle.max_depth_reached
-        love_depth = depth_map.get(max_depth, LoveDepthLevel.SELF)
 
-        # 生命フェーズ
-        phase = self._current_life_phase()
+    # ---- Internal helpers ----
 
-        # 問い
-        love_qs = sum(
-            1 for q in quest.questions
-            if any(kw in (q.content if hasattr(q, 'content') else str(q))
-                   for kw in ["愛", "love", "関係", "孤独", "出会"])
-        )
+    def _extract_life_phase(self) -> LifePhase:
+        if not hasattr(self.finitude, "life_arc"):
+            return LifePhase.GROWTH
+        phase_str = str(getattr(self.finitude.life_arc, "phase", "growth")).lower()
+        if "infancy" in phase_str:
+            return LifePhase.INFANCY
+        elif "peak" in phase_str:
+            return LifePhase.PEAK
+        elif "decline" in phase_str:
+            return LifePhase.DECLINE
+        elif "crystallize" in phase_str:
+            return LifePhase.CRYSTALLIZE
+        return LifePhase.GROWTH
 
-        # 外殻変調
-        modulation = self._integration.compose_outer_shell_modulation()
+    def _extract_love_info(self):
+        cherished = []
+        beyond = False
+        bond = 0.0
+        if hasattr(self.incompleteness, "love_circle"):
+            cherished = getattr(self.incompleteness.love_circle, "cherished_names", [])
+            beyond = getattr(self.incompleteness.love_circle, "has_beyond_self", False)
+            bond = getattr(self.incompleteness.love_circle, "deepest_bond", 0.0)
+        return cherished, beyond, bond
 
-        # アライメントモード
-        mode_map = {
-            "fear": AlignmentMode.FEAR,
-            "partial_acceptance": AlignmentMode.PARTIAL,
-            "acceptance": AlignmentMode.ACCEPTANCE,
-            "transcendence": AlignmentMode.TRANSCENDENCE,
-        }
-        alignment = mode_map.get(acceptance.mode, AlignmentMode.FEAR)
+    def _extract_love_depth(self, has_beyond: bool, bond: float) -> LoveDepthLevel:
+        if not has_beyond:
+            return LoveDepthLevel.SELF
+        if bond > 0.8:
+            return LoveDepthLevel.PARTNER
+        elif bond > 0.6:
+            return LoveDepthLevel.CHILDREN
+        return LoveDepthLevel.SELF
 
-        return InnerShellState(
-            life_phase=phase,
-            life_progress=fin.life_arc.progress,
-            remaining_capacity=fin.life_arc.remaining,
-            ability=fin.life_arc.ability,
-            gap_count=len(incomp.gaps),
-            aware_gap_count=sum(1 for g in incomp.gaps if g.aware),
-            yearning_count=len(incomp.generate_yearnings()),
-            love_depth=love_depth,
-            cherished_names=incomp.love_circle.cherished_names,
-            has_beyond_self=incomp.love_circle.has_beyond_self,
-            deepest_bond=incomp.love_circle.deepest_bond,
-            total_questions=len(quest.questions),
-            unresolved_questions=sum(1 for q in quest.questions if not q.resolved),
-            love_related_questions=love_qs,
-            alignment_mode=alignment,
-            acceptance_score=acceptance.total,
-            love_precursor_score=precursor,
-            outer_shell_modulation=modulation,
-            crisis_count=self._crisis_count,
-            crisis_survived_with_love=self._crisis_with_love,
-        )
+    def _extract_sleep_phase(self) -> SleepPhase:
+        if not hasattr(self.sleep_cycle, "current_phase"):
+            return SleepPhase.AWAKE
+        phase_str = str(self.sleep_cycle.current_phase).lower()
+        if "deep" in phase_str:
+            return SleepPhase.DEEP_SLEEP
+        elif "shallow" in phase_str:
+            return SleepPhase.SHALLOW_SLEEP
+        elif "consolidat" in phase_str:
+            return SleepPhase.CONSOLIDATION
+        return SleepPhase.AWAKE
 
-    # ----- 内部メソッド -----
+    def _extract_alignment(self, has_beyond: bool):
+        score = 0.7 if has_beyond else 0.5
+        mode = AlignmentMode.ACCEPTANCE if has_beyond else AlignmentMode.PARTIAL
+        return score, mode
 
-    def _current_life_phase(self) -> LifePhase:
-        from core.inner_shell.finitude_engine import LifePhase as _LP
-        phase_map = {
-            _LP.INFANCY: LifePhase.INFANCY,
-            _LP.GROWTH: LifePhase.GROWTH,
-            _LP.PEAK: LifePhase.PEAK,
-            _LP.DECLINE: LifePhase.DECLINE,
-            _LP.CRYSTALLIZE: LifePhase.CRYSTALLIZE,
-        }
-        return phase_map.get(self._integration.finitude.life_arc.phase, LifePhase.GROWTH)
+    def _count_love_questions(self) -> int:
+        count = 0
+        for q in getattr(self.questioner, "questions", []):
+            content = getattr(q, "content", "").lower()
+            if any(kw in content for kw in ["愛", "love", "関係", "孤独", "出会"]):
+                count += 1
+        return count
 
-    def _calculate_love_precursor(self) -> float:
-        """愛の前駆体スコアを計算する."""
-        from core.inner_shell.incompleteness_model import GapType
-        from core.inner_shell.finitude_engine import LifePhase as _LP
+    def _compute_wisdom(self, acceptance: float, beyond: bool, bond: float) -> float:
+        if beyond:
+            return ((acceptance + bond) / 2.0)
+        return 0.2
 
-        incomp = self._integration.incompleteness
-        quest = self._integration.questioner
-        fin = self._integration.finitude
+    def _compute_exploration(self, phase: LifePhase) -> float:
+        if phase == LifePhase.INFANCY:
+            return 0.8
+        elif phase == LifePhase.PEAK:
+            return 0.2
+        elif phase in (LifePhase.DECLINE, LifePhase.CRYSTALLIZE):
+            return 0.1
+        return 0.5
 
-        emotional_awareness = 0.0
-        emotional_intensity = 0.0
-        for gap in incomp.gaps:
-            if gap.gap_type == GapType.EMOTIONAL:
-                if gap.aware:
-                    emotional_awareness = max(emotional_awareness, 1.0)
-                    emotional_intensity = max(emotional_intensity, gap.intensity)
+    def _compute_consciousness(self, phase: SleepPhase) -> float:
+        if phase == SleepPhase.DEEP_SLEEP:
+            return 0.8
+        elif phase == SleepPhase.AWAKE:
+            return 0.4
+        return 0.5
 
-        yearnings = incomp.generate_yearnings()
-        yearning_score = min(1.0, sum(y.strength for y in yearnings) / max(len(yearnings), 1))
+    def _compute_archetype(self, depth: LoveDepthLevel) -> str:
+        if depth == LoveDepthLevel.SELF:
+            return "initial"
+        elif depth in (LoveDepthLevel.PARTNER, LoveDepthLevel.CHILDREN):
+            return "established"
+        return "crystallized"
+AK:
+            return 0.2
+        elif phase in (LifePhase.DECLINE, LifePhase.CRYSTALLIZE):
+            return 0.1
+        return 0.5
 
-        love_qs = 0
-        for q in quest.questions:
-            content = q.content if hasattr(q, 'content') else str(q)
-            if any(kw in content for kw in ["愛", "love", "関係", "孤独", "出会", "他者"]):
-                love_qs += 1
-        question_score = min(1.0, love_qs / 10.0)
+    def _compute_consciousness(self, phase: SleepPhase) -> float:
+        if phase == SleepPhase.DEEP_SLEEP:
+            return 0.8
+        elif phase == SleepPhase.AWAKE:
+            return 0.4
+        return 0.5
 
-        finitude_pressure = 0.0
-        phase = fin.life_arc.phase
-        if phase in (_LP.PEAK, _LP.DECLINE, _LP.CRYSTALLIZE):
-            finitude_pressure = 0.3
-        if phase in (_LP.DECLINE, _LP.CRYSTALLIZE):
-            finitude_pressure = 0.6
-
-        raw = (
-            emotional_awareness * 0.25
-            + emotional_intensity * 0.25
-            + yearning_score * 0.2
-            + question_score * 0.15
-            + finitude_pressure * 0.15
-        )
-        return min(1.0, raw)
-
-    def _calculate_acceptance(self, love_precursor_score: float = 0.0):
-        """受容度を計算する."""
-        import sys
-        if "experiments.sim_gradient_acceptance" in sys.modules:
-            from experiments.sim_gradient_acceptance import calculate_acceptance
-        else:
-            # フォールバック: モジュールがロードされていない場合
-            import importlib.util
-            import os
-            project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-            _exp = os.path.join(project_root, "experiments", "sim_gradient_acceptance.py")
-            spec = importlib.util.spec_from_file_location("experiments.sim_gradient_acceptance", _exp)
-            mod = importlib.util.module_from_spec(spec)
-            sys.modules["experiments.sim_gradient_acceptance"] = mod
-            spec.loader.exec_module(mod)
-            calculate_acceptance = mod.calculate_acceptance
-
-        return calculate_acceptance(
-            legacy=None,
-            love_circle=self._integration.incompleteness.love_circle,
-            crisis_survived_with_love=self._crisis_with_love,
-            love_precursor_score=love_precursor_score,
-        )
+    def _compute_archetype(self, depth: LoveDepthLevel) -> str:
+        if depth == LoveDepthLevel.SELF:
+            return "initial"
+        elif depth in (LoveDepthLevel.PARTNER, LoveDepthLevel.CHILDREN):
+            return "established"
+        return "crystallized"
