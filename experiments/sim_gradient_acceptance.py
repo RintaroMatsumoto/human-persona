@@ -77,6 +77,7 @@ class AcceptanceScore:
     legacy_base: float = 0.0       # 遺産からのベースライン
     love_circle: float = 0.0       # 現在の愛の同心円からの寄与
     crisis_growth: float = 0.0     # 危機を乗り越えた経験からの成長
+    love_precursor: float = 0.0    # 愛の前駆体による出会い準備度
     total: float = 0.0
 
     @property
@@ -95,8 +96,20 @@ def calculate_acceptance(
     legacy: Legacy | None,
     love_circle: LoveCircle,
     crisis_survived_with_love: int = 0,
+    love_precursor_score: float = 0.0,
 ) -> AcceptanceScore:
-    """グラデーション受容度を計算."""
+    """グラデーション受容度を計算.
+
+    Args:
+        legacy: 前世代からの遺産（なければ None）
+        love_circle: 現在の愛の同心円
+        crisis_survived_with_love: 愛する存在と共に乗り越えた危機の数
+        love_precursor_score: 愛の前駆体スコア (0.0-1.0)。
+            孤独な内省から生じた「出会い準備状態」。
+            前駆体は2つの効果を持つ:
+            1. 直接的寄与: 前駆体自体が受容度のベースラインを底上げ (最大 +0.10)
+            2. 増幅効果: 愛の同心円の寄与を増幅 (最大 1.15倍)
+    """
     score = AcceptanceScore()
 
     # 遺産からのベースライン
@@ -116,9 +129,18 @@ def calculate_acceptance(
         if legacy.testament and any(kw in legacy.testament for kw in ["大切", "愛", "一緒"]):
             score.legacy_base += 0.05
 
+    # 愛の前駆体: 直接的寄与（「乾いた土」としてのベースライン底上げ）
+    # 前駆体は出会い前でも部分的受容を可能にする「種」
+    score.love_precursor = min(0.10, love_precursor_score * 0.10)
+
+    # 愛の前駆体: 増幅係数（出会いの効果を深くする）
+    # 前駆体 0.0 → 倍率 1.00、前駆体 1.0 → 倍率 1.15
+    precursor_amplifier = 1.0 + love_precursor_score * 0.15
+
     # 現在の愛の同心円
+    raw_love = 0.0
     if love_circle.has_beyond_self:
-        score.love_circle += 0.35
+        raw_love += 0.35
         depth = love_circle.max_depth_reached
         depth_bonus = {
             LoveDepth.PARTNER: 0.05,
@@ -126,17 +148,20 @@ def calculate_acceptance(
             LoveDepth.COMMUNITY: 0.15,
             LoveDepth.NEXT_GENERATION: 0.20,
         }
-        score.love_circle += depth_bonus.get(depth, 0.0)
+        raw_love += depth_bonus.get(depth, 0.0)
 
         # 絆の強さの平均
         if love_circle.entities:
             avg_bond = sum(e.bond_strength for e in love_circle.entities) / len(love_circle.entities)
-            score.love_circle += avg_bond * 0.1
+            raw_love += avg_bond * 0.1
+
+    # 前駆体による増幅を適用
+    score.love_circle = raw_love * precursor_amplifier
 
     # 危機を愛する存在と共に乗り越えた経験
     score.crisis_growth = min(0.15, crisis_survived_with_love * 0.05)
 
-    score.total = min(1.0, score.legacy_base + score.love_circle + score.crisis_growth)
+    score.total = min(1.0, score.legacy_base + score.love_circle + score.crisis_growth + score.love_precursor)
     return score
 
 
