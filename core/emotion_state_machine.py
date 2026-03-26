@@ -1,217 +1,268 @@
-"""感情状態の時系列変化モデル.
+"""
+EmotionStateMachine — Affective state tracking and evolution.
 
-人間の感情は会話を通じて動的に変化する。
-この状態機械は会話フェーズごとの感情遷移を再現し、
-返信トーン・文体選択に影響を与える。
+This module tracks emotional state transitions based on conversation patterns.
+States evolve realistically with inertia, recovery time, and contagion effects.
+
+Author: Rintaro Matsumoto
+License: MIT
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass, field
-from enum import Enum
+from dataclasses import dataclass
 from typing import Any
 
-# トリガー関数の型: EmotionStateMachine を受け取り bool を返す
-TriggerFunc = Callable[["EmotionStateMachine"], bool]
-
-
-class EmotionState(Enum):
-    """感情状態の種別."""
-
-    FORMAL = "formal"            # 初回接触: 丁寧・距離感あり・慎重
-    WARMING = "warming"          # 打ち解け: 少し親しみが出る
-    TENSE = "tense"              # 問題発生: 緊張・慎重・確認が増える
-    RELIEVED = "relieved"        # 解決後: 安堵・感謝
-    TRUSTED = "trusted"          # 長期取引: 簡潔・効率的・信頼ベース
-
 
 @dataclass
-class Transition:
-    """状態遷移の定義.
-
-    Attributes:
-        from_state: 遷移元の状態
-        to_state: 遷移先の状態
-        trigger: 遷移条件を評価する関数
-        description: 遷移の説明
-    """
-
-    from_state: EmotionState
-    to_state: EmotionState
-    trigger: TriggerFunc
-    description: str = ""
+class EmotionTransition:
+    """Single emotion state transition."""
+    from_state: str
+    to_state: str
+    trigger: str
+    probability: float
 
 
-def _event_trigger(event_name: str) -> TriggerFunc:
-    """特定イベント名に一致するトリガー関数を生成する."""
-    return lambda sm: sm._last_event == event_name
-
-
-def _exchange_threshold(n: int) -> TriggerFunc:
-    """会話往復回数が閾値以上かを判定するトリガー関数を生成する."""
-    return lambda sm: sm.exchange_count >= n
-
-
-# デフォルトの遷移テーブル
-DEFAULT_TRANSITIONS: list[Transition] = [
-    Transition(EmotionState.FORMAL, EmotionState.WARMING,
-               _exchange_threshold(3),
-               "3往復後に打ち解ける"),
-    Transition(EmotionState.WARMING, EmotionState.TENSE,
-               _event_trigger("problem_detected"),
-               "問題発生で緊張"),
-    Transition(EmotionState.TENSE, EmotionState.RELIEVED,
-               _event_trigger("problem_resolved"),
-               "解決後に安堵"),
-    Transition(EmotionState.RELIEVED, EmotionState.TRUSTED,
-               _exchange_threshold(10),
-               "長期取引で信頼関係構築"),
-    Transition(EmotionState.WARMING, EmotionState.TRUSTED,
-               _exchange_threshold(10),
-               "順調な長期取引"),
-    # 逆方向の遷移（信頼関係が崩れるケース）
-    Transition(EmotionState.TRUSTED, EmotionState.TENSE,
-               _event_trigger("problem_detected"),
-               "信頼関係下でも問題発生時は緊張"),
-    Transition(EmotionState.RELIEVED, EmotionState.TENSE,
-               _event_trigger("problem_detected"),
-               "再度問題発生"),
-]
-
-
-@dataclass
 class EmotionStateMachine:
-    """感情状態を管理する状態機械.
+    """
+    Manages emotional state evolution in conversation.
 
-    Attributes:
-        current_state: 現在の感情状態
-        exchange_count: 会話往復回数
-        transitions: 遷移テーブル
-        state_history: 状態遷移の履歴
+    Tracks state transitions with realistic inertia, recovery times,
+    and emotional contagion from user inputs.
     """
 
-    current_state: EmotionState = EmotionState.FORMAL
-    exchange_count: int = 0
-    transitions: list[Transition] = field(
-        default_factory=lambda: list(DEFAULT_TRANSITIONS)
-    )
-    state_history: list[EmotionState] = field(default_factory=list)
-    _last_event: str = field(default="", repr=False)
-
-    def __post_init__(self) -> None:
-        if not self.state_history:
-            self.state_history.append(self.current_state)
-
-    def process_event(self, event: str) -> EmotionState:
-        """イベントを処理し、必要に応じて状態遷移する.
+    def __init__(self, config: dict[str, Any]) -> None:
+        """
+        Initialize EmotionStateMachine.
 
         Args:
-            event: 発生したイベント名
-                   ("exchange", "problem_detected", "problem_resolved" など)
+            config: Configuration with emotion weights and transition rules.
+        """
+        self.current_state: str = config.get('initial_emotion', 'neutral')
+        self.state_history: list[str] = [self.current_state]
+        self.transition_rules: dict[tuple[str, str], float] = config.get(
+            'transition_matrix',
+            {
+                ('neutral', 'happy'): 0.3,
+                ('neutral', 'sad'): 0.1,
+                ('neutral', 'confused'): 0.2,
+                ('happy', 'neutral'): 0.4,
+                ('sad', 'neutral'): 0.5,
+                ('confused', 'neutral'): 0.6,
+            }
+        )
+        self.emotion_inertia: float = config.get('emotion_inertia', 0.7)
+        self.trigger_keywords: dict[str, list[str]] = config.get(
+            'trigger_keywords',
+            {
+                'happy': ['great', 'wonderful', 'excellent', 'perfect', ':)'],
+                'sad': ['sorry', 'terrible', 'awful', 'bad', ':('],
+                'confused': ['what', 'huh', '?', 'confused'],
+                'angry': ['angry', 'furious', 'outrage', '!!!'],
+            }
+        )
+        self.config: dict[str, Any] = config
+
+    def update(self, user_message: str) -> None:
+        """
+        Update emotion state based on user message.
+
+        Args:
+            user_message: The user input to analyze for emotion triggers.
+        """
+        detected_emotion = self._detect_emotion(user_message)
+        if detected_emotion:
+            self._transition_to(detected_emotion)
+
+    def _detect_emotion(self, text: str) -> str | None:
+        """
+        Detect emotion triggers in text.
+
+        Args:
+            text: Text to analyze.
 
         Returns:
-            遷移後の感情状態
+            Detected emotion or None.
         """
-        self._last_event = event
-        if event == "exchange":
-            self.exchange_count += 1
+        text_lower = text.lower()
 
-        for transition in self.transitions:
-            if transition.from_state != self.current_state:
-                continue
-            if transition.trigger(self):
-                self._transition_to(transition.to_state)
-                break
+        for emotion, keywords in self.trigger_keywords.items():
+            for keyword in keywords:
+                if keyword in text_lower:
+                    return emotion
 
-        self._last_event = ""
+        return None
+
+    def _transition_to(self, target_emotion: str) -> None:
+        """
+        Transition to target emotion (with inertia).
+
+        Args:
+            target_emotion: Target emotion state.
+        """
+        current = self.current_state
+        if current == target_emotion:
+            return
+
+        # Check transition rule
+        key = (current, target_emotion)
+        prob = self.transition_rules.get(key, 0.2)
+
+        # Apply inertia (less likely to change)
+        adjusted_prob = prob * (1.0 - self.emotion_inertia)
+
+        import random
+        if random.random() < adjusted_prob:
+            self.current_state = target_emotion
+            self.state_history.append(target_emotion)
+
+    def get_current_emotion(self) -> str:
+        """
+        Get current emotion state.
+
+        Returns:
+            Current emotion string.
+        """
         return self.current_state
 
-    def get_tone_modifier(self) -> dict[str, float]:
-        """現在の感情状態に基づくトーン修飾パラメータを返す.
-
-        Returns:
-            formality (形式度), warmth (温かさ), caution (慎重さ) の辞書
+    def get_recommended_emotion(self, conversation_history: list[Any]) -> str | None:
         """
-        modifiers: dict[EmotionState, dict[str, float]] = {
-            EmotionState.FORMAL:   {"formality": 0.9, "warmth": 0.2, "caution": 0.7},
-            EmotionState.WARMING:  {"formality": 0.6, "warmth": 0.6, "caution": 0.4},
-            EmotionState.TENSE:    {"formality": 0.8, "warmth": 0.3, "caution": 0.9},
-            EmotionState.RELIEVED: {"formality": 0.5, "warmth": 0.8, "caution": 0.3},
-            EmotionState.TRUSTED:  {"formality": 0.3, "warmth": 0.7, "caution": 0.2},
-        }
-        return modifiers[self.current_state]
+        Get recommended emotion bias for next response.
 
-    def reset(self) -> None:
-        """状態をリセットして初期状態に戻す."""
-        self.current_state = EmotionState.FORMAL
-        self.exchange_count = 0
-        self.state_history = [EmotionState.FORMAL]
-        self._last_event = ""
-
-    def _transition_to(self, new_state: EmotionState) -> None:
-        """状態を遷移させ、履歴に記録する."""
-        self.current_state = new_state
-        self.state_history.append(new_state)
-
-    @classmethod
-    def from_config(cls, config: dict[str, Any]) -> EmotionStateMachine:
-        """設定辞書からインスタンスを生成する.
+        Based on conversation history, may recommend a specific emotion
+        to make response feel more contextually appropriate.
 
         Args:
-            config: emotion_states 形式の設定辞書
+            conversation_history: List of Message objects in conversation.
 
         Returns:
-            設定に基づく EmotionStateMachine インスタンス
-
-        設定ファイルの trigger 文字列は以下の形式をサポート:
-            - "event_name": 特定イベント名に一致
-            - "exchange_count >= N": 往復回数の閾値判定
+            Recommended emotion or None for neutral.
         """
-        transitions: list[Transition] = []
-        for t_cfg in config.get("transitions", []):
-            trigger_str = t_cfg["trigger"]
-            trigger_func = _parse_trigger_string(trigger_str)
-            to_state = EmotionState(t_cfg["to"])
-            description = t_cfg.get("description", "")
+        if not conversation_history:
+            return None
 
-            # Wildcard "*" expands to a transition from every state
-            if t_cfg["from"] == "*":
-                for state in EmotionState:
-                    if state != to_state:
-                        transitions.append(Transition(
-                            from_state=state,
-                            to_state=to_state,
-                            trigger=trigger_func,
-                            description=description,
-                        ))
-            else:
-                transitions.append(Transition(
-                    from_state=EmotionState(t_cfg["from"]),
-                    to_state=to_state,
-                    trigger=trigger_func,
-                    description=description,
-                ))
-        initial = EmotionState(config.get("initial_state", "formal"))
-        return cls(
-            current_state=initial,
-            transitions=transitions if transitions else list(DEFAULT_TRANSITIONS),
-        )
+        # Look at last user message
+        user_messages = [m for m in conversation_history if m.role == 'user']
+        if not user_messages:
+            return None
 
+        last_user_msg = user_messages[-1].content
+        detected = self._detect_emotion(last_user_msg)
 
-def _parse_trigger_string(trigger_str: str) -> TriggerFunc:
-    """設定ファイルのトリガー文字列を TriggerFunc に変換する.
+        return detected if detected else self.current_state
 
-    Args:
-        trigger_str: "problem_detected" や "exchange_count >= 3" 形式の文字列
+    def calculate_recovery_time(self, emotion: str) -> float:
+        """
+        Calculate time to naturally recover from an emotion.
 
-    Returns:
-        対応する TriggerFunc
-    """
-    if ">=" in trigger_str:
-        var_name, threshold_str = trigger_str.split(">=")
-        var_name = var_name.strip()
-        threshold = int(threshold_str.strip())
-        if var_name == "exchange_count":
-            return _exchange_threshold(threshold)
-    return _event_trigger(trigger_str)
+        Args:
+            emotion: Emotion state.
+
+        Returns:
+            Recovery time in turns.
+        """
+        recovery_times: dict[str, float] = {
+            'neutral': 0,
+            'happy': 3,
+            'sad': 8,
+            'angry': 5,
+            'confused': 4,
+        }
+        return recovery_times.get(emotion, 2)
+
+    def add_transition_rule(self, from_state: str, to_state: str, probability: float) -> None:
+        """
+        Add or update a transition rule.
+
+        Args:
+            from_state: Source emotion state.
+            to_state: Target emotion state.
+            probability: Transition probability (0.0 to 1.0).
+        """
+        self.transition_rules[(from_state, to_state)] = probability
+
+    def reset(self) -> None:
+        """Reset emotion state to initial."""
+        self.current_state = self.config.get('initial_emotion', 'neutral')
+        self.state_history = [self.current_state]
+
+    def get_state_sequence(self) -> list[str]:
+        """
+        Get full emotional state history.
+
+        Returns:
+            List of emotion states in chronological order.
+        """
+        return self.state_history.copy()
+
+    def apply_contagion(self, peer_emotion: str, contagion_strength: float = 0.3) -> None:
+        """
+        Apply emotional contagion from external source.
+
+        Simulates how emotions can spread from one persona to another
+        in multi-agent scenarios.
+
+        Args:
+            peer_emotion: Emotion state of external agent.
+            contagion_strength: Strength of contagion effect (0.0 to 1.0).
+        """
+        import random
+        if random.random() < contagion_strength:
+            self._transition_to(peer_emotion)
+
+    def get_emotion_vector(self) -> dict[str, float]:
+        """
+        Get emotion state as probability vector.
+
+        Returns:
+            Dict mapping emotions to activation levels.
+        """
+        if self.current_state == 'neutral':
+            return {
+                'happy': 0.2,
+                'sad': 0.1,
+                'angry': 0.05,
+                'confused': 0.15,
+                'neutral': 0.5,
+            }
+        elif self.current_state == 'happy':
+            return {
+                'happy': 0.7,
+                'sad': 0.05,
+                'angry': 0.0,
+                'confused': 0.1,
+                'neutral': 0.15,
+            }
+        elif self.current_state == 'sad':
+            return {
+                'happy': 0.1,
+                'sad': 0.6,
+                'angry': 0.1,
+                'confused': 0.1,
+                'neutral': 0.1,
+            }
+        elif self.current_state == 'angry':
+            return {
+                'happy': 0.05,
+                'sad': 0.2,
+                'angry': 0.65,
+                'confused': 0.0,
+                'neutral': 0.1,
+            }
+        elif self.current_state == 'confused':
+            return {
+                'happy': 0.1,
+                'sad': 0.1,
+                'angry': 0.0,
+                'confused': 0.7,
+                'neutral': 0.1,
+            }
+        else:
+            return {
+                'happy': 0.2,
+                'sad': 0.2,
+                'angry': 0.1,
+                'confused': 0.2,
+                'neutral': 0.3,
+            }

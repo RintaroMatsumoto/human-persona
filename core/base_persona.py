@@ -58,376 +58,335 @@ class Message:
 
 @dataclass
 class PersonaResponse:
-    """Output of the persona pipeline."""
+    """Output from HumanPersonaBase.process_message()."""
     content: str
-    delay_seconds: float
+    timing_delay_sec: float
     emotion_state: str
-    escalation_triggered: bool = False
-    escalation_type: Optional[str] = None
-    escalation_action: Optional[str] = None
-    debug: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class Platform(Enum):
     """Supported communication platforms."""
-    CHAT = auto()
-    CROWDSOURCING = auto()
+    GENERIC = auto()
+    DISCORD = auto()
+    SLACK = auto()
+    TWITTER = auto()
+    REDDIT = auto()
     EMAIL = auto()
-    CUSTOM = auto()
 
 
 # ---------------------------------------------------------------------------
-# Configuration loader
-# ---------------------------------------------------------------------------
-
-def load_config(config_path: str | Path) -> dict[str, Any]:
-    """Load and validate a persona configuration JSON file.
-
-    Args:
-        config_path: Path to a persona config JSON (e.g. config/ja.json).
-
-    Returns:
-        Parsed configuration dictionary.
-
-    Raises:
-        FileNotFoundError: If config file does not exist.
-        json.JSONDecodeError: If config is not valid JSON.
-        ValueError: If required top-level keys are missing.
-    """
-    path = Path(config_path)
-    if not path.exists():
-        raise FileNotFoundError(f"Config not found: {path}")
-
-    with open(path, "r", encoding="utf-8") as f:
-        config = json.load(f)
-
-    required_keys = {"meta", "timing", "style", "emotion", "escalation"}
-    missing = required_keys - set(config.keys())
-    if missing:
-        raise ValueError(f"Config missing required keys: {missing}")
-
-    return config
-
-
-# ---------------------------------------------------------------------------
-# Base class
+# HumanPersonaBase
 # ---------------------------------------------------------------------------
 
 class HumanPersonaBase(ABC):
-    """Abstract base class for human-like AI persona behavior.
+    """
+    Abstract base class for humanized AI personas.
 
-    This class orchestrates the full response pipeline:
-    1. Receive incoming message
-    2. Detect escalation conditions
-    3. Update emotional state
-    4. Generate response content (delegated to subclass)
-    5. Apply style variation
-    6. Insert context references
-    7. Apply intentional ambiguity
-    8. Calculate response delay
+    Manages conversation state and orchestrates timing, style, emotion,
+    context-referencing, and escalation detection. Derived classes must
+    implement generate_raw_response() in their language/culture.
 
-    Subclasses MUST implement:
-        - generate_raw_response(message, context) -> str
-        - extract_topics(message) -> list[str]
-
-    Subclasses MAY override:
-        - on_escalation(trigger) -> PersonaResponse
-        - post_process(response) -> str
+    Attributes:
+        persona_id (str): Unique identifier for this persona instance.
+        language (str): ISO 639-1 language code (e.g., "ja", "en").
+        culture_context (str): Cultural/regional identifier (e.g., "US", "JP").
+        current_emotion (str): Current emotion state.
+        turn_count (int): Total turns in conversation.
+        conversation_history (list[Message]): All messages (user + persona).
     """
 
-    def __init__(self, config: dict[str, Any], platform: Platform = Platform.CHAT):
-        """Initialize persona with configuration.
+    def __init__(self, persona_id: str, config: dict[str, Any], platform: Platform = Platform.GENERIC) -> None:
+        """
+        Initialize a HumanPersonaBase instance.
 
         Args:
-            config: Parsed persona configuration dictionary.
-            platform: Communication platform for timing calibration.
+            persona_id: Unique persona identifier.
+            config: Configuration dict (language, culture, emotion_weights, etc.).
+            platform: Target communication platform (default: GENERIC).
         """
-        self._config = config
-        self._platform = platform
-        self._conversation: list[Message] = []
-        self._turn_count: int = 0
+        self.persona_id: str = persona_id
+        self.language: str = config.get('language', 'en')
+        self.culture_context: str = config.get('culture_context', 'neutral')
+        self.platform: Platform = platform
 
-        # Initialize sub-components
-        self._timing = TimingController(
-            config.get("timing", {}),
-            platform.name.lower(),
-        )
-        self._style = StyleVariator(config.get("style", {}))
-        self._emotion = EmotionStateMachine(config.get("emotion", {}))
-        self._context = ContextReferencer(config.get("context_reference", {}))
-        self._escalation = EscalationDetector(config.get("escalation", {}))
+        # State management
+        self.turn_count: int = 0
+        self.conversation_history: list[Message] = []
+        self.current_emotion: str = 'neutral'
 
-    # -- Properties ----------------------------------------------------------
+        # Controllers
+        self.timing_controller: TimingController = TimingController(config)
+        self.style_variator: StyleVariator = StyleVariator(config)
+        self.emotion_state_machine: EmotionStateMachine = EmotionStateMachine(config)
+        self.context_referencer: ContextReferencer = ContextReferencer(config)
+        self.escalation_detector: EscalationDetector = EscalationDetector(config)
+
+        self.config: dict[str, Any] = config
 
     @property
     def persona_id(self) -> str:
-        return self._config.get("meta", {}).get("persona_id", "unknown")
+        """Unique persona identifier."""
+        return self._persona_id
+
+    @persona_id.setter
+    def persona_id(self, value: str) -> None:
+        self._persona_id = value
 
     @property
     def language(self) -> str:
-        return self._config.get("meta", {}).get("language", "en")
+        """Language code (e.g., 'en', 'ja')."""
+        return self._language
+
+    @language.setter
+    def language(self, value: str) -> None:
+        self._language = value
 
     @property
     def culture_context(self) -> str:
-        return self._config.get("meta", {}).get("context_culture", "low")
+        """Cultural/regional context identifier."""
+        return self._culture_context
+
+    @culture_context.setter
+    def culture_context(self, value: str) -> None:
+        self._culture_context = value
 
     @property
     def current_emotion(self) -> str:
-        return self._emotion.current_state
+        """Current emotional state."""
+        return self._current_emotion
+
+    @current_emotion.setter
+    def current_emotion(self, value: str) -> None:
+        self._current_emotion = value
 
     @property
     def turn_count(self) -> int:
+        """Number of conversation turns so far."""
         return self._turn_count
+
+    @turn_count.setter
+    def turn_count(self, value: int) -> None:
+        self._turn_count = value
 
     @property
     def conversation_history(self) -> list[Message]:
-        return list(self._conversation)
+        """All messages in conversation (chronological)."""
+        return self._conversation_history
 
-    # -- Abstract methods (subclass contract) --------------------------------
-
-    @abstractmethod
-    def generate_raw_response(
-        self,
-        message: str,
-        context: list[Message],
-    ) -> str:
-        """Generate the core response content.
-
-        This is where the actual LLM call or template logic lives.
-        The base class handles all human-likeness transformations around it.
-
-        Args:
-            message: The incoming user message text.
-            context: Recent conversation history for reference.
-
-        Returns:
-            Raw response string before style/ambiguity processing.
-        """
-        ...
+    @conversation_history.setter
+    def conversation_history(self, value: list[Message]) -> None:
+        self._conversation_history = value
 
     @abstractmethod
-    def extract_topics(self, message: str) -> list[str]:
-        """Extract key topics/entities from a message.
+    def generate_raw_response(self, user_message: str, emotion_bias: str | None) -> str:
+        """
+        Generate raw response text in the persona's language/style.
 
-        Used by ContextReferencer to generate natural back-references.
+        This is the core generation logic. Derived classes must implement
+        this to produce the initial response, which will then be post-processed
+        by the base class (timing, style, emotion, escalation).
 
         Args:
-            message: Message text to analyze.
+            user_message: The user input.
+            emotion_bias: Optional emotion to bias the response.
 
         Returns:
-            List of topic strings found in the message.
+            Raw response text (unmodified).
+
+        Raises:
+            NotImplementedError: Must be implemented by derived classes.
         """
-        ...
+        raise NotImplementedError("Derived classes must implement generate_raw_response()")
 
-    # -- Overridable hooks ---------------------------------------------------
+    def extract_topics(self, text: str) -> list[str]:
+        """
+        Extract key topics/entities from text.
 
-    def on_escalation(
-        self,
-        trigger_type: str,
-        action: str,
-        message: str,
-    ) -> PersonaResponse:
-        """Handle an escalation event.
-
-        Default behavior: return the configured fallback message.
-        Override for custom escalation logic (e.g. Slack notification).
+        Default implementation uses simple regex. Override in derived classes
+        for language-specific NLP.
 
         Args:
-            trigger_type: Category of escalation trigger.
-            action: Configured action (notify_human, pause_and_notify, etc.).
-            message: The message that triggered escalation.
+            text: Input text to analyze.
 
         Returns:
-            PersonaResponse with escalation metadata.
+            List of detected topic strings.
         """
-        fallback = self._config.get("escalation", {}).get(
-            "fallback_message",
-            "I'll need to check on that and get back to you.",
+        # Simple extraction: capitalized words, quoted phrases
+        import re
+        cap_words = re.findall(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b', text)
+        quoted = re.findall(r'"([^"]+)"', text)
+        return list(dict.fromkeys(cap_words + quoted))  # Deduplicate
+
+    def on_escalation(self, reason: str, user_message: str, raw_response: str) -> str:
+        """
+        Handle escalation request (user needs human).
+
+        Override in derived classes to implement platform-specific handoff
+        (e.g., notify support queue, auto-reply with ticket ID).
+
+        Args:
+            reason: Why escalation was triggered.
+            user_message: The user input that triggered escalation.
+            raw_response: The response that was going to be sent.
+
+        Returns:
+            A human-readable escalation response.
+        """
+        return f"I'm escalating your request to our support team. Reference: {self.persona_id}-{self.turn_count}"
+
+    def post_process(self, response_dict: dict[str, Any]) -> str:
+        """
+        Post-process a response dict into final output.
+
+        This is where style variation, final formatting, and platform-specific
+        adjustments happen.
+
+        Args:
+            response_dict: Dict with 'content', 'timing_delay_sec', etc.
+
+        Returns:
+            Final response string (ready to send).
+        """
+        content = response_dict.get('content', '')
+        # Platform-specific post-processing can go here
+        return content
+
+    def process_message(self, user_message: str) -> PersonaResponse:
+        """
+        Process a user message end-to-end.
+
+        1. Update conversation history
+        2. Check for escalation
+        3. Generate raw response (via generate_raw_response)
+        4. Apply emotion, style, timing
+        5. Return final PersonaResponse
+
+        Args:
+            user_message: Input from user.
+
+        Returns:
+            PersonaResponse with content, timing, emotion, metadata.
+        """
+        # Record user message
+        user_msg = Message(role='user', content=user_message)
+        self.conversation_history.append(user_msg)
+        self.turn_count += 1
+
+        # Check escalation
+        escalation_result = self.escalation_detector.check(
+            user_message, self.conversation_history
         )
-        delay = self._timing.calculate_delay(len(fallback))
-
-        return PersonaResponse(
-            content=fallback,
-            delay_seconds=delay,
-            emotion_state=self._emotion.current_state,
-            escalation_triggered=True,
-            escalation_type=trigger_type,
-            escalation_action=action,
-        )
-
-    def post_process(self, response: str) -> str:
-        """Final transformation hook before returning response.
-
-        Override for language-specific post-processing
-        (e.g. honorific adjustment, character-width normalization).
-
-        Args:
-            response: Processed response text.
-
-        Returns:
-            Final response text.
-        """
-        return response
-
-    # -- Core pipeline -------------------------------------------------------
-
-    def process_message(self, message: str) -> PersonaResponse:
-        """Full persona response pipeline.
-
-        This is the main entry point. Call this with each incoming message.
-
-        Pipeline stages:
-            1. Record incoming message
-            2. Check escalation conditions
-            3. Update emotion state
-            4. Generate raw response
-            5. Apply style variation
-            6. Insert context references
-            7. Apply ambiguity
-            8. Post-process (subclass hook)
-            9. Calculate timing delay
-            10. Record outgoing message
-
-        Args:
-            message: Incoming message text.
-
-        Returns:
-            PersonaResponse containing the final response and metadata.
-        """
-        # 1. Record incoming
-        incoming = Message(role="user", content=message)
-        self._conversation.append(incoming)
-        self._turn_count += 1
-
-        # 2. Escalation check (before generating response)
-        esc_result = self._escalation.check(
-            message=message,
-            turn_count=self._turn_count,
-            conversation=self._conversation,
-        )
-        if esc_result is not None:
-            return self.on_escalation(
-                trigger_type=esc_result["type"],
-                action=esc_result["action"],
-                message=message,
+        if escalation_result['should_escalate']:
+            escalation_response = self.on_escalation(
+                reason=escalation_result['reason'],
+                user_message=user_message,
+                raw_response=''
+            )
+            persona_msg = Message(role='persona', content=escalation_response, metadata={'escalated': True})
+            self.conversation_history.append(persona_msg)
+            return PersonaResponse(
+                content=escalation_response,
+                timing_delay_sec=0.5,
+                emotion_state='professional',
+                metadata={'escalated': True}
             )
 
-        # 3. Update emotion state
-        self._emotion.update(
-            message=message,
-            turn_count=self._turn_count,
+        # Generate base response
+        emotion_bias = self.emotion_state_machine.get_recommended_emotion(self.conversation_history)
+        raw_response = self.generate_raw_response(user_message, emotion_bias)
+
+        # Apply timing
+        delay = self.timing_controller.calculate_delay(
+            user_message, raw_response, self.turn_count
         )
 
-        # 4. Generate raw response
-        recent_context = self._conversation[-10:]  # last 10 messages
-        raw_response = self.generate_raw_response(message, recent_context)
-
-        # 5. Apply style variation
-        styled = self._style.apply(
-            text=raw_response,
-            emotion_params=self._emotion.current_params,
+        # Apply style variation
+        styled_response = self.style_variator.apply_variation(
+            raw_response,
+            register=self.style_variator.select_register(self.platform),
+            emotion=emotion_bias or self.current_emotion
         )
 
-        # 6. Insert context references
-        topics = self.extract_topics(message)
-        referenced = self._context.apply(
-            text=styled,
-            topics=topics,
-            conversation=self._conversation,
-        )
+        # Update emotion state
+        self.emotion_state_machine.update(user_message)
+        self.current_emotion = self.emotion_state_machine.current_state
 
-        # 7. Apply ambiguity
-        ambiguity_config = self._config.get("ambiguity", {})
-        ambiguous = self._apply_ambiguity(referenced, ambiguity_config)
-
-        # 8. Post-process (subclass hook)
-        final_text = self.post_process(ambiguous)
-
-        # 9. Calculate delay
-        emotion_multiplier = self._emotion.current_params.get(
-            "response_delay_multiplier", 1.0
-        )
-        delay = self._timing.calculate_delay(
-            message_length=len(message),
-            multiplier=emotion_multiplier,
-        )
-
-        # 10. Record outgoing
-        outgoing = Message(
-            role="persona",
-            content=final_text,
-            metadata={
-                "emotion_state": self._emotion.current_state,
-                "delay_seconds": delay,
-                "style_applied": True,
-            },
-        )
-        self._conversation.append(outgoing)
+        # Record response
+        persona_msg = Message(role='persona', content=styled_response)
+        self.conversation_history.append(persona_msg)
 
         return PersonaResponse(
-            content=final_text,
-            delay_seconds=delay,
-            emotion_state=self._emotion.current_state,
-            debug={
-                "raw_response": raw_response,
-                "turn_count": self._turn_count,
-                "topics_extracted": topics,
-            },
+            content=styled_response,
+            timing_delay_sec=delay,
+            emotion_state=self.current_emotion,
+            metadata={'turn': self.turn_count, 'platform': self.platform.name}
         )
 
-    # -- Internal helpers ----------------------------------------------------
-
-    def _apply_ambiguity(self, text: str, config: dict[str, Any]) -> str:
-        """Apply intentional imperfection to response text.
-
-        Adds hedging, approximations, and occasional self-corrections
-        to avoid the uncanny precision of AI-generated text.
+    def _apply_ambiguity(self, text: str, rate: float) -> str:
         """
-        hedge_prob = config.get("hedge_probability", 0.15)
-        self_correction_rate = config.get("self_correction_rate", 0.02)
+        Introduce intentional ambiguity.
 
-        result = text
+        Args:
+            text: Input text.
+            rate: Ambiguity rate (0.0 to 1.0).
 
-        # Self-correction injection (very rare)
-        if random.random() < self_correction_rate:
-            result = self._inject_self_correction(result)
-
-        return result
-
-    def _inject_self_correction(self, text: str) -> str:
-        """Inject a natural self-correction into the text.
-
-        This is a base implementation; derived classes should override
-        with language-appropriate corrections.
+        Returns:
+            Text with ambiguity applied.
         """
-        # Base implementation is a no-op; language-specific subclasses
-        # provide actual self-correction patterns
+        if rate <= 0 or random.random() > rate:
+            return text
+        # Example: replace some specifics with hedges
+        text = text.replace('will', 'might')
+        text = text.replace('is', 'seems to be')
         return text
 
-    # -- Serialization -------------------------------------------------------
+    def _inject_self_correction(self, text: str) -> str:
+        """
+        Inject realistic self-correction patterns.
+
+        Args:
+            text: Input text.
+
+        Returns:
+            Text with self-corrections (e.g., "...actually, I think...").
+        """
+        if random.random() < 0.1:
+            # Occasionally add a correction
+            return text + " (Actually, let me rephrase that...)"
+        return text
 
     def to_dict(self) -> dict[str, Any]:
-        """Serialize persona state for persistence."""
+        """
+        Serialize persona state to dict.
+
+        Returns:
+            Dict with all state (history, emotion, config, etc.).
+        """
         return {
-            "persona_id": self.persona_id,
-            "turn_count": self._turn_count,
-            "emotion_state": self._emotion.current_state,
-            "conversation_length": len(self._conversation),
-            "platform": self._platform.name,
+            'persona_id': self.persona_id,
+            'language': self.language,
+            'culture_context': self.culture_context,
+            'current_emotion': self.current_emotion,
+            'turn_count': self.turn_count,
+            'conversation_history': [
+                {'role': m.role, 'content': m.content, 'timestamp': m.timestamp}
+                for m in self.conversation_history
+            ],
+            'config': self.config
         }
 
     def reset(self) -> None:
-        """Reset persona to initial state (new conversation)."""
-        self._conversation.clear()
-        self._turn_count = 0
-        self._emotion.reset()
-        self._context.reset()
+        """Reset conversation state (keep config and controllers)."""
+        self.conversation_history = []
+        self.turn_count = 0
+        self.current_emotion = 'neutral'
 
     def __repr__(self) -> str:
         return (
             f"<{self.__class__.__name__} "
-            f"id={self.persona_id!r} "
-            f"lang={self.language!r} "
-            f"turn={self._turn_count} "
-            f"emotion={self.current_emotion!r}>"
+            f"id={self.persona_id} "
+            f"lang={self.language} "
+            f"emotion={self.current_emotion} "
+            f"turns={self.turn_count}>"
         )

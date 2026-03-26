@@ -4,16 +4,59 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "human-persona"
-version = "0.3.0"
-description = "Text humanization pipeline based on DPO-calibrated ablation study"
+version = "0.2.0"
+description = "Language and culture-agnostic framework for AI to behave humanly. Provides HumanPersonaBase with timing, style, emotion, and inner shell modules."
 readme = "README.md"
 license = {text = "MIT"}
-requires-python = ">=3.11"
-authors = [{name = "The Author"}]
-keywords = ["nlp", "humanization", "dpo", "ablation"]
+requires-python = ">=3.10"
+authors = [{name = "Rintaro Matsumoto", email = "matsumotoinla@gmail.com"}]
+keywords = ["nlp", "personalization", "emotion", "humanization", "alignment"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff"]
+dev = ["pytest>=8.0", "ruff>=0.1.0", "mypy>=1.5.0", "types-setuptools"]
+research = ["matplotlib>=3.7", "numpy>=1.24"]
 
-[tool.setuptools.packages.find]
-include = ["humanize*"]
+[tool.setuptools]
+packages = ["core", "config"]
+
+[tool.setuptools.package-data]
+config = ["*.json"]
+
+[tool.setuptools.package-dir]
+"" = "."
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+plugins = []
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "experiments.*"
+ignore_errors = true

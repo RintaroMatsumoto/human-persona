@@ -1,146 +1,168 @@
-"""返信速度制御モジュール.
+"""
+TimingController — Response delay simulation engine.
 
-人間の自然な返信速度をプラットフォーム・文脈ごとにシミュレートする。
-即座の返信はAIらしさを示唆するため、適切な遅延を挿入する。
+This module simulates human response delays to avoid the "too-instant"
+perception of AI. It applies delays based on:
+- Message complexity/length
+- Emotional state
+- Platform context
+- Stochastic factors (variance)
+
+Author: Rintaro Matsumoto
+License: MIT
 """
 
 from __future__ import annotations
 
 import random
 from dataclasses import dataclass, field
-from datetime import time
-from enum import Enum
 from typing import Any
 
 
-class Platform(Enum):
-    """対応プラットフォーム種別."""
-
-    CHAT = "chat"
-    CROWDSOURCING = "crowdsourcing_message"
-    EMAIL = "email"
-
-
-@dataclass(frozen=True)
-class TimingProfile:
-    """プラットフォーム別タイミング設定.
-
-    Attributes:
-        min_seconds: 最小返信待機時間（秒）
-        max_seconds: 最大返信待機時間（秒）
-    """
-
-    min_seconds: float
-    max_seconds: float
-
-    def __post_init__(self) -> None:
-        if self.min_seconds < 0 or self.max_seconds < 0:
-            raise ValueError("Timing values must be non-negative")
-        if self.min_seconds > self.max_seconds:
-            raise ValueError("min_seconds must be <= max_seconds")
-
-
-# デフォルトのプラットフォーム別タイミング
-DEFAULT_PROFILES: dict[Platform, TimingProfile] = {
-    Platform.CHAT: TimingProfile(min_seconds=30, max_seconds=180),
-    Platform.CROWDSOURCING: TimingProfile(min_seconds=300, max_seconds=900),
-    Platform.EMAIL: TimingProfile(min_seconds=3600, max_seconds=28800),
-}
-
-
 @dataclass
+class TimingConfig:
+    """Configuration for timing delays."""
+    base_delay_sec: float = 0.5
+    per_char_sec: float = 0.01
+    thinking_delay_sec: float = 1.0
+    emotion_multipliers: dict[str, float] = field(default_factory=lambda: {
+        'neutral': 1.0,
+        'confused': 2.0,
+        'happy': 0.8,
+        'angry': 0.6,
+        'sad': 1.5,
+    })
+
+
 class TimingController:
-    """返信速度を制御するコントローラー.
+    """
+    Manages response delay simulation.
 
-    人間らしい返信タイミングを計算する。活動時間外のメッセージは
-    キューに入れ、翌活動時間に返信する。
-
-    Attributes:
-        profiles: プラットフォーム別タイミング設定
-        active_start: 活動開始時刻
-        active_end: 活動終了時刻
-        night_queue: 夜間キューイングを有効にするか
+    This controller calculates realistic delays that account for message
+    complexity, emotional state, and platform context.
     """
 
-    profiles: dict[Platform, TimingProfile] = field(
-        default_factory=lambda: dict(DEFAULT_PROFILES)
-    )
-    active_start: time = field(default_factory=lambda: time(8, 0))
-    active_end: time = field(default_factory=lambda: time(22, 0))
-    night_queue: bool = True
-
-    def calculate_delay(self, platform: Platform) -> float:
-        """指定プラットフォームに対する返信遅延時間（秒）を計算する.
+    def __init__(self, config: dict[str, Any]) -> None:
+        """
+        Initialize TimingController.
 
         Args:
-            platform: 対象プラットフォーム
-
-        Returns:
-            遅延秒数。正規分布ベースで自然なばらつきを持つ。
+            config: Configuration dict with timing parameters.
         """
-        profile = self.profiles.get(platform, DEFAULT_PROFILES[Platform.CHAT])
-        midpoint = (profile.min_seconds + profile.max_seconds) / 2
-        spread = (profile.max_seconds - profile.min_seconds) / 4
-        delay = random.gauss(midpoint, spread)
-        return max(profile.min_seconds, min(delay, profile.max_seconds))
-
-    def is_active_hours(self, current: time) -> bool:
-        """現在時刻が活動時間内かどうかを判定する.
-
-        Args:
-            current: 判定対象の時刻
-
-        Returns:
-            活動時間内なら True
-        """
-        return self.active_start <= current <= self.active_end
-
-    def should_queue(self, current: time) -> bool:
-        """メッセージをキューに入れるべきかを判定する.
-
-        Args:
-            current: 現在時刻
-
-        Returns:
-            夜間キューイング有効かつ活動時間外なら True
-        """
-        return self.night_queue and not self.is_active_hours(current)
-
-    @classmethod
-    def from_config(cls, config: dict[str, Any]) -> TimingController:
-        """設定辞書からインスタンスを生成する.
-
-        Args:
-            config: platform_timing 形式の設定辞書
-
-        Returns:
-            設定に基づく TimingController インスタンス
-        """
-        profiles: dict[Platform, TimingProfile] = {}
-        platform_timing = config.get("platform_timing", {})
-
-        for platform in Platform:
-            if platform.value in platform_timing:
-                pt = platform_timing[platform.value]
-                if platform == Platform.EMAIL:
-                    profiles[platform] = TimingProfile(
-                        min_seconds=pt.get("min_hour", 1) * 3600,
-                        max_seconds=pt.get("max_hour", 8) * 3600,
-                    )
-                else:
-                    profiles[platform] = TimingProfile(
-                        min_seconds=pt.get("min_sec", 30),
-                        max_seconds=pt.get("max_sec", 180),
-                    )
-
-        active_hours = platform_timing.get("active_hours", "08:00-22:00")
-        start_str, end_str = active_hours.split("-")
-        active_start = time.fromisoformat(start_str)
-        active_end = time.fromisoformat(end_str)
-
-        return cls(
-            profiles=profiles if profiles else dict(DEFAULT_PROFILES),
-            active_start=active_start,
-            active_end=active_end,
-            night_queue=platform_timing.get("night_queue", True),
+        self.base_delay: float = config.get('base_delay_sec', 0.5)
+        self.per_char_delay: float = config.get('per_char_sec', 0.01)
+        self.thinking_delay: float = config.get('thinking_delay_sec', 1.0)
+        self.emotion_multipliers: dict[str, float] = config.get(
+            'emotion_multipliers',
+            {
+                'neutral': 1.0,
+                'confused': 2.0,
+                'happy': 0.8,
+                'angry': 0.6,
+                'sad': 1.5,
+            }
         )
+
+    def calculate_delay(self, user_message: str, response: str, turn_count: int) -> float:
+        """
+        Calculate delay for a given response.
+
+        Factors:
+        - Response length (base + per-char)
+        - Turn count (earlier turns get slightly more delay)
+        - Random variance to avoid bot-like regularity
+
+        Args:
+            user_message: The user input.
+            response: The persona response.
+            turn_count: Current conversation turn.
+
+        Returns:
+            Delay in seconds (float, >= 0).
+        """
+        # Base delay
+        length_delay = self.base_delay + (len(response) * self.per_char_delay)
+
+        # Turn-based adjustment (first turn gets longer delay)
+        turn_factor = 1.0 + (1.0 / max(1, turn_count))
+
+        # Random variance (±20%)
+        variance = random.uniform(0.8, 1.2)
+
+        final_delay = length_delay * turn_factor * variance
+
+        # Cap at reasonable limits
+        return max(0.2, min(final_delay, 15.0))
+
+    def apply_emotion_multiplier(self, base_delay: float, emotion: str | None) -> float:
+        """
+        Apply emotion-based multiplier to delay.
+
+        Args:
+            base_delay: Initial delay value.
+            emotion: Current emotional state (or None for neutral).
+
+        Returns:
+            Adjusted delay in seconds.
+        """
+        if emotion is None:
+            emotion = 'neutral'
+
+        multiplier = self.emotion_multipliers.get(emotion, 1.0)
+        return base_delay * multiplier
+
+    def add_thinking_pause(self, response: str) -> str:
+        """
+        Optionally prepend thinking pause indicators.
+
+        Example: "...[thinks]... Here's my response"
+
+        Args:
+            response: Original response text.
+
+        Returns:
+            Response with optional thinking indicators.
+        """
+        if random.random() < 0.15:  # 15% chance
+            return f"[thinking...] {response}"
+        return response
+
+    def get_typing_speed_wpm(self) -> int:
+        """
+        Get simulated typing speed in words per minute.
+
+        Returns:
+            Typing speed (wpm) for this persona.
+        """
+        # Average human types 40 wpm, range 20-80
+        return random.randint(35, 85)
+
+    def estimate_thinking_time(self, question_complexity: str) -> float:
+        """
+        Estimate thinking time based on question complexity.
+
+        Args:
+            question_complexity: One of 'simple', 'moderate', 'complex'.
+
+        Returns:
+            Estimated thinking time in seconds.
+        """
+        times: dict[str, float] = {
+            'simple': 0.5,
+            'moderate': 2.0,
+            'complex': 4.0,
+        }
+        return times.get(question_complexity, 1.0)
+
+    def humanize_timestamp(self, raw_timestamp: float) -> float:
+        """
+        Add stochastic variation to make timestamps less regular.
+
+        Args:
+            raw_timestamp: Original timestamp.
+
+        Returns:
+            Humanized timestamp with noise.
+        """
+        noise = random.gauss(0, 0.1)  # Gaussian noise
+        return max(0, raw_timestamp + noise)

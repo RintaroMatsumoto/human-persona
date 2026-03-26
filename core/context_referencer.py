@@ -1,7 +1,11 @@
-"""前文脈参照・一貫性維持モジュール.
+"""
+ContextReferencer — Conversation memory and contextual back-referencing.
 
-人間は相手のメッセージを読んでいることを無意識に示す。
-このモジュールは会話履歴を追跡し、適切な文脈参照を生成する。
+This module tracks conversation context, enables back-references to earlier
+messages, and allows contextual awareness of previous topics.
+
+Author: Rintaro Matsumoto
+License: MIT
 """
 
 from __future__ import annotations
@@ -10,121 +14,155 @@ from dataclasses import dataclass, field
 from typing import Any
 
 
-@dataclass(frozen=True)
-class ConversationTurn:
-    """会話の1ターン（1往復分）.
-
-    Attributes:
-        role: 発言者ロール ("user" or "assistant")
-        content: 発言内容
-        topics: 抽出されたトピックのリスト
-        turn_index: 会話内の順番
-    """
-
-    role: str
-    content: str
-    topics: list[str] = field(default_factory=list)
-    turn_index: int = 0
-
-
 @dataclass
+class ContextRef:
+    """A reference to earlier conversation context."""
+    turn_number: int
+    content: str
+    topic: str | None = None
+    sentiment: str | None = None
+
+
 class ContextReferencer:
-    """会話履歴を管理し、前文脈参照を支援する.
+    """
+    Manages conversation context and enables back-references.
 
-    「先ほどの〇〇の件ですが」「おっしゃる通り〇〇ですね」のような
-    文脈参照パターンを生成するための情報を提供する。
-
-    Attributes:
-        history: 会話履歴
-        max_history: 保持する最大ターン数
-        reference_patterns: 参照パターンテンプレート（派生クラスで言語別定義）
+    Allows AI to naturally reference earlier parts of conversation,
+    creating continuity and human-like memory of discussion flow.
     """
 
-    history: list[ConversationTurn] = field(default_factory=list)
-    max_history: int = 20
-    reference_patterns: list[str] = field(default_factory=list)
-
-    def add_turn(self, role: str, content: str, topics: list[str] | None = None) -> None:
-        """会話ターンを追加する.
+    def __init__(self, config: dict[str, Any]) -> None:
+        """
+        Initialize ContextReferencer.
 
         Args:
-            role: 発言者ロール
-            content: 発言内容
-            topics: 抽出されたトピック（None の場合は空リスト）
+            config: Configuration with context parameters.
         """
-        turn = ConversationTurn(
-            role=role,
+        self.config: dict[str, Any] = config
+        self.max_context_depth: int = config.get('max_context_depth', 10)
+        self.context_refs: list[ContextRef] = []
+        self.topic_memory: dict[str, int] = {}  # topic -> turn_number
+
+    def add_context(self, turn_number: int, content: str, topic: str | None = None) -> None:
+        """
+        Add a message to context memory.
+
+        Args:
+            turn_number: Conversation turn number.
+            content: Message content.
+            topic: Detected topic/entity (optional).
+        """
+        ref = ContextRef(
+            turn_number=turn_number,
             content=content,
-            topics=topics or [],
-            turn_index=len(self.history),
+            topic=topic
         )
-        self.history.append(turn)
-        if len(self.history) > self.max_history:
-            self.history = self.history[-self.max_history :]
+        self.context_refs.append(ref)
 
-    def get_recent_topics(self, n: int = 3) -> list[str]:
-        """直近 n ターンのトピックを取得する.
+        # Trim old context
+        if len(self.context_refs) > self.max_context_depth:
+            self.context_refs.pop(0)
+
+        # Track topic
+        if topic:
+            self.topic_memory[topic] = turn_number
+
+    def find_context_by_topic(self, topic: str) -> ContextRef | None:
+        """
+        Find earlier message mentioning a specific topic.
 
         Args:
-            n: 遡るターン数
+            topic: Topic to search for.
 
         Returns:
-            トピックのリスト（重複除去済み）
+            ContextRef if found, else None.
         """
-        topics: list[str] = []
-        seen: set[str] = set()
-        for turn in reversed(self.history[-n:]):
-            for topic in turn.topics:
-                if topic not in seen:
-                    topics.append(topic)
-                    seen.add(topic)
-        return topics
+        if topic in self.topic_memory:
+            turn = self.topic_memory[topic]
+            for ref in self.context_refs:
+                if ref.turn_number == turn:
+                    return ref
 
-    def get_user_last_message(self) -> str | None:
-        """ユーザーの直近メッセージを取得する.
-
-        Returns:
-            直近のユーザーメッセージ。存在しなければ None。
-        """
-        for turn in reversed(self.history):
-            if turn.role == "user":
-                return turn.content
         return None
 
-    def find_topic_history(self, topic: str) -> list[ConversationTurn]:
-        """特定トピックに関連するターンを検索する.
+    def get_recent_context(self, depth: int = 5) -> list[ContextRef]:
+        """
+        Get most recent context messages.
 
         Args:
-            topic: 検索するトピック名
+            depth: Number of recent messages to return.
 
         Returns:
-            該当トピックを含むターンのリスト
+            List of recent ContextRef objects.
         """
-        return [turn for turn in self.history if topic in turn.topics]
+        return self.context_refs[-depth:] if self.context_refs else []
 
-    def should_reference_previous(self) -> bool:
-        """前文脈を参照すべきかを判定する.
+    def generate_backref(self, turn_number: int) -> str | None:
+        """
+        Generate a natural back-reference to an earlier turn.
 
-        同一トピックが複数ターンに渡って議論されている場合、
-        前文脈参照が自然な返信となる。
+        Args:
+            turn_number: Turn to reference.
 
         Returns:
-            参照すべきなら True
+            Back-reference phrase or None if not found.
         """
-        if len(self.history) < 2:
-            return False
-        recent = self.get_recent_topics(3)
-        # 同一トピックが複数回登場していれば参照すべき
-        return len(recent) != len(set(recent)) or len(self.history) >= 3
+        for ref in self.context_refs:
+            if ref.turn_number == turn_number:
+                turns_ago = len(self.context_refs) - 1 - self.context_refs.index(ref)
 
-    def get_consistency_context(self) -> dict[str, Any]:
-        """一貫性維持のための文脈情報を返す.
+                if turns_ago == 1:
+                    return f"Like I mentioned, "
+                elif turns_ago <= 3:
+                    return f"Earlier, you said... "
+                else:
+                    return f"Going back to what you mentioned... "
+
+        return None
+
+    def get_topic_summary(self) -> dict[str, int]:
+        """
+        Get summary of topics discussed.
 
         Returns:
-            直近トピック、メッセージ数、ユーザー最終発言を含む辞書
+            Dict mapping topics to turn numbers.
         """
-        return {
-            "recent_topics": self.get_recent_topics(),
-            "total_turns": len(self.history),
-            "user_last_message": self.get_user_last_message(),
-        }
+        return self.topic_memory.copy()
+
+    def clear_context(self) -> None:
+        """Clear all context memory."""
+        self.context_refs = []
+        self.topic_memory = {}
+
+    def get_coherence_score(self, new_message: str, recent_depth: int = 3) -> float:
+        """
+        Score how coherent a new message is with recent context.
+
+        Args:
+            new_message: Proposed message.
+            recent_depth: How many recent turns to consider.
+
+        Returns:
+            Coherence score from 0.0 to 1.0.
+        """
+        if not self.context_refs:
+            return 0.5  # Neutral if no context
+
+        recent = self.get_recent_context(recent_depth)
+        if not recent:
+            return 0.5
+
+        # Simple overlap-based coherence
+        new_words = set(new_message.lower().split())
+        recent_words = set()
+
+        for ref in recent:
+            recent_words.update(ref.content.lower().split())
+
+        if not recent_words:
+            return 0.5
+
+        overlap = len(new_words & recent_words)
+        coherence = overlap / len(recent_words)
+
+        return min(1.0, max(0.0, coherence))
