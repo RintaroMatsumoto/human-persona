@@ -93,7 +93,7 @@ human-persona/
 │   └── es.json              # Spanish (mixed-context)
 ├── personas/                # Derived class examples
 │   ├── base_template.md     # How to create your own
-│   └── english_support.py   # English support agent example
+│   └── base_template.md     # How to create your own persona
 ├── docs/                    # Documentation
 │   ├── research.md          # Literature review
 │   ├── design.md            # Architecture decisions

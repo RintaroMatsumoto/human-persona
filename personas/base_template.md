@@ -16,7 +16,7 @@ Before creating a persona, familiarize yourself with the six major sections of a
 
 The `meta` section stores identifying information about your persona:
 
-- **persona_id**: A kebab-case unique identifier (e.g., `ja_business_formal`, `en_customer_support`, `es_sales`)
+- **persona_id**: A kebab-case unique identifier (e.g., `ja_business_formal`, `en_casual_direct`, `es_sales`)
 - **language**: ISO 639-1 language code (e.g., `ja`, `en`, `es`)
 - **context_culture**: Either `"high"` (implicit communication like Japanese), `"low"` (explicit communication like American English), or `"mixed"` (context-dependent)
 - **formality_default**: The starting formality level for new conversations (`"formal"`, `"semi_formal"`, or `"casual"`)
@@ -130,7 +130,7 @@ If your audience spans cultures, use `"mixed"` and create a balanced profile:
 
 ### Best Practices
 
-1. **Start with a reference persona**: Don't create from scratch. Use `ja_business.json` or `en_customer_support.json` as a template and modify only what differs.
+1. **Start with a reference persona**: Don't create from scratch. Use `ja_business.json` or `en.json` as a template and modify only what differs.
 
 2. **Keep variation_patterns plentiful**: For each pattern type, provide at least 3–5 variations. This prevents repetition.
 
