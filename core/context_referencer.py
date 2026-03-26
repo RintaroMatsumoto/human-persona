@@ -40,6 +40,7 @@ class ContextReferencer:
         """
         self.config: dict[str, Any] = config
         self.max_context_depth: int = config.get('max_context_depth', 10)
+        self.max_history: int = self.max_context_depth
         self.context_refs: list[ContextRef] = []
         self.topic_memory: dict[str, int] = {}  # topic -> turn_number
 

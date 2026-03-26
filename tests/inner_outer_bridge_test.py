@@ -21,14 +21,14 @@ from core.context_referencer import ContextReferencer
 
 class TestInnerOuterBridge(unittest.TestCase):
     """Tests for InnerOuterBridge class."""
-    
+
     def setUp(self) -> None:
         """Set up test fixtures."""
-        self.timing = TimingController()
-        self.style = StyleVariator()
-        self.emotion = EmotionStateMachine()
-        self.context = ContextReferencer()
-        
+        self.timing = TimingController({})
+        self.style = StyleVariator({})
+        self.emotion = EmotionStateMachine({})
+        self.context = ContextReferencer({})
+
         self.bridge = InnerOuterBridge(
             self.timing,
             self.style,

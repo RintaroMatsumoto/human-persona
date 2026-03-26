@@ -19,7 +19,7 @@ from .config_validator import ConfigValidator, ValidationResult
 from .context_referencer import ContextReferencer, ContextRef
 from .emotion_state_machine import EmotionStateMachine
 from .escalation_detector import EscalationDetector, EscalationResult
-from .inner_outer_bridge import InnerOuterBridge, ModulationValues, BridgeState
+from .inner_outer_bridge import InnerOuterBridge, ControllerSnapshot
 from .style_variator import StyleVariator, Register
 from .timing_controller import TimingController, TimingConfig
 
@@ -40,8 +40,7 @@ __all__ = [
     'ConfigValidator',
     'ValidationResult',
     'InnerOuterBridge',
-    'ModulationValues',
-    'BridgeState',
+    'ControllerSnapshot',
 ]
 
 __version__ = '0.2.0'

@@ -16,7 +16,24 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Any
+
+
+class Platform(Enum):
+    """Communication platforms for timing profiles."""
+    CHAT = "chat"
+    EMAIL = "email"
+    VOICE = "voice"
+    FORUM = "forum"
+
+
+@dataclass
+class TimingProfile:
+    """Timing profile for a specific platform."""
+    min_seconds: float = 0.3
+    max_seconds: float = 5.0
+    typing_speed_wpm: int = 60
 
 
 @dataclass
@@ -62,6 +79,15 @@ class TimingController:
                 'sad': 1.5,
             }
         )
+        self.profiles: dict[Platform, TimingProfile] = {
+            Platform.CHAT: TimingProfile(
+                min_seconds=config.get('chat_min_seconds', 0.3),
+                max_seconds=config.get('chat_max_seconds', 5.0),
+            ),
+            Platform.EMAIL: TimingProfile(min_seconds=5.0, max_seconds=60.0),
+            Platform.VOICE: TimingProfile(min_seconds=0.1, max_seconds=2.0),
+            Platform.FORUM: TimingProfile(min_seconds=10.0, max_seconds=120.0),
+        }
 
     def calculate_delay(self, user_message: str, response: str, turn_count: int) -> float:
         """

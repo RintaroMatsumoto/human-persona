@@ -2,12 +2,22 @@
 InnerOuterBridge — Bridge between inner shell and outer shell modules.
 
 This module connects the inner shell (FinitudeEngine, IncompletenessModel,
-AutonomousQuestioner) with the outer shell (TimingController, StyleVariator,
-EmotionStateMachine, ContextReferencer, EscalationDetector).
+AutonomousQuestioner, MemoryHierarchy, MutualRecognition, SleepCycle) with
+the outer shell (TimingController, StyleVariator, EmotionStateMachine,
+ContextReferencer, EscalationDetector).
 
-The inner shell generates modulation values (e.g., timing_exploration_vs_exploitation)
-that adjust outer shell parameters in real-time, while preserving original values
-for restoration and testing.
+The bridge accepts a modulation dict from inner shell state and applies
+adjustments to outer shell controllers, while preserving original values
+for restoration.
+
+Modulation keys:
+    style_openness: Multiplier for StyleVariator.uncertainty_rate
+    emotion_amplitude: Multiplier for EmotionStateMachine.exchange_count
+    timing_exploration: Multiplier for timing profile range expansion
+    context_depth: Multiplier for ContextReferencer.max_history
+    emotion_volatility: Reserved hook for future emotion volatility control
+    style_mimicry: Multiplier for StylePattern(CONFIRMATION).weight
+    emotion_curiosity: Additive factor for StylePattern(UNCERTAIN).weight
 
 Author: Rintaro Matsumoto
 License: MIT
@@ -18,229 +28,161 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
-
-@dataclass
-class ModulationValues:
-    """Modulation parameters from inner shell to adjust outer shell."""
-    timing_delay_multiplier: float = 1.0
-    style_formality_shift: float = 0.0  # -1.0 (more casual) to +1.0 (more formal)
-    emotion_intensity_multiplier: float = 1.0
-    context_relevance_boost: float = 1.0
-    escalation_sensitivity_multiplier: float = 1.0
-    metadata: dict[str, Any] = field(default_factory=dict)
+from .timing_controller import TimingController, Platform
+from .style_variator import StyleVariator, StyleType
+from .emotion_state_machine import EmotionStateMachine
+from .context_referencer import ContextReferencer
 
 
 @dataclass
-class BridgeState:
-    """State of the bridge between shells."""
-    current_modulations: ModulationValues
-    original_values: dict[str, Any] = field(default_factory=dict)
-    history: list[ModulationValues] = field(default_factory=list)
+class ControllerSnapshot:
+    """Snapshot of original controller values before modulation."""
+    style_uncertainty_rate: float = 0.0
+    style_pattern_weights: dict[str, float] = field(default_factory=dict)
+    emotion_exchange_count: int = 0
+    emotion_inertia: float = 0.7
+    timing_min_seconds: float = 0.3
+    timing_max_seconds: float = 5.0
+    context_max_history: int = 10
 
 
 class InnerOuterBridge:
     """
     Bridge between inner and outer shell architectures.
 
-    Accepts modulation values from inner shell and applies them to
-    outer shell controllers, while preserving originals for reversal.
+    Accepts modulation dicts from inner shell and applies them to
+    outer shell controllers, preserving originals for reversal.
     """
 
-    def __init__(self, config: dict[str, Any]) -> None:
-        """
-        Initialize InnerOuterBridge.
-
-        Args:
-            config: Configuration dict.
-        """
-        self.config: dict[str, Any] = config
-        self.state: BridgeState = BridgeState(current_modulations=ModulationValues())
-        self.is_active: bool = config.get('inner_outer_bridge_enabled', True)
-        self.max_history: int = config.get('bridge_history_max', 100)
-
-    def apply_modulation(
+    def __init__(
         self,
-        outer_shell_controller: Any,
-        modulation: ModulationValues | None = None
+        timing: TimingController,
+        style: StyleVariator,
+        emotion: EmotionStateMachine,
+        context: ContextReferencer,
     ) -> None:
-        """
-        Apply inner shell modulations to outer shell controller.
+        self.timing = timing
+        self.style = style
+        self.emotion = emotion
+        self.context = context
+        self._original_snapshot: Optional[ControllerSnapshot] = None
+        self._current_modulation: dict[str, float] = {}
+
+    def is_modulated(self) -> bool:
+        """Return True if modulation is currently applied."""
+        return self._original_snapshot is not None
+
+    def apply_modulation(self, modulation: dict[str, float]) -> None:
+        """Apply inner shell modulation to outer shell controllers.
+
+        If already modulated, restores to original first, then applies new.
 
         Args:
-            outer_shell_controller: Any outer shell module
-                (TimingController, StyleVariator, etc.).
-            modulation: ModulationValues to apply (uses current if None).
+            modulation: Dict mapping modulation keys to float values.
         """
-        if not self.is_active:
+        if not modulation:
             return
 
-        if modulation is None:
-            modulation = self.state.current_modulations
+        # If already modulated, restore first then re-apply from original
+        if self._original_snapshot is not None:
+            self._restore_from_snapshot(self._original_snapshot)
 
-        # Store original values if not already stored
-        if not self.state.original_values:
-            self._store_original_values(outer_shell_controller)
+        # Take snapshot of current (original) values
+        self._original_snapshot = self._take_snapshot()
+        self._current_modulation = dict(modulation)
 
-        # Apply modulations based on controller type
-        controller_name = type(outer_shell_controller).__name__
+        # Apply each modulation
+        if "style_openness" in modulation:
+            self.style.uncertainty_rate *= modulation["style_openness"]
 
-        if controller_name == 'TimingController':
-            self._apply_timing_modulation(outer_shell_controller, modulation)
-        elif controller_name == 'StyleVariator':
-            self._apply_style_modulation(outer_shell_controller, modulation)
-        elif controller_name == 'EmotionStateMachine':
-            self._apply_emotion_modulation(outer_shell_controller, modulation)
-        elif controller_name == 'ContextReferencer':
-            self._apply_context_modulation(outer_shell_controller, modulation)
-        elif controller_name == 'EscalationDetector':
-            self._apply_escalation_modulation(outer_shell_controller, modulation)
+        if "emotion_amplitude" in modulation:
+            self.emotion.exchange_count = int(
+                self.emotion.exchange_count * modulation["emotion_amplitude"]
+            )
 
-        # Record in history
-        self.state.history.append(modulation)
-        if len(self.state.history) > self.max_history:
-            self.state.history.pop(0)
+        if "timing_exploration" in modulation:
+            factor = modulation["timing_exploration"]
+            profile = self.timing.profiles[Platform.CHAT]
+            midpoint = (profile.min_seconds + profile.max_seconds) / 2.0
+            half_range = (profile.max_seconds - profile.min_seconds) / 2.0
+            new_half = half_range * factor
+            profile.min_seconds = max(0.0, midpoint - new_half)
+            profile.max_seconds = midpoint + new_half
 
-    def _store_original_values(self, controller: Any) -> None:
-        """Store original controller values for restoration."""
-        controller_name = type(controller).__name__
-        original = {}
+        if "context_depth" in modulation:
+            self.context.max_history = max(
+                1, int(self.context.max_history * modulation["context_depth"])
+            )
 
-        if controller_name == 'TimingController':
-            original['base_delay'] = controller.base_delay
-            original['per_char_delay'] = controller.per_char_delay
+        if "style_mimicry" in modulation:
+            if StyleType.CONFIRMATION in self.style.patterns:
+                self.style.patterns[StyleType.CONFIRMATION].weight *= (
+                    modulation["style_mimicry"]
+                )
 
-        elif controller_name == 'StyleVariator':
-            original['emotion_multipliers'] = controller.emotion_multipliers.copy()
+        if "emotion_curiosity" in modulation:
+            if StyleType.UNCERTAIN in self.style.patterns:
+                self.style.patterns[StyleType.UNCERTAIN].weight *= (
+                    1.0 + modulation["emotion_curiosity"]
+                )
 
-        elif controller_name == 'EmotionStateMachine':
-            original['current_state'] = controller.current_state
-            original['emotion_inertia'] = controller.emotion_inertia
+        # emotion_volatility: accepted but currently a design hook
+        # No-op for now, but presence doesn't cause errors.
 
-        elif controller_name == 'ContextReferencer':
-            original['max_context_depth'] = controller.max_context_depth
+    def restore_original_values(self) -> None:
+        """Restore all controllers to original values.
 
-        elif controller_name == 'EscalationDetector':
-            original['frustration_threshold'] = controller.frustration_threshold
+        Raises:
+            RuntimeError: If no modulation has been applied.
+        """
+        if self._original_snapshot is None:
+            raise RuntimeError(
+                "Cannot restore: no modulation has been applied."
+            )
+        self._restore_from_snapshot(self._original_snapshot)
+        self._original_snapshot = None
+        self._current_modulation = {}
 
-        self.state.original_values[controller_name] = original
+    def reset_to_original(self) -> None:
+        """Reset bridge state completely (restore + clear snapshot)."""
+        if self._original_snapshot is not None:
+            self._restore_from_snapshot(self._original_snapshot)
+        self._original_snapshot = None
+        self._current_modulation = {}
 
-    def _apply_timing_modulation(
-        self,
-        controller: Any,
-        modulation: ModulationValues
-    ) -> None:
-        """Apply modulation to TimingController."""
-        controller.base_delay *= modulation.timing_delay_multiplier
-        controller.per_char_delay *= modulation.timing_delay_multiplier
+    def get_current_modulation(self) -> dict[str, float]:
+        """Return the currently applied modulation dict."""
+        return dict(self._current_modulation)
 
-    def _apply_style_modulation(
-        self,
-        controller: Any,
-        modulation: ModulationValues
-    ) -> None:
-        """Apply modulation to StyleVariator."""
-        # Positive shift = more formal, negative = more casual
-        if modulation.style_formality_shift != 0:
-            # Adjust hedges and intensifiers
-            hedges_adjustment = max(0, len(controller.hedges) - int(modulation.style_formality_shift * 3))
-            if hedges_adjustment < len(controller.hedges):
-                controller.hedges = controller.hedges[:hedges_adjustment]
+    def _take_snapshot(self) -> ControllerSnapshot:
+        """Capture current controller state."""
+        pattern_weights = {}
+        for st, pat in self.style.patterns.items():
+            pattern_weights[st.value] = pat.weight
 
-    def _apply_emotion_modulation(
-        self,
-        controller: Any,
-        modulation: ModulationValues
-    ) -> None:
-        """Apply modulation to EmotionStateMachine."""
-        controller.emotion_inertia *= modulation.emotion_intensity_multiplier
-
-    def _apply_context_modulation(
-        self,
-        controller: Any,
-        modulation: ModulationValues
-    ) -> None:
-        """Apply modulation to ContextReferencer."""
-        controller.max_context_depth = int(
-            controller.max_context_depth * modulation.context_relevance_boost
+        profile = self.timing.profiles[Platform.CHAT]
+        return ControllerSnapshot(
+            style_uncertainty_rate=self.style.uncertainty_rate,
+            style_pattern_weights=pattern_weights,
+            emotion_exchange_count=self.emotion.exchange_count,
+            emotion_inertia=self.emotion.emotion_inertia,
+            timing_min_seconds=profile.min_seconds,
+            timing_max_seconds=profile.max_seconds,
+            context_max_history=self.context.max_history,
         )
 
-    def _apply_escalation_modulation(
-        self,
-        controller: Any,
-        modulation: ModulationValues
-    ) -> None:
-        """Apply modulation to EscalationDetector."""
-        controller.frustration_threshold /= modulation.escalation_sensitivity_multiplier
+    def _restore_from_snapshot(self, snap: ControllerSnapshot) -> None:
+        """Restore controller values from snapshot."""
+        self.style.uncertainty_rate = snap.style_uncertainty_rate
+        for st, pat in self.style.patterns.items():
+            if st.value in snap.style_pattern_weights:
+                pat.weight = snap.style_pattern_weights[st.value]
 
-    def restore_original_values(self, controller: Any) -> None:
-        """
-        Restore controller to original values (undo modulations).
+        self.emotion.exchange_count = snap.emotion_exchange_count
+        self.emotion.emotion_inertia = snap.emotion_inertia
 
-        Args:
-            controller: Controller to restore.
-        """
-        controller_name = type(controller).__name__
+        profile = self.timing.profiles[Platform.CHAT]
+        profile.min_seconds = snap.timing_min_seconds
+        profile.max_seconds = snap.timing_max_seconds
 
-        if controller_name not in self.state.original_values:
-            return
-
-        original = self.state.original_values[controller_name]
-
-        if controller_name == 'TimingController':
-            controller.base_delay = original.get('base_delay', 0.5)
-            controller.per_char_delay = original.get('per_char_delay', 0.01)
-
-        elif controller_name == 'StyleVariator':
-            controller.emotion_multipliers = original.get('emotion_multipliers', {})
-
-        elif controller_name == 'EmotionStateMachine':
-            controller.current_state = original.get('current_state', 'neutral')
-            controller.emotion_inertia = original.get('emotion_inertia', 0.7)
-
-        elif controller_name == 'ContextReferencer':
-            controller.max_context_depth = original.get('max_context_depth', 10)
-
-        elif controller_name == 'EscalationDetector':
-            controller.frustration_threshold = original.get('frustration_threshold', 0.7)
-
-    def set_modulation(self, modulation: ModulationValues) -> None:
-        """
-        Set active modulation values.
-
-        Args:
-            modulation: New ModulationValues to apply.
-        """
-        self.state.current_modulations = modulation
-
-    def get_current_modulation(self) -> ModulationValues:
-        """
-        Get current active modulation.
-
-        Returns:
-            Current ModulationValues.
-        """
-        return self.state.current_modulations
-
-    def get_modulation_history(self, depth: int = 10) -> list[ModulationValues]:
-        """
-        Get recent modulation history.
-
-        Args:
-            depth: Number of recent entries to return.
-
-        Returns:
-            List of ModulationValues in chronological order.
-        """
-        return self.state.history[-depth:] if self.state.history else []
-
-    def reset(self) -> None:
-        """Reset bridge state."""
-        self.state = BridgeState(current_modulations=ModulationValues())
-
-    def enable(self) -> None:
-        """Enable the bridge."""
-        self.is_active = True
-
-    def disable(self) -> None:
-        """Disable the bridge (pass-through mode)."""
-        self.is_active = False
+        self.context.max_history = snap.context_max_history

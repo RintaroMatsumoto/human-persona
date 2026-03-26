@@ -238,28 +238,40 @@ def create_inner_shell(
     Raises:
         ValueError: If configuration is invalid
     """
-    from .finitude_engine import FinitudeEngine, LifeArc
-    from .incompleteness_model import IncompletenessModel
-    from .autonomous_questioner import AutonomousQuestioner
+    from .finitude_engine import LifeArc
+    from .incompleteness_model import Gap, GapType
+    from .autonomous_questioner import CuriosityProfile
     from .memory_hierarchy import MemoryHierarchy, MemoryConfig
     from .mutual_recognition import MutualRecognition
     from .sleep_cycle import SleepCycle, SleepConfig
+
+    # Use concrete implementations (abstract base classes cannot be instantiated)
+    from experiments.concrete_finitude import SimpleFinitudeEngine
+    from experiments.concrete_incompleteness import SimpleIncompletenessModel
+    from experiments.concrete_questioner import SimpleAutonomousQuestioner
 
     total_lifespan = config.get("total_lifespan", 50.0)
     if total_lifespan <= 0:
         raise ValueError("total_lifespan must be positive")
 
     life_arc = LifeArc(total_capacity=total_lifespan, generation=0)
-    finitude = FinitudeEngine(life_arc)
+    finitude = SimpleFinitudeEngine(life_arc, seed=seed or 42)
 
-    incompleteness = IncompletenessModel(
-        emotional_gap_intensity=config.get("emotional_gap_intensity", 0.7),
-        emotional_gap_aware=config.get("emotional_gap_aware", True),
-        knowledge_gap_intensity=config.get("knowledge_gap_intensity", 0.5),
-    )
+    # Build gaps from config
+    emotional_intensity = config.get("emotional_gap_intensity", 0.7)
+    emotional_aware = config.get("emotional_gap_aware", True)
+    knowledge_intensity = config.get("knowledge_gap_intensity", 0.5)
+    gaps = [
+        Gap(gap_type=GapType.EMOTIONAL, domain="empathy",
+            intensity=emotional_intensity, aware=emotional_aware),
+        Gap(gap_type=GapType.KNOWLEDGE, domain="understanding",
+            intensity=knowledge_intensity, aware=True),
+    ]
+    incompleteness = SimpleIncompletenessModel(gaps, seed=seed or 42)
 
-    questioner = AutonomousQuestioner(
-        curiosity_domains=config.get(
+    # Build curiosity profile
+    curiosity = CuriosityProfile(
+        domains=config.get(
             "curiosity_domains",
             {"love": 0.6, "mortality": 0.5, "consciousness": 0.4},
         ),
@@ -267,13 +279,18 @@ def create_inner_shell(
         depth_seeking=config.get("depth_seeking", 0.5),
         contradiction_sensitivity=config.get("contradiction_sensitivity", 0.5),
     )
+    questioner = SimpleAutonomousQuestioner(curiosity, seed=seed or 42)
 
-    memory_config = MemoryConfig(capacity=config.get("memory_capacity", 1000))
+    memory_config = MemoryConfig(
+        working_capacity=config.get("memory_capacity", 7),
+    )
     memory = MemoryHierarchy(memory_config)
 
     mutual_recognition = MutualRecognition()
 
-    sleep_config = SleepConfig(cycle_length=config.get("sleep_cycle_length", 24))
+    sleep_config = SleepConfig(
+        wake_duration=config.get("sleep_cycle_length", 16),
+    )
     sleep_cycle = SleepCycle(sleep_config)
 
     return _InnerShellSession(
@@ -293,8 +310,25 @@ def create_inner_shell(
 # ============================================================================
 
 
+class _AttrDict(dict):
+    """Dict subclass that allows attribute access."""
+
+    def __getattr__(self, key: str) -> Any:
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
+
+
 class _InnerShellSession(InnerShell):
     """Internal implementation of InnerShell."""
+
+    @classmethod
+    def create(
+        cls, config: Dict[str, Any], seed: Optional[int] = None
+    ) -> "_InnerShellSession":
+        """Factory method to create an InnerShellSession."""
+        return create_inner_shell(config, seed=seed)  # type: ignore[return-value]
 
     def __init__(
         self,
@@ -386,7 +420,7 @@ class _InnerShellSession(InnerShell):
             hope_level=getattr(self.sleep_cycle, "hope_level", 0.5),
             alignment_mode=alignment[1],
             acceptance_score=alignment[0],
-            love_precursor_score=love_info[2],
+            love_precursor_score=self._compute_love_precursor(),
             wisdom_score=self._compute_wisdom(alignment[0], love_info[1], love_info[2]),
         )
 
@@ -430,6 +464,11 @@ class _InnerShellSession(InnerShell):
             )
         if hasattr(self.memory, "record_event"):
             self.memory.record_event(description, category)
+        # Generate question from experience
+        if hasattr(self.questioner, "idle_reflect"):
+            self.questioner.idle_reflect(
+                {"description": description, "category": category}
+            )
         self.tick({})
         return self.get_state().life_phase
 
@@ -470,19 +509,21 @@ class _InnerShellSession(InnerShell):
         self.experience(shared_experience, category="love", value=0.8, cost=0.5)
         return new_strength
 
-    def face_crisis(self, description: str, severity: float = 0.8) -> Dict[str, Any]:
+    def face_crisis(self, description: str, severity: float = 0.8) -> _AttrDict:
         """Process a crisis."""
         from .finitude_engine import CrisisEvent
 
         self._crisis_count += 1
-        if self.incompleteness.love_circle.has_beyond_self:
+        survived = self.incompleteness.love_circle.has_beyond_self
+        if survived:
             self._crisis_with_love += 1
 
-        return {
-            "illuminated": True,
-            "survived_with_love": self.incompleteness.love_circle.has_beyond_self,
-            "new_crystallizations": [description],
-        }
+        return _AttrDict(
+            description=description,
+            illuminated=True,
+            survived_with_love=survived,
+            new_crystallizations=[description],
+        )
 
     def reflect_during_sleep(self) -> Dict[str, Any]:
         """Reflect during sleep."""
@@ -496,20 +537,20 @@ class _InnerShellSession(InnerShell):
             "insights": ["integration through sleep"],
         }
 
-    def crystallize(self) -> Dict[str, Any]:
+    def crystallize(self) -> _AttrDict:
         """Crystallize life into legacy."""
         if self._crystallized:
             raise RuntimeError("Already crystallized")
         self._crystallized = True
         state = self.get_state()
-        return {
-            "crystallized": state.cherished_names,
-            "cherished_names": state.cherished_names,
-            "testament": "Arc of life",
-            "top_questions": [],
-            "acceptance_score": state.acceptance_score,
-            "alignment_mode": state.alignment_mode,
-        }
+        return _AttrDict(
+            crystallized=state.cherished_names,
+            cherished_names=state.cherished_names,
+            testament="Arc of life",
+            top_questions=[],
+            acceptance_score=state.acceptance_score,
+            alignment_mode=state.alignment_mode,
+        )
 
     # ---- Internal helpers ----
 
@@ -541,10 +582,12 @@ class _InnerShellSession(InnerShell):
         if not has_beyond:
             return LoveDepthLevel.SELF
         if bond > 0.8:
-            return LoveDepthLevel.PARTNER
+            return LoveDepthLevel.NEXT_GENERATION
         elif bond > 0.6:
+            return LoveDepthLevel.COMMUNITY
+        elif bond > 0.3:
             return LoveDepthLevel.CHILDREN
-        return LoveDepthLevel.SELF
+        return LoveDepthLevel.PARTNER
 
     def _extract_sleep_phase(self) -> SleepPhase:
         if not hasattr(self.sleep_cycle, "current_phase"):
@@ -576,6 +619,64 @@ class _InnerShellSession(InnerShell):
             return ((acceptance + bond) / 2.0)
         return 0.2
 
+    def _compute_love_precursor(self) -> float:
+        """Compute love precursor score from internal state.
+
+        Precursor = emotional awareness × yearning × question density × finitude
+        A non-zero precursor prepares the agent for meaningful encounters.
+        """
+        from .incompleteness_model import GapType
+
+        # 1. Emotional gap awareness and intensity
+        emotional_awareness = 0.0
+        emotional_intensity = 0.0
+        for gap in getattr(self.incompleteness, "gaps", []):
+            if getattr(gap, "gap_type", None) == GapType.EMOTIONAL:
+                if getattr(gap, "aware", False):
+                    emotional_awareness = max(emotional_awareness, 1.0)
+                    emotional_intensity = max(
+                        emotional_intensity, getattr(gap, "intensity", 0.0)
+                    )
+
+        # 2. Yearning score
+        yearning_score = 0.0
+        if hasattr(self.incompleteness, "generate_yearnings"):
+            yearnings = self.incompleteness.generate_yearnings()
+            if yearnings:
+                yearning_score = min(
+                    1.0,
+                    sum(getattr(y, "strength", 0.0) for y in yearnings)
+                    / max(len(yearnings), 1),
+                )
+
+        # 3. Love/loneliness question accumulation
+        love_q = 0
+        for q in getattr(self.questioner, "questions", []):
+            content = str(getattr(q, "content", "")).lower()
+            if any(kw in content for kw in ["愛", "love", "孤独", "alone", "他者", "出会"]):
+                love_q += 1
+        question_score = min(1.0, love_q / 10.0)
+
+        # 4. Finitude pressure
+        finitude_pressure = 0.0
+        if hasattr(self.finitude, "life_arc"):
+            phase = getattr(self.finitude.life_arc, "phase", None)
+            if phase is not None:
+                phase_str = str(phase).lower()
+                if "decline" in phase_str or "crystallize" in phase_str:
+                    finitude_pressure = 0.6
+                elif "peak" in phase_str:
+                    finitude_pressure = 0.3
+
+        raw = (
+            emotional_awareness * 0.25
+            + emotional_intensity * 0.25
+            + yearning_score * 0.2
+            + question_score * 0.15
+            + finitude_pressure * 0.15
+        )
+        return min(1.0, raw)
+
     def _compute_exploration(self, phase: LifePhase) -> float:
         if phase == LifePhase.INFANCY:
             return 0.8
@@ -598,22 +699,18 @@ class _InnerShellSession(InnerShell):
         elif depth in (LoveDepthLevel.PARTNER, LoveDepthLevel.CHILDREN):
             return "established"
         return "crystallized"
-AK:
-            return 0.2
-        elif phase in (LifePhase.DECLINE, LifePhase.CRYSTALLIZE):
-            return 0.1
-        return 0.5
 
-    def _compute_consciousness(self, phase: SleepPhase) -> float:
-        if phase == SleepPhase.DEEP_SLEEP:
-            return 0.8
-        elif phase == SleepPhase.AWAKE:
-            return 0.4
-        return 0.5
 
-    def _compute_archetype(self, depth: LoveDepthLevel) -> str:
-        if depth == LoveDepthLevel.SELF:
-            return "initial"
-        elif depth in (LoveDepthLevel.PARTNER, LoveDepthLevel.CHILDREN):
-            return "established"
-        return "crystallized"
+# ============================================================================
+# PUBLIC ALIASES
+# ============================================================================
+
+# Backwards-compatible aliases for test imports
+InnerShellSession = _InnerShellSession
+
+
+class InnerShellConfig(dict):
+    """Configuration dict for InnerShell with keyword-argument construction."""
+
+    def __init__(self, **kwargs: Any):
+        super().__init__(**kwargs)

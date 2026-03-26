@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import random
 import re
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
@@ -23,6 +24,23 @@ class Register(Enum):
     BUSINESS = "business"
     CASUAL = "casual"
     TECHNICAL = "technical"
+
+
+class StyleType(Enum):
+    """Types of stylistic patterns."""
+    CONFIRMATION = "confirmation"
+    UNCERTAIN = "uncertain"
+    EMPHATIC = "emphatic"
+    HEDGE = "hedge"
+    FILLER = "filler"
+
+
+@dataclass
+class StylePattern:
+    """A stylistic pattern with adjustable weight."""
+    style_type: StyleType
+    weight: float = 1.0
+    examples: list[str] = field(default_factory=list)
 
 
 class StyleVariator:
@@ -44,6 +62,29 @@ class StyleVariator:
         self.register_rules: dict[str, dict[str, str]] = config.get('register_rules', {})
         self.hedges: list[str] = config.get('hedges', ['I think', 'kind of', 'maybe', 'I guess'])
         self.intensifiers: list[str] = config.get('intensifiers', ['really', 'very', 'quite'])
+        self.uncertainty_rate: float = config.get('uncertainty_rate', 0.15)
+        self.patterns: dict[StyleType, StylePattern] = {
+            StyleType.CONFIRMATION: StylePattern(
+                style_type=StyleType.CONFIRMATION, weight=1.0,
+                examples=["right", "exactly", "indeed"],
+            ),
+            StyleType.UNCERTAIN: StylePattern(
+                style_type=StyleType.UNCERTAIN, weight=1.0,
+                examples=["maybe", "perhaps", "I'm not sure"],
+            ),
+            StyleType.EMPHATIC: StylePattern(
+                style_type=StyleType.EMPHATIC, weight=1.0,
+                examples=["absolutely", "definitely", "certainly"],
+            ),
+            StyleType.HEDGE: StylePattern(
+                style_type=StyleType.HEDGE, weight=1.0,
+                examples=self.hedges,
+            ),
+            StyleType.FILLER: StylePattern(
+                style_type=StyleType.FILLER, weight=1.0,
+                examples=["well", "um", "like"],
+            ),
+        }
 
     def apply_variation(self, text: str, register: Register | str = Register.CASUAL, emotion: str | None = None) -> str:
         """

@@ -12,7 +12,17 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any
+
+
+class EmotionState(Enum):
+    """Enumeration of emotion states."""
+    NEUTRAL = "neutral"
+    HAPPY = "happy"
+    SAD = "sad"
+    ANGRY = "angry"
+    CONFUSED = "confused"
 
 
 @dataclass
@@ -62,6 +72,7 @@ class EmotionStateMachine:
                 'angry': ['angry', 'furious', 'outrage', '!!!'],
             }
         )
+        self.exchange_count: int = config.get('exchange_count', 0)
         self.config: dict[str, Any] = config
 
     def update(self, user_message: str) -> None:
