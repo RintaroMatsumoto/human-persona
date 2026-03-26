@@ -143,6 +143,10 @@ class SleepConfig:
     light_sleep_duration: float = 1.0
     deep_sleep_duration: float = 4.0
     rem_duration: float = 1.5
+    # Hope mechanics: sleep as emotional renewal
+    grief_decay_on_wake: float = 0.4       # 40% of grief dissipates through sleep
+    hope_generation_rate: float = 0.3      # Grief released -> hope generated (conversion)
+    hope_decay_during_wake: float = 0.02   # Hope slowly fades during waking hours
 
 
 @dataclass
@@ -197,6 +201,9 @@ class SleepState:
     cognitive_clarity: float
     emotional_stability: float
     memory_consolidation_pending: int
+    # Hope mechanics
+    grief_accumulated: float = 0.0    # Pain from the day (0.0-1.0)
+    hope_score: float = 0.5           # Capacity to face tomorrow (0.0-1.0)
 
 
 @dataclass(frozen=True)
@@ -296,10 +303,14 @@ class SleepCycle:
         
         # Sleep debt (cumulative penalty for missed sleep)
         self._sleep_debt = 0.0
-        
+
         # Track if consolidation/creativity happened in current cycle
         self._consolidation_done_this_cycle = False
         self._creativity_done_this_cycle = False
+
+        # Hope mechanics: sleep as emotional renewal
+        self._grief_accumulated = 0.0  # Pain from today (0.0-1.0)
+        self._hope_score = 0.5         # Capacity to face tomorrow (0.0-1.0)
     
     # =========================================================================
     # Core Dynamics
@@ -368,14 +379,17 @@ class SleepCycle:
     # =========================================================================
     
     def _tick_wake(self, hours: float) -> None:
-        """During WAKE: accumulate fatigue and waste."""
+        """During WAKE: accumulate fatigue, waste, and erode hope."""
         self._fatigue += hours * self.config.fatigue_rate
         self._waste_level += hours * self.config.waste_accumulation_rate
         self._sleep_pressure = min(
             self.config.sleep_pressure_max,
             self._fatigue / self.config.drowsy_threshold
         )
-        
+
+        # Hope slowly fades as the day wears on
+        self._hope_score = max(0.0, self._hope_score - hours * self.config.hope_decay_during_wake)
+
         # Cap at 1.0
         self._fatigue = min(1.0, self._fatigue)
         self._waste_level = min(1.0, self._waste_level)
@@ -510,13 +524,32 @@ class SleepCycle:
         self._time_in_phase = 0.0
     
     def _transition_to_wake(self) -> None:
-        """Complete sleep cycle, return to wake."""
+        """Complete sleep cycle, return to wake.
+
+        Hope Mechanics:
+            Sleep allows grief to partially dissipate. The released grief
+            is converted into hope — the capacity to face a new day.
+            "No matter how painful today was, sleeping lets you start
+            tomorrow with renewed hope."
+
+            grief_released = grief × grief_decay_on_wake
+            hope_gained = grief_released × hope_generation_rate
+            This means: the MORE pain you carried, the MORE hope sleep gives you.
+            A painless day produces little hope (you don't need it).
+            A devastating day produces the most hope on waking (you need it most).
+        """
+        # --- Hope generation: the alchemy of sleep ---
+        grief_released = self._grief_accumulated * self.config.grief_decay_on_wake
+        hope_gained = grief_released * self.config.hope_generation_rate
+        self._grief_accumulated = max(0.0, self._grief_accumulated - grief_released)
+        self._hope_score = min(1.0, self._hope_score + hope_gained)
+
         self._phase = CyclePhase.WAKE
         self._time_in_phase = 0.0
         self._total_wake_time = 0.0  # Reset for next cycle
         self._total_sleep_time += self.config.sleep_duration
         self._cycles_completed += 1
-        
+
         # Reset consolidation flags for next cycle
         self._consolidation_done_this_cycle = False
         self._creativity_done_this_cycle = False
@@ -644,7 +677,14 @@ class SleepCycle:
         )
         
         self._pending_memories.append(memory)
-    
+
+        # Painful experiences accumulate grief during wakefulness
+        # High importance + high emotional weight on negative events = more grief
+        # We treat emotional_weight > 0.5 as "painful" (simplified model)
+        if emotional_weight > 0.5:
+            grief_delta = importance * (emotional_weight - 0.5) * 2.0  # Scale to 0-1
+            self._grief_accumulated = min(1.0, self._grief_accumulated + grief_delta * 0.1)
+
     def force_wake(self) -> float:
         """Force waking up (interrupt sleep).
         
@@ -691,7 +731,9 @@ class SleepCycle:
             total_sleep_time=self._total_sleep_time,
             cognitive_clarity=self._compute_cognitive_clarity(),
             emotional_stability=self._compute_emotional_stability(),
-            memory_consolidation_pending=len(self._pending_memories)
+            memory_consolidation_pending=len(self._pending_memories),
+            grief_accumulated=self._grief_accumulated,
+            hope_score=self._hope_score,
         )
     
     def get_performance_modifier(self) -> PerformanceModifiers:
