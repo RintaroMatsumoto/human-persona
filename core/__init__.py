@@ -7,7 +7,6 @@ Exports:
     - StyleVariator: Linguistic style variation engine
     - EmotionStateMachine: Emotional state tracking
     - ContextReferencer: Conversation memory and back-referencing
-    - EscalationDetector: Human handoff trigger detection
     - ConfigValidator: Configuration validation
     - InnerOuterBridge: Bridge between inner and outer shell modules
 """
@@ -16,12 +15,11 @@ from __future__ import annotations
 
 from .base_persona import HumanPersonaBase, Message, PersonaResponse, Platform
 from .config_validator import ConfigValidator, ValidationResult
-from .context_referencer import ContextReferencer, ContextRef
-from .emotion_state_machine import EmotionStateMachine
-from .escalation_detector import EscalationDetector, EscalationResult
-from .inner_outer_bridge import InnerOuterBridge, ModulationValues, BridgeState
+from .context_referencer import ContextReferencer, ContextRef, Turn
+from .emotion_state_machine import EmotionStateMachine, EmotionState
+from .inner_outer_bridge import InnerOuterBridge, ControllerSnapshot
 from .style_variator import StyleVariator, Register
-from .timing_controller import TimingController, TimingConfig
+from .timing_controller import TimingController, TimingConfig, TimingProfile, DEFAULT_PROFILES
 
 __all__ = [
     'HumanPersonaBase',
@@ -35,13 +33,14 @@ __all__ = [
     'EmotionStateMachine',
     'ContextReferencer',
     'ContextRef',
-    'EscalationDetector',
-    'EscalationResult',
+    'Turn',
+    'EmotionState',
+    'TimingProfile',
+    'DEFAULT_PROFILES',
     'ConfigValidator',
     'ValidationResult',
     'InnerOuterBridge',
-    'ModulationValues',
-    'BridgeState',
+    'ControllerSnapshot',
 ]
 
 __version__ = '0.2.0'

@@ -3,7 +3,7 @@
   "language": "es",
   "culture": {
     "culture_context": "high",
-    "context_level": 0.70,
+    "context_level": 0.7,
     "formality_default": 0.5,
     "indirect_expression_rate": 0.45,
     "silence_tolerance": 0.6
@@ -113,45 +113,5 @@
   "ambiguity": {
     "hedge_probability": 0.08,
     "self_correction_rate": 0.043
-  },
-  "escalation": {
-    "max_chat_turns": 4,
-    "escalation_rules": [
-      {
-        "reason": "negotiation",
-        "keywords": ["precio", "tarifa", "descuento", "presupuesto", "cotizacion", "factura"],
-        "threshold": 1,
-        "priority": 5,
-        "description": "Negociacion de precio o tarifa"
-      },
-      {
-        "reason": "call_request",
-        "keywords": ["llamada", "telefono", "videollamada", "Zoom", "Teams", "hablemos por telefono"],
-        "threshold": 1,
-        "priority": 4,
-        "description": "Solicitud de llamada de voz o video"
-      },
-      {
-        "reason": "complaint",
-        "keywords": ["queja", "inaceptable", "terrible", "pesimo", "reembolso", "furioso"],
-        "threshold": 1,
-        "priority": 5,
-        "description": "Queja o fuerte insatisfaccion"
-      },
-      {
-        "reason": "meeting_request",
-        "keywords": ["reunirnos", "en persona", "vernos", "ir a la oficina", "tomar un cafe"],
-        "threshold": 1,
-        "priority": 3,
-        "description": "Solicitud de reunion presencial"
-      },
-      {
-        "reason": "identity_check",
-        "keywords": ["verificar identidad", "documento de identidad", "DNI", "pasaporte", "KYC"],
-        "threshold": 1,
-        "priority": 5,
-        "description": "Solicitud de verificacion de identidad"
-      }
-    ]
   }
 }

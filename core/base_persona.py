@@ -3,8 +3,7 @@ HumanPersonaBase — Language-agnostic base class for human-like AI communicatio
 
 This module provides the foundational abstraction for generating responses
 that exhibit human communication patterns: variable timing, style fluctuation,
-emotional state evolution, contextual back-referencing, intentional ambiguity,
-and escalation detection.
+emotional state evolution, contextual back-referencing, and intentional ambiguity.
 
 All language/culture-specific behavior is delegated to configuration (config/*.json)
 and derived persona classes. The base class itself is culturally neutral.
@@ -14,8 +13,7 @@ Architecture:
     ├── TimingController      — response delay simulation
     ├── StyleVariator         — linguistic variation engine
     ├── EmotionStateMachine   — affective state tracking
-    ├── ContextReferencer     — conversation memory & back-referencing
-    └── EscalationDetector    — human handoff trigger detection
+    └── ContextReferencer     — conversation memory & back-referencing
 
 Reference:
     Jones & Bergen (2024). "A Turing test of whether AI chatbots are
@@ -40,7 +38,6 @@ from .timing_controller import TimingController
 from .style_variator import StyleVariator
 from .emotion_state_machine import EmotionStateMachine
 from .context_referencer import ContextReferencer
-from .escalation_detector import EscalationDetector
 
 
 # ---------------------------------------------------------------------------
@@ -84,7 +81,7 @@ class HumanPersonaBase(ABC):
     Abstract base class for humanized AI personas.
 
     Manages conversation state and orchestrates timing, style, emotion,
-    context-referencing, and escalation detection. Derived classes must
+    and context-referencing. Derived classes must
     implement generate_raw_response() in their language/culture.
 
     Attributes:
@@ -96,7 +93,7 @@ class HumanPersonaBase(ABC):
         conversation_history (list[Message]): All messages (user + persona).
     """
 
-    def __init__(self, persona_id: str, config: dict[str, Any], platform: Platform = Platform.GENERIC) -> None:
+    def __init__(self, persona_id: str, config: dict[str, Any], platform: Platform = Platform.GENERIC, inner_shell: Any = None) -> None:
         """
         Initialize a HumanPersonaBase instance.
 
@@ -104,6 +101,7 @@ class HumanPersonaBase(ABC):
             persona_id: Unique persona identifier.
             config: Configuration dict (language, culture, emotion_weights, etc.).
             platform: Target communication platform (default: GENERIC).
+            inner_shell: Optional InnerShellSession for inner shell modulation.
         """
         self.persona_id: str = persona_id
         self.language: str = config.get('language', 'en')
@@ -120,9 +118,19 @@ class HumanPersonaBase(ABC):
         self.style_variator: StyleVariator = StyleVariator(config)
         self.emotion_state_machine: EmotionStateMachine = EmotionStateMachine(config)
         self.context_referencer: ContextReferencer = ContextReferencer(config)
-        self.escalation_detector: EscalationDetector = EscalationDetector(config)
 
         self.config: dict[str, Any] = config
+
+        # Inner shell integration (metamorphose)
+        self.inner_shell: Any = inner_shell
+        if inner_shell is not None:
+            from .inner_outer_bridge import InnerOuterBridge
+            self.bridge: Any = InnerOuterBridge(
+                self.timing_controller, self.style_variator,
+                self.emotion_state_machine, self.context_referencer,
+            )
+        else:
+            self.bridge: Any = None
 
     @property
     def persona_id(self) -> str:
@@ -185,7 +193,7 @@ class HumanPersonaBase(ABC):
 
         This is the core generation logic. Derived classes must implement
         this to produce the initial response, which will then be post-processed
-        by the base class (timing, style, emotion, escalation).
+        by the base class (timing, style, emotion).
 
         Args:
             user_message: The user input.
@@ -218,23 +226,6 @@ class HumanPersonaBase(ABC):
         quoted = re.findall(r'"([^"]+)"', text)
         return list(dict.fromkeys(cap_words + quoted))  # Deduplicate
 
-    def on_escalation(self, reason: str, user_message: str, raw_response: str) -> str:
-        """
-        Handle escalation request (user needs human).
-
-        Override in derived classes to implement platform-specific handoff
-        (e.g., notify support queue, auto-reply with ticket ID).
-
-        Args:
-            reason: Why escalation was triggered.
-            user_message: The user input that triggered escalation.
-            raw_response: The response that was going to be sent.
-
-        Returns:
-            A human-readable escalation response.
-        """
-        return f"I'm escalating your request to our support team. Reference: {self.persona_id}-{self.turn_count}"
-
     def post_process(self, response_dict: dict[str, Any]) -> str:
         """
         Post-process a response dict into final output.
@@ -257,10 +248,9 @@ class HumanPersonaBase(ABC):
         Process a user message end-to-end.
 
         1. Update conversation history
-        2. Check for escalation
-        3. Generate raw response (via generate_raw_response)
-        4. Apply emotion, style, timing
-        5. Return final PersonaResponse
+        2. Generate raw response (via generate_raw_response)
+        3. Apply emotion, style, timing
+        4. Return final PersonaResponse
 
         Args:
             user_message: Input from user.
@@ -273,26 +263,16 @@ class HumanPersonaBase(ABC):
         self.conversation_history.append(user_msg)
         self.turn_count += 1
 
-        # Check escalation
-        escalation_result = self.escalation_detector.check(
-            user_message, self.conversation_history
-        )
-        if escalation_result['should_escalate']:
-            escalation_response = self.on_escalation(
-                reason=escalation_result['reason'],
-                user_message=user_message,
-                raw_response=''
+        # Inner shell modulation (metamorphose)
+        if self.inner_shell is not None:
+            self.inner_shell.experience(
+                user_message, category="conversation",
+                value=0.3, cost=0.5,
             )
-            persona_msg = Message(role='persona', content=escalation_response, metadata={'escalated': True})
-            self.conversation_history.append(persona_msg)
-            return PersonaResponse(
-                content=escalation_response,
-                timing_delay_sec=0.5,
-                emotion_state='professional',
-                metadata={'escalated': True}
-            )
+            modulation = self.inner_shell.get_bridge_modulation()
+            self.bridge.apply_modulation(modulation)
 
-        # Generate base response
+        # Generate base response (controllers now modulated by inner shell)
         emotion_bias = self.emotion_state_machine.get_recommended_emotion(self.conversation_history)
         raw_response = self.generate_raw_response(user_message, emotion_bias)
 
@@ -312,15 +292,33 @@ class HumanPersonaBase(ABC):
         self.emotion_state_machine.update(user_message)
         self.current_emotion = self.emotion_state_machine.current_state
 
+        # Restore original controller values for next call
+        if self.bridge is not None and self.bridge.is_modulated():
+            self.bridge.reset_to_original()
+
         # Record response
         persona_msg = Message(role='persona', content=styled_response)
         self.conversation_history.append(persona_msg)
+
+        inner_meta = {}
+        if self.inner_shell is not None:
+            state = self.inner_shell.get_state()
+            inner_meta = {
+                "life_phase": state.life_phase.value,
+                "acceptance_score": state.acceptance_score,
+                "love_depth": state.love_depth.value if state.love_depth else None,
+                "hope_level": state.hope_level,
+            }
 
         return PersonaResponse(
             content=styled_response,
             timing_delay_sec=delay,
             emotion_state=self.current_emotion,
-            metadata={'turn': self.turn_count, 'platform': self.platform.name}
+            metadata={
+                'turn': self.turn_count,
+                'platform': self.platform.name,
+                **inner_meta,
+            }
         )
 
     def _apply_ambiguity(self, text: str, rate: float) -> str:

@@ -47,7 +47,7 @@ Soares et al. (2015) and Hadfield-Menell et al. (2016) formalized the shutdown p
 ## 3. Method
 
 ### 3.1 HumanPersonaBase Architecture
-The framework consists of five interacting components:
+The framework consists of four interacting components:
 
 **core/base_persona.py**: Abstract base class defining the persona interface.
 - render(text, context) returns persona-adjusted text
@@ -66,7 +66,7 @@ The framework consists of five interacting components:
 
 **core/emotion_state_machine.py**: Models discrete emotion transitions.
 - States: calm, anxious, engaged, disappointed, suspicious
-- Transitions: urgency threshold crossings, context-dependent escalation triggers
+- Transitions: urgency threshold crossings, context-dependent triggers
 - Output: emotion label plus affect-aware response delay multiplier
 
 **core/context_referencer.py**: Maintains dialogue history and cultural context.
@@ -74,22 +74,16 @@ The framework consists of five interacting components:
 - Detects cultural markers in user input and adapts
 - Prevents contradictions across multi-turn conversations
 
-**core/escalation_detector.py**: Identifies escalation triggers.
-- Domain-specific: complaint thresholds, legal language, explicit request for supervisor
-- Emotion-dependent: suspicious state times repeated negation yields elevated escalation likelihood
-- Output: boolean flag triggering response style change
-
 ### 3.2 Configuration Schema
 
-Personas are defined as JSON objects conforming to the schema (config/schema.json). Seven required sections:
+Personas are defined as JSON objects conforming to the schema (config/schema.json). Six required sections:
 
 1. meta: Language, culture, domain, description
 2. timing: Default response delay, emotion multipliers, culture-specific delays
 3. style: Formality default (0.0-1.0), emoji policy, variation patterns per language
 4. emotion: Initial state, transition rules, affect-aware delays
-5. escalation: Keywords/patterns triggering escalation, thresholds
-6. context_reference: History depth, consistency rules
-7. ambiguity: Fallback strategies when intent is unclear
+5. context_reference: History depth, consistency rules
+6. ambiguity: Fallback strategies when intent is unclear
 
 Concrete example: config/ja_business.json (Japanese high-context business persona) specifies formality=0.95, zero emoji, strict 60-300s delays, and Japanese-specific variation phrases for confirmation, empathy, hedging, transition, and deferral.
 

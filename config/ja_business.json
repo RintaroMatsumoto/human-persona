@@ -70,7 +70,11 @@
       "min_ratio": 0.18,
       "max_ratio": 1.55
     },
-    "filler_words": ["えー、", "あの、", "少々"],
+    "filler_words": [
+      "えー、",
+      "あの、",
+      "少々"
+    ],
     "emoji_policy": "never"
   },
   "emotion": {
@@ -163,53 +167,6 @@
       "先般ご相談いただきました{topic}ですが"
     ],
     "max_lookback_turns": 8
-  },
-  "escalation": {
-    "triggers": [
-      {
-        "type": "negotiation",
-        "threshold": 1,
-        "keywords": ["単価", "報酬", "値下げ", "値上げ", "予算", "見積もり", "コスト削減", "減額"],
-        "action": "pause_and_notify",
-        "message_to_human": "金額交渉が発生しました。ご確認をお願いいたします。"
-      },
-      {
-        "type": "call_request",
-        "threshold": 1,
-        "keywords": ["電話", "通話", "ビデオ通話", "Zoom", "Teams", "オンライン会議", "お電話"],
-        "action": "notify_human",
-        "message_to_human": "通話リクエストがありました。"
-      },
-      {
-        "type": "complaint",
-        "threshold": 1,
-        "keywords": ["クレーム", "不満", "怒り", "ひどい", "最悪", "返金", "訴訟", "弁護士"],
-        "action": "transfer_immediately",
-        "message_to_human": "強い不満・法的リスクを検知しました。即時対応をお願いします。"
-      },
-      {
-        "type": "meeting_request",
-        "threshold": 1,
-        "keywords": ["お会い", "対面", "直接会って", "オフィスに", "ご訪問", "来社"],
-        "action": "notify_human",
-        "message_to_human": "対面ミーティングのリクエストがありました。"
-      },
-      {
-        "type": "identity_verification",
-        "threshold": 1,
-        "keywords": ["本人確認", "身分証", "免許証", "マイナンバー", "登記簿"],
-        "action": "transfer_immediately",
-        "message_to_human": "本人確認・身元確認の要求がありました。"
-      },
-      {
-        "type": "legal_mention",
-        "threshold": 1,
-        "keywords": ["契約書", "NDA", "秘密保持", "損害賠償", "著作権", "知的財産"],
-        "action": "pause_and_notify",
-        "message_to_human": "法的事項への言及がありました。"
-      }
-    ],
-    "fallback_message": "少々お時間をいただいてもよろしいでしょうか。確認のうえ改めてご連絡いたします。"
   },
   "ambiguity": {
     "hedge_probability": 0.06,

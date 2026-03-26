@@ -158,45 +158,5 @@
     "kanji_ratio_casual": 0.2825,
     "cushion_rate": 0.002,
     "filler_rate": 0.0385
-  },
-  "escalation": {
-    "max_chat_turns": 3,
-    "escalation_rules": [
-      {
-        "reason": "negotiation",
-        "keywords": ["単価", "報酬", "値下げ", "値上げ", "予算", "見積もり"],
-        "threshold": 1,
-        "priority": 5,
-        "description": "金額交渉は即座にエスカレーション"
-      },
-      {
-        "reason": "call_request",
-        "keywords": ["電話", "通話", "ビデオ通話", "Zoom", "Teams", "オンライン会議"],
-        "threshold": 1,
-        "priority": 4,
-        "description": "音声・映像通話の要求"
-      },
-      {
-        "reason": "complaint",
-        "keywords": ["クレーム", "不満", "怒り", "ひどい", "最悪", "返金"],
-        "threshold": 1,
-        "priority": 5,
-        "description": "クレーム・強い不満の表現"
-      },
-      {
-        "reason": "meeting_request",
-        "keywords": ["お会い", "対面", "直接会って", "オフィスに"],
-        "threshold": 1,
-        "priority": 3,
-        "description": "対面ミーティングの要求"
-      },
-      {
-        "reason": "identity_check",
-        "keywords": ["本人確認", "身分証", "免許証", "マイナンバー"],
-        "threshold": 1,
-        "priority": 5,
-        "description": "本人確認・身元確認の要求"
-      }
-    ]
   }
 }

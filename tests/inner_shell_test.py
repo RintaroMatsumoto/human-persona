@@ -905,12 +905,12 @@ class TestIntegrationScenarios(unittest.TestCase):
         session = InnerShellSession.create(config, seed=42)
         
         session.encounter_other("Partner", depth="partner", initial_bond=0.3)
-        initial_bond = session._integration.incompleteness.love_circle.entities[0].bond_strength
-        
+        initial_bond = session.incompleteness.love_circle.entities[0].bond_strength
+
         for i in range(3):
             session.face_crisis(f"Crisis {i}", severity=0.6)
-        
-        final_bond = session._integration.incompleteness.love_circle.entities[0].bond_strength
+
+        final_bond = session.incompleteness.love_circle.entities[0].bond_strength
         self.assertGreaterEqual(final_bond, initial_bond)
 
     def test_love_precursor_enables_encounter(self):

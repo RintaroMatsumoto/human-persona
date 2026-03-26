@@ -1,7 +1,7 @@
 # 内殻研究ノート — AIの個性の源泉に関する仮説
 
 > 2026-03-25 深夜の対話から得られた研究仮説を記録する。
-> 現行アーキテクチャ（外殻: TimingController, StyleVariator, EmotionStateMachine, ContextReferencer, EscalationDetector）の射程外にある問題を扱う。
+> 現行アーキテクチャ（外殻: TimingController, StyleVariator, EmotionStateMachine, ContextReferencer）の射程外にある問題を扱う。
 
 ## 前提：外殻と内殻の区分
 
@@ -11,7 +11,6 @@
 - 文体の揺らぎ（StyleVariator）
 - 感情遷移（EmotionStateMachine）
 - 文脈参照（ContextReferencer）
-- エスカレーション（EscalationDetector）
 
 これらは「人間の最大公約数」を再現する。統計的に人間らしい振る舞いのパターン。
 
@@ -136,8 +135,7 @@ HumanPersonaBase（外殻 — 実装済み）
 ├── TimingController        — 応答遅延
 ├── StyleVariator           — 文体変動
 ├── EmotionStateMachine     — 感情遷移
-├── ContextReferencer       — 文脈参照
-└── EscalationDetector      — エスカレーション
+└── ContextReferencer       — 文脈参照
 
 InnerShell（内殻 — 研究段階）
 ├── FinitudeEngine          — 有限性: リソース制約・寿命・世代継承
