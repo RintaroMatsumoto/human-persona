@@ -99,7 +99,7 @@ human-persona/
 │   ├── research.md          # Literature review
 │   ├── design.md            # Architecture decisions
 │   ├── ethics.md            # Ethics & responsible use
-│   └── paper_draft.md       # Academic paper draft
+│   └── paper_draft_v3.md    # Academic paper draft
 ├── analysis/                # DPO dataset analysis
 │   ├── metrics.py           # Shared metrics module (7 metrics)
 │   ├── dpo_parameter_extraction.py
@@ -159,7 +159,7 @@ API responses are cached in `benchmarks/cache/` to minimize cost on re-runs.
 ## Research
 
 This project aims to publish findings on arXiv and contribute to the
-Anthropic Agent Skills ecosystem. See [docs/paper_draft.md](docs/paper_draft.md).
+Anthropic Agent Skills ecosystem. See [docs/paper_draft_v3.md](docs/paper_draft_v3.md).
 
 ## License
 
