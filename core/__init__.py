@@ -15,11 +15,11 @@ from __future__ import annotations
 
 from .base_persona import HumanPersonaBase, Message, PersonaResponse, Platform
 from .config_validator import ConfigValidator, ValidationResult
-from .context_referencer import ContextReferencer, ContextRef
-from .emotion_state_machine import EmotionStateMachine
+from .context_referencer import ContextReferencer, ContextRef, Turn
+from .emotion_state_machine import EmotionStateMachine, EmotionState
 from .inner_outer_bridge import InnerOuterBridge, ControllerSnapshot
 from .style_variator import StyleVariator, Register
-from .timing_controller import TimingController, TimingConfig
+from .timing_controller import TimingController, TimingConfig, TimingProfile, DEFAULT_PROFILES
 
 __all__ = [
     'HumanPersonaBase',
@@ -33,6 +33,10 @@ __all__ = [
     'EmotionStateMachine',
     'ContextReferencer',
     'ContextRef',
+    'Turn',
+    'EmotionState',
+    'TimingProfile',
+    'DEFAULT_PROFILES',
     'ConfigValidator',
     'ValidationResult',
     'InnerOuterBridge',

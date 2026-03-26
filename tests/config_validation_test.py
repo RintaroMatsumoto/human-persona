@@ -16,6 +16,7 @@ import json
 import os
 import tempfile
 import unittest
+from pathlib import Path
 from typing import Any, Dict
 
 from core.config_validator import ConfigValidator, ValidationResult
@@ -61,7 +62,7 @@ class TestConfigValidatorBasic(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up validator with actual schema."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
 
     def test_schema_loaded(self):
@@ -102,7 +103,7 @@ class TestRequiredFields(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
 
     def test_missing_meta(self):
@@ -155,7 +156,7 @@ class TestMetaField(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
 
     def test_meta_wrong_type(self):
@@ -289,7 +290,7 @@ class TestTimingField(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
 
     def test_timing_missing_platforms(self):
@@ -367,7 +368,7 @@ class TestStyleField(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
 
     def test_style_missing_variation_patterns(self):
@@ -428,7 +429,7 @@ class TestEmotionField(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
 
     def test_emotion_missing_initial_state(self):
@@ -484,16 +485,15 @@ class TestEmotionField(unittest.TestCase):
         self.assertFalse(any("emotion.states" in e for e in result.errors))
 
 
-class TestEscalationField(unittest.TestCase):
 class TestExistingConfigFiles(unittest.TestCase):
     """Test validation against actual config files in the repo."""
 
     @classmethod
     def setUpClass(cls):
         """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
-        cls.config_dir = "/sessions/funny-brave-gauss/mnt/human-persona/config"
+        cls.config_dir = str(Path(__file__).parent.parent / "config")
 
     def test_ja_config(self):
         """Test ja.json against schema."""
@@ -545,7 +545,7 @@ class TestFileValidation(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
 
     def test_validate_nonexistent_file(self):
@@ -590,7 +590,7 @@ class TestNumberRangeValidation(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
 
     def test_typo_rate_in_range(self):
@@ -634,7 +634,7 @@ class TestArrayMinItems(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
 
     def test_variation_pattern_min_items(self):
@@ -662,7 +662,7 @@ class TestOptionalFieldWarnings(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
+        schema_path = str(Path(__file__).parent.parent / "config" / "schema.json")
         cls.validator = ConfigValidator(schema_path)
 
     def test_missing_optional_fields_generate_warnings(self):

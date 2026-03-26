@@ -28,7 +28,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
-from .timing_controller import TimingController, Platform
+from .timing_controller import TimingController, TimingProfile, Platform
 from .style_variator import StyleVariator, StyleType
 from .emotion_state_machine import EmotionStateMachine
 from .context_referencer import ContextReferencer
@@ -106,8 +106,10 @@ class InnerOuterBridge:
             midpoint = (profile.min_seconds + profile.max_seconds) / 2.0
             half_range = (profile.max_seconds - profile.min_seconds) / 2.0
             new_half = half_range * factor
-            profile.min_seconds = max(0.0, midpoint - new_half)
-            profile.max_seconds = midpoint + new_half
+            self.timing.profiles[Platform.CHAT] = TimingProfile(
+                min_seconds=max(0.0, midpoint - new_half),
+                max_seconds=midpoint + new_half,
+            )
 
         if "context_depth" in modulation:
             self.context.max_history = max(
@@ -181,8 +183,9 @@ class InnerOuterBridge:
         self.emotion.exchange_count = snap.emotion_exchange_count
         self.emotion.emotion_inertia = snap.emotion_inertia
 
-        profile = self.timing.profiles[Platform.CHAT]
-        profile.min_seconds = snap.timing_min_seconds
-        profile.max_seconds = snap.timing_max_seconds
+        self.timing.profiles[Platform.CHAT] = TimingProfile(
+            min_seconds=snap.timing_min_seconds,
+            max_seconds=snap.timing_max_seconds,
+        )
 
         self.context.max_history = snap.context_max_history
