@@ -28,7 +28,7 @@
     }
   },
   "style": {
-    "uncertainty_rate": 0.10,
+    "uncertainty_rate": 0.1,
     "sentence_length_variance": {
       "min_ratio": 0.22,
       "max_ratio": 1.78
@@ -169,45 +169,5 @@
     "_cushion_note": "Reduced from 0.1578: source text has ~0.016 existing cushions. Formula: (0.1572-0.016)/(1-0.016)=0.1434",
     "filler_rate": 0.1652,
     "sentence_length_cv": 0.634
-  },
-  "escalation": {
-    "max_chat_turns": 5,
-    "escalation_rules": [
-      {
-        "reason": "negotiation",
-        "keywords": ["price", "rate", "discount", "budget", "quote", "invoice"],
-        "threshold": 1,
-        "priority": 5,
-        "description": "Price or rate negotiation"
-      },
-      {
-        "reason": "call_request",
-        "keywords": ["call me", "phone", "video call", "Zoom", "Teams", "hop on a call"],
-        "threshold": 1,
-        "priority": 4,
-        "description": "Request for voice/video call"
-      },
-      {
-        "reason": "complaint",
-        "keywords": ["complaint", "unacceptable", "terrible", "worst", "refund", "furious"],
-        "threshold": 1,
-        "priority": 5,
-        "description": "Complaint or strong dissatisfaction"
-      },
-      {
-        "reason": "meeting_request",
-        "keywords": ["meet in person", "face to face", "come to the office", "grab coffee"],
-        "threshold": 1,
-        "priority": 3,
-        "description": "In-person meeting request"
-      },
-      {
-        "reason": "identity_check",
-        "keywords": ["verify your identity", "ID check", "proof of identity", "KYC"],
-        "threshold": 1,
-        "priority": 5,
-        "description": "Identity verification request"
-      }
-    ]
   }
 }

@@ -111,7 +111,6 @@ class TestRequiredFields(unittest.TestCase):
             "timing": {},
             "style": {},
             "emotion": {},
-            "escalation": {},
         }
         result = self.validator.validate(config)
         self.assertFalse(result.valid)
@@ -123,7 +122,6 @@ class TestRequiredFields(unittest.TestCase):
             "meta": {},
             "style": {},
             "emotion": {},
-            "escalation": {},
         }
         result = self.validator.validate(config)
         self.assertFalse(result.valid)
@@ -135,7 +133,6 @@ class TestRequiredFields(unittest.TestCase):
             "meta": {},
             "timing": {},
             "emotion": {},
-            "escalation": {},
         }
         result = self.validator.validate(config)
         self.assertFalse(result.valid)
@@ -147,24 +144,10 @@ class TestRequiredFields(unittest.TestCase):
             "meta": {},
             "timing": {},
             "style": {},
-            "escalation": {},
         }
         result = self.validator.validate(config)
         self.assertFalse(result.valid)
         self.assertTrue(any("emotion" in e for e in result.errors))
-
-    def test_missing_escalation(self):
-        """Test missing required 'escalation' field."""
-        config = {
-            "meta": {},
-            "timing": {},
-            "style": {},
-            "emotion": {},
-        }
-        result = self.validator.validate(config)
-        self.assertFalse(result.valid)
-        self.assertTrue(any("escalation" in e for e in result.errors))
-
 
 class TestMetaField(unittest.TestCase):
     """Test meta field validation."""
@@ -182,7 +165,6 @@ class TestMetaField(unittest.TestCase):
             "timing": {},
             "style": {},
             "emotion": {},
-            "escalation": {},
         }
         result = self.validator.validate(config)
         self.assertFalse(result.valid)
@@ -198,7 +180,6 @@ class TestMetaField(unittest.TestCase):
             "timing": {},
             "style": {},
             "emotion": {},
-            "escalation": {},
         }
         result = self.validator.validate(config)
         self.assertFalse(result.valid)
@@ -215,7 +196,6 @@ class TestMetaField(unittest.TestCase):
             "timing": {"platforms": {}, "active_hours": {"start": "09:00", "end": "18:00"}},
             "style": {"variation_patterns": {}},
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         # Should not have persona_id in errors
@@ -232,7 +212,6 @@ class TestMetaField(unittest.TestCase):
             "timing": {"platforms": {}, "active_hours": {"start": "09:00", "end": "18:00"}},
             "style": {"variation_patterns": {}},
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertFalse(result.valid)
@@ -250,7 +229,6 @@ class TestMetaField(unittest.TestCase):
                 "timing": {"platforms": {}, "active_hours": {"start": "09:00", "end": "18:00"}},
                 "style": {"variation_patterns": {}},
                 "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-                "escalation": {"triggers": []},
             }
             result = self.validator.validate(config)
             self.assertFalse(any("language" in e for e in result.errors))
@@ -267,7 +245,6 @@ class TestMetaField(unittest.TestCase):
                 "timing": {"platforms": {}, "active_hours": {"start": "09:00", "end": "18:00"}},
                 "style": {"variation_patterns": {}},
                 "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-                "escalation": {"triggers": []},
             }
             result = self.validator.validate(config)
             self.assertTrue(any("language" in e and "pattern" in e for e in result.errors))
@@ -285,7 +262,6 @@ class TestMetaField(unittest.TestCase):
                 "timing": {"platforms": {}, "active_hours": {"start": "09:00", "end": "18:00"}},
                 "style": {"variation_patterns": {}},
                 "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-                "escalation": {"triggers": []},
             }
             result = self.validator.validate(config)
             self.assertFalse(any("context_culture" in e for e in result.errors))
@@ -301,7 +277,6 @@ class TestMetaField(unittest.TestCase):
             "timing": {"platforms": {}, "active_hours": {"start": "09:00", "end": "18:00"}},
             "style": {"variation_patterns": {}},
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertFalse(result.valid)
@@ -324,7 +299,6 @@ class TestTimingField(unittest.TestCase):
             "timing": {"active_hours": {"start": "09:00", "end": "18:00"}},
             "style": {"variation_patterns": {}},
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertTrue(any("timing.platforms" in e for e in result.errors))
@@ -336,7 +310,6 @@ class TestTimingField(unittest.TestCase):
             "timing": {"platforms": {}},
             "style": {"variation_patterns": {}},
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertTrue(any("timing.active_hours" in e for e in result.errors))
@@ -354,7 +327,6 @@ class TestTimingField(unittest.TestCase):
             },
             "style": {"variation_patterns": {}},
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertFalse(any("platforms" in e for e in result.errors))
@@ -370,7 +342,6 @@ class TestTimingField(unittest.TestCase):
                 },
                 "style": {"variation_patterns": {}},
                 "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-                "escalation": {"triggers": []},
             }
             result = self.validator.validate(config)
             self.assertFalse(any("start" in e or "end" in e for e in result.errors))
@@ -385,7 +356,6 @@ class TestTimingField(unittest.TestCase):
             },
             "style": {"variation_patterns": {}},
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertTrue(any("start" in e and "pattern" in e for e in result.errors))
@@ -410,7 +380,6 @@ class TestStyleField(unittest.TestCase):
             },
             "style": {},
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertTrue(any("variation_patterns" in e for e in result.errors))
@@ -430,7 +399,6 @@ class TestStyleField(unittest.TestCase):
                 }
             },
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertFalse(any("variation_patterns" in e for e in result.errors))
@@ -449,7 +417,6 @@ class TestStyleField(unittest.TestCase):
                     "emoji_policy": policy,
                 },
                 "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-                "escalation": {"triggers": []},
             }
             result = self.validator.validate(config)
             self.assertFalse(any("emoji_policy" in e for e in result.errors))
@@ -474,7 +441,6 @@ class TestEmotionField(unittest.TestCase):
             },
             "style": {"variation_patterns": {}},
             "emotion": {"states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertTrue(any("initial_state" in e for e in result.errors))
@@ -489,7 +455,6 @@ class TestEmotionField(unittest.TestCase):
             },
             "style": {"variation_patterns": {}},
             "emotion": {"initial_state": "polite", "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertTrue(any("emotion.states" in e for e in result.errors))
@@ -514,88 +479,12 @@ class TestEmotionField(unittest.TestCase):
                 },
                 "transitions": [],
             },
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertFalse(any("emotion.states" in e for e in result.errors))
 
 
 class TestEscalationField(unittest.TestCase):
-    """Test escalation field validation."""
-
-    @classmethod
-    def setUpClass(cls):
-        """Set up validator."""
-        schema_path = "/sessions/funny-brave-gauss/mnt/human-persona/config/schema.json"
-        cls.validator = ConfigValidator(schema_path)
-
-    def test_escalation_missing_triggers(self):
-        """Test escalation missing required triggers."""
-        config = {
-            "meta": {"persona_id": "test", "language": "ja", "context_culture": "high"},
-            "timing": {
-                "platforms": {"chat": {"min_delay": 30, "max_delay": 180}},
-                "active_hours": {"start": "09:00", "end": "18:00"},
-            },
-            "style": {"variation_patterns": {}},
-            "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {},
-        }
-        result = self.validator.validate(config)
-        self.assertTrue(any("triggers" in e for e in result.errors))
-
-    def test_escalation_trigger_valid(self):
-        """Test valid escalation trigger."""
-        config = {
-            "meta": {"persona_id": "test", "language": "ja", "context_culture": "high"},
-            "timing": {
-                "platforms": {"chat": {"min_delay": 30, "max_delay": 180}},
-                "active_hours": {"start": "09:00", "end": "18:00"},
-            },
-            "style": {"variation_patterns": {}},
-            "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {
-                "triggers": [
-                    {
-                        "type": "negotiation",
-                        "action": "notify_human",
-                        "keywords": ["price", "discount"],
-                    }
-                ]
-            },
-        }
-        result = self.validator.validate(config)
-        self.assertFalse(any("escalation" in e for e in result.errors))
-
-    def test_escalation_trigger_type_enum(self):
-        """Test escalation trigger type enum."""
-        for trigger_type in [
-            "negotiation",
-            "call_request",
-            "complaint",
-            "meeting_request",
-            "identity_verification",
-            "legal_mention",
-            "custom_keyword",
-        ]:
-            config = {
-                "meta": {"persona_id": "test", "language": "ja", "context_culture": "high"},
-                "timing": {
-                    "platforms": {"chat": {"min_delay": 30, "max_delay": 180}},
-                    "active_hours": {"start": "09:00", "end": "18:00"},
-                },
-                "style": {"variation_patterns": {}},
-                "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-                "escalation": {
-                    "triggers": [
-                        {"type": trigger_type, "action": "notify_human"}
-                    ]
-                },
-            }
-            result = self.validator.validate(config)
-            self.assertFalse(any("type" in e and "enum" in e for e in result.errors))
-
-
 class TestExistingConfigFiles(unittest.TestCase):
     """Test validation against actual config files in the repo."""
 
@@ -717,7 +606,6 @@ class TestNumberRangeValidation(unittest.TestCase):
                 "typo_rate": 0.005,
             },
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertFalse(any("typo_rate" in e for e in result.errors))
@@ -735,7 +623,6 @@ class TestNumberRangeValidation(unittest.TestCase):
                 "typo_rate": 0.15,  # Max is 0.1
             },
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertTrue(any("typo_rate" in e for e in result.errors))
@@ -764,7 +651,6 @@ class TestArrayMinItems(unittest.TestCase):
                 }
             },
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
         }
         result = self.validator.validate(config)
         self.assertTrue(any("minimum is 2" in e for e in result.errors))
@@ -789,7 +675,6 @@ class TestOptionalFieldWarnings(unittest.TestCase):
             },
             "style": {"variation_patterns": {}},
             "emotion": {"initial_state": "polite", "states": {}, "transitions": []},
-            "escalation": {"triggers": []},
             # Missing optional context_reference and ambiguity
         }
         result = self.validator.validate(config)

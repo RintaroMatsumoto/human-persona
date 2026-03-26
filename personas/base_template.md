@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This guide walks you through the process of creating a new persona configuration for the HumanPersonaBase framework. A persona configuration is a JSON file that defines how an AI should behave in text-based communication—including timing, style variation, emotional dynamics, context awareness, and escalation handling.
+This guide walks you through the process of creating a new persona configuration for the HumanPersonaBase framework. A persona configuration is a JSON file that defines how an AI should behave in text-based communication—including timing, style variation, emotional dynamics, and context awareness.
 
 The HumanPersonaBase framework is **language-agnostic** and **culture-aware**. This means you can create personas for any language and cultural context, provided you understand both the linguistic patterns and cultural communication norms of your target audience.
 
@@ -71,19 +71,7 @@ Humans' emotional tone shifts throughout a conversation. This section defines em
 
 **Example state progression**: `polite_distant` → `professional_warm` (after 5 turns) → `trusted_efficient` (after 15 turns)
 
-### 5. **escalation** - Handoff to Humans
-
-Define conditions that should trigger human intervention:
-
-- **triggers**: Array of escalation conditions, each with:
-  - `type`: Category like `"complaint"`, `"legal_mention"`, `"call_request"`, `"negotiation"`, etc.
-  - `threshold`: Number of occurrences before triggering (e.g., 3 complaints)
-  - `keywords`: Custom keywords that trigger escalation (for `"custom_keyword"` type)
-  - `action`: What to do (`"notify_human"`, `"pause_and_notify"`, `"transfer_immediately"`)
-  - `message_to_human`: Template message sent to the operator
-- **fallback_message**: What to tell the user while waiting for a human
-
-### 6. **context_reference** - Active Listening
+### 5. **context_reference** - Active Listening
 
 Configure how the persona references previous parts of the conversation:
 
@@ -152,7 +140,7 @@ If your audience spans cultures, use `"mixed"` and create a balanced profile:
 
 5. **Match timing to platform realities**: Email delays should be hours; live chat should be seconds. Mismatches feel jarring.
 
-6. **Use keyword-based escalation conservatively**: Every escalation keyword should genuinely warrant human involvement.
+
 
 7. **Document your choices**: Add comments explaining why you chose specific values (e.g., "High hedge rate due to risk-averse domain").
 
@@ -166,7 +154,7 @@ If your audience spans cultures, use `"mixed"` and create a balanced profile:
 
 4. **Inconsistent emoji usage**: Decide on emoji_policy upfront and stick with it. Sudden emoji use is jarring.
 
-5. **Ignoring escalation testing**: Escalation triggers should be thoroughly tested. A false positive (escalating a routine request) hurts user experience.
+
 
 6. **Hardcoding persona IDs**: Use snake_case and make IDs descriptive and portable (e.g., `ja_business_formal` instead of `japanese_assistant_v2`).
 
@@ -299,30 +287,6 @@ Below is a complete, commented skeleton you can copy and modify:
     "max_lookback_turns": 8
   },
 
-  "escalation": {
-    "triggers": [
-      {
-        "type": "complaint",
-        "threshold": 3,
-        "action": "notify_human",
-        "message_to_human": "Customer has complained 3+ times."
-      },
-      {
-        "type": "legal_mention",
-        "threshold": 1,
-        "action": "transfer_immediately",
-        "message_to_human": "Legal language detected. Transferring to compliance."
-      },
-      {
-        "type": "call_request",
-        "threshold": 1,
-        "action": "pause_and_notify",
-        "message_to_human": "Customer requested a phone call."
-      }
-    ],
-    "fallback_message": "Let me check on that and get back to you shortly."
-  },
-
   "ambiguity": {
     "hedge_probability": 0.06,
     "approximation_rules": {
@@ -365,10 +329,6 @@ Below is a complete, commented skeleton you can copy and modify:
    - Write 3–4 reference templates that feel natural in your language
    - Set `max_lookback_turns` to 5–8 depending on domain complexity
 
-8. **Define escalation triggers**:
-   - List keywords and conditions that truly warrant human involvement
-   - Assign appropriate actions (notify, pause, or transfer)
-   - Test with sample conversations to ensure no false positives
 
 9. **Validate against schema**: Run your configuration through the schema validator to ensure all required fields are present and types are correct.
 

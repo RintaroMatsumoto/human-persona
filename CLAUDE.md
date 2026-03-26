@@ -27,8 +27,7 @@ human-persona/
 │   ├── timing_controller.py
 │   ├── style_variator.py
 │   ├── emotion_state_machine.py
-│   ├── context_referencer.py
-│   └── escalation_detector.py
+│   └── context_referencer.py
 ├── config/schema.json       # 派生クラス用JSONスキーマ
 ├── docs/
 │   ├── research.md          # 文献レビュー
@@ -59,7 +58,7 @@ human-persona/
 
 ### humanize/pipeline.py の凍結
 - `humanize/pipeline.py` は凍結。現状のまま保存するが、プロダクション利用はしない。
-- 理由: core/ の既存アーキテクチャ（HumanPersonaBase, StyleVariator, EmotionStateMachine 等）を完全に無視して作られた。レジスター（formal/business/casual）の区別なし、日本語の敬語体系（尊敬語/謙譲語/丁寧語）へのアプローチなし。
+- 理由: core/ の既存アーキテクチャ（HumanPersonaBase, StyleVariator, EmotionStateMachine等）を完全に無視して作られた。レジスター（formal/business/casual）の区別なし、日本語の敬語体系（尊敬語/謙譲語/丁寧語）へのアプローチなし。
 - 教訓: **既存プロジェクトに新しいコードを書く前に、既存アーキテクチャを全部読むこと。**
 
 ### FreelanceAutoPilot との連携方針

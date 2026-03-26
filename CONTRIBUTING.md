@@ -26,12 +26,7 @@ cp config/schema.json config/your_persona.json
 `style.style_patterns` に言語固有のテンプレートを追加します。
 最低でも `confirmation`, `empathy`, `uncertain` の 3 パターンを定義してください。
 
-### 3. エスカレーションキーワードを定義する
-
-`escalation.escalation_rules` に言語固有のキーワードを追加します。
-クレーム・交渉・通話要求の検知に必要な単語を網羅してください。
-
-### 4. 配置する
+### 3. 配置する
 
 ```
 config/
@@ -40,7 +35,7 @@ personas/
   └── {用途名}_{言語コード}.md      # ペルソナの説明ドキュメント
 ```
 
-### 5. テストする
+### 4. テストする
 
 ```python
 from core.base_persona import HumanPersonaBase
@@ -101,8 +96,8 @@ assert response.emotion_state is not None
 
 - **docstring**: すべての public クラスとメソッドに docstring を付ける
   ```python
-  def evaluate(self, message: str) -> EscalationResult:
-      """メッセージを評価し、エスカレーション要否を判定する."""
+  def evaluate(self, message: str) -> Result:
+      """メッセージを評価する."""
   ```
 
 - **`from __future__ import annotations`**: すべてのモジュールの先頭に記述する
@@ -132,7 +127,6 @@ PR を作成する際、以下を確認してください:
 
 - [ ] `docs/ethics.md` の禁止用途に該当しない
 - [ ] 詐欺・なりすまし・世論操作を容易にする機能ではない
-- [ ] エスカレーション機能を弱める変更ではない
 - [ ] 感情的に脆弱な人への悪用リスクを検討した
 - [ ] プラットフォーム TOS 違反を助長しない
 

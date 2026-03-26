@@ -1,7 +1,7 @@
 ---
 title: "HumanPersonaBase: A Language-Agnostic Framework for Human-like AI Communication"
 published: false
-description: "An open-source Python framework that makes AI communication feel human — timing, emotion, style variation, and escalation detection as composable components."
+description: "An open-source Python framework that makes AI communication feel human — timing, emotion, style variation, and context referencing as composable components."
 tags: python, ai, opensource, nlp
 cover_image:
 ---
@@ -22,9 +22,9 @@ These are *paralinguistic features* — a separate layer from language understan
 
 ## The Solution: A Behavioral Base Class
 
-I built **[human-persona](https://github.com/RintaroMatsumoto/human-persona)**, an open-source Python framework that provides the behavioral layer for human-like AI communication. It doesn't generate text — it tells your LLM *when* to reply, *what tone* to use, *what emotional state* to convey, and *when to hand off to a human*.
+I built **[human-persona](https://github.com/RintaroMatsumoto/human-persona)**, an open-source Python framework that provides the behavioral layer for human-like AI communication. It doesn't generate text — it tells your LLM *when* to reply, *what tone* to use, and *what emotional state* to convey.
 
-The framework decomposes human-like behavior into 5 orthogonal components:
+The framework decomposes human-like behavior into 4 orthogonal components:
 
 ### 1. TimingController
 
@@ -60,10 +60,6 @@ Rotates between 5 patterns (confirmation, empathy, deferral, transition, uncerta
 ### 4. ContextReferencer
 
 Topic-based conversation tracking. Knows when to add "as you mentioned earlier..." style back-references.
-
-### 5. EscalationDetector
-
-Keyword-based human handoff with priority ranking. Automatically chains to the emotion state machine — a detected complaint shifts emotion to TENSE.
 
 ## The Design Principle: Culture-Agnostic Base Class
 

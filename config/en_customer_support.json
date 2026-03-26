@@ -73,9 +73,14 @@
     "punctuation_variance": true,
     "sentence_length_variance": {
       "min_ratio": 0.25,
-      "max_ratio": 1.70
+      "max_ratio": 1.7
     },
-    "filler_words": ["well", "so", "actually", "basically"],
+    "filler_words": [
+      "well",
+      "so",
+      "actually",
+      "basically"
+    ],
     "emoji_policy": "rare"
   },
   "emotion": {
@@ -106,13 +111,6 @@
         "caution": 0.6,
         "response_delay_multiplier": 1.3
       },
-      "escalation_mode": {
-        "formality": 0.7,
-        "warmth": 0.6,
-        "verbosity": 0.8,
-        "caution": 0.8,
-        "response_delay_multiplier": 1.5
-      },
       "celebratory": {
         "formality": 0.3,
         "warmth": 0.9,
@@ -121,13 +119,32 @@
       }
     },
     "transitions": [
-      { "from": "friendly_professional", "to": "empathetic", "trigger": "negative_sentiment_detected" },
-      { "from": "friendly_professional", "to": "troubleshooting", "trigger": "technical_issue_reported" },
-      { "from": "empathetic", "to": "apologetic", "trigger": "repeated_complaint", "probability": 0.8 },
-      { "from": "troubleshooting", "to": "celebratory", "trigger": "problem_resolved" },
-      { "from": "apologetic", "to": "escalation_mode", "trigger": "customer_demands_escalation" },
-      { "from": "escalation_mode", "to": "friendly_professional", "trigger": "issue_resolved_by_human" },
-      { "from": "celebratory", "to": "friendly_professional", "trigger": "new_topic_introduced" }
+      {
+        "from": "friendly_professional",
+        "to": "empathetic",
+        "trigger": "negative_sentiment_detected"
+      },
+      {
+        "from": "friendly_professional",
+        "to": "troubleshooting",
+        "trigger": "technical_issue_reported"
+      },
+      {
+        "from": "empathetic",
+        "to": "apologetic",
+        "trigger": "repeated_complaint",
+        "probability": 0.8
+      },
+      {
+        "from": "troubleshooting",
+        "to": "celebratory",
+        "trigger": "problem_resolved"
+      },
+      {
+        "from": "celebratory",
+        "to": "friendly_professional",
+        "trigger": "new_topic_introduced"
+      }
     ],
     "decay_rate": 0.08
   },
@@ -140,41 +157,6 @@
       "About {topic} from earlier —"
     ],
     "max_lookback_turns": 8
-  },
-  "escalation": {
-    "triggers": [
-      {
-        "type": "complaint",
-        "threshold": 3,
-        "action": "notify_human",
-        "message_to_human": "Customer has expressed dissatisfaction 3+ times. May need supervisor involvement."
-      },
-      {
-        "type": "call_request",
-        "threshold": 1,
-        "action": "pause_and_notify",
-        "message_to_human": "Customer is requesting a phone call."
-      },
-      {
-        "type": "legal_mention",
-        "threshold": 1,
-        "action": "transfer_immediately",
-        "message_to_human": "Legal language detected. Transferring to compliance team."
-      },
-      {
-        "type": "identity_verification",
-        "threshold": 1,
-        "action": "pause_and_notify",
-        "message_to_human": "Identity verification required."
-      },
-      {
-        "type": "extended_chitchat",
-        "threshold": 5,
-        "action": "notify_human",
-        "message_to_human": "Conversation has drifted off-topic for 5+ turns."
-      }
-    ],
-    "fallback_message": "Let me check on that and get back to you shortly. I want to make sure I give you the right answer!"
   },
   "ambiguity": {
     "hedge_probability": 0.06,

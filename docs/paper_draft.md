@@ -16,8 +16,8 @@ understanding to paralinguistic features: response timing, stylistic variation, 
 dynamics, and contextual referencing. However, existing persona implementations remain
 ad hoc, language-specific, and tightly coupled to particular platforms. We present
 HumanPersonaBase, a language-agnostic, open-source framework that decomposes human-like
-communication into five orthogonal components: timing control, style variation, emotion
-state management, context referencing, and escalation detection. The framework employs
+communication into four orthogonal components: timing control, style variation, emotion
+state management, and context referencing. The framework employs
 an object-oriented architecture where the base class provides culture-independent
 communication structures, while derived classes inject language-specific and
 culture-specific parameters through external configuration. We argue for the framework's
@@ -56,7 +56,7 @@ three limitations:
 
 1. **Language coupling**: Persona implementations are typically hardcoded for a
    specific language, making cross-cultural deployment expensive.
-2. **Platform coupling**: Timing, tone, and escalation behaviors are intertwined
+2. **Platform coupling**: Timing and tone behaviors are intertwined
    with specific messaging platforms.
 3. **Monolithic design**: All aspects of human-like behavior are implemented as a
    single, untestable unit.
@@ -65,7 +65,7 @@ three limitations:
 
 This paper makes the following contributions:
 
-- A **decomposition** of human-like communication into five orthogonal, independently
+- A **decomposition** of human-like communication into four orthogonal, independently
   testable components.
 - A **language-agnostic base class** (HumanPersonaBase) that provides
   culture-independent communication structures.
@@ -116,7 +116,7 @@ Justification for the state machine approach in professional contexts.
 
 ### 3.1 Architecture Overview
 
-HumanPersonaBase decomposes human-like communication into five orthogonal
+HumanPersonaBase decomposes human-like communication into four orthogonal
 components, each implemented as an independent Python dataclass:
 
 | Component | Responsibility |
@@ -125,7 +125,6 @@ components, each implemented as an independent Python dataclass:
 | StyleVariator | Stylistic variation to avoid uniformity |
 | EmotionStateMachine | Dynamic emotional state transitions |
 | ContextReferencer | Conversation history tracking and referencing |
-| EscalationDetector | Human handoff detection |
 
 ### 3.2 Timing Control
 
@@ -154,24 +153,13 @@ defined as `Callable[[EmotionStateMachine], bool]` functions, supporting both
 event-based triggers (e.g., problem detection) and threshold-based triggers
 (e.g., exchange count ≥ 3).
 
-Escalation events (complaint, negotiation) are automatically chained to
-the emotion state machine, ensuring consistent emotional responses to
-adversarial situations.
-
 ### 3.5 Context Referencing
 
 Topic-based conversation tracking enables natural back-references
 ("as you mentioned earlier..."). The system determines when context
 referencing is appropriate based on topic recurrence across turns.
 
-### 3.6 Escalation Detection
-
-Keyword-based rule evaluation with priority ranking detects situations
-requiring human intervention. Extended chitchat tracking provides an
-additional escalation signal. The escalation check is performed first
-in the processing pipeline, ensuring safety takes precedence.
-
-### 3.7 Configuration-Driven Derivation
+### 3.6 Configuration-Driven Derivation
 
 A JSON Schema defines the configuration surface for derived personas.
 Cultural parameters (context level, formality default, indirect expression rate)
@@ -191,7 +179,6 @@ of Jones and Bergen (2024).
 ### 4.2 Proposed Metrics
 
 - **Detection rate**: Percentage of interactions where the AI is identified as non-human
-- **Escalation accuracy**: Precision and recall of escalation detection
 - **Emotional consistency**: Human evaluation of emotional state appropriateness
 - **Style variation entropy**: Shannon entropy of style pattern distribution
 

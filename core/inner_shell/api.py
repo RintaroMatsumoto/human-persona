@@ -136,7 +136,6 @@ class ModulationParams:
     style_archetype: str = "neutral"
     emotion_intensity_multiplier: float = 1.0
     context_relevance_boost: float = 1.0
-    escalation_sensitivity_multiplier: float = 1.0
     consciousness_depth: float = 0.5
     metadata: Dict[str, Any] = field(default_factory=dict)
 
@@ -439,7 +438,6 @@ class _InnerShellSession(InnerShell):
             style_archetype=archetype,
             emotion_intensity_multiplier=0.8 + (0.4 * state.deepest_bond),
             context_relevance_boost=1.0 + (0.3 * state.wisdom_score),
-            escalation_sensitivity_multiplier=1.0 + (0.5 * state.acceptance_score),
             consciousness_depth=consciousness,
             metadata={
                 "life_phase": state.life_phase.value,

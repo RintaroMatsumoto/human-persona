@@ -4,7 +4,7 @@ InnerOuterBridge — Bridge between inner shell and outer shell modules.
 This module connects the inner shell (FinitudeEngine, IncompletenessModel,
 AutonomousQuestioner, MemoryHierarchy, MutualRecognition, SleepCycle) with
 the outer shell (TimingController, StyleVariator, EmotionStateMachine,
-ContextReferencer, EscalationDetector).
+ContextReferencer).
 
 The bridge accepts a modulation dict from inner shell state and applies
 adjustments to outer shell controllers, while preserving original values

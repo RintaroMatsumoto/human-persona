@@ -61,8 +61,6 @@ print(response.emotion_state)  # Current emotional state
 | `StyleVariator` | Introduces linguistic variation (filler words, punctuation, rare typos) |
 | `EmotionStateMachine` | Tracks emotional state across conversation lifetime |
 | `ContextReferencer` | Generates natural back-references to earlier topics |
-| `EscalationDetector` | Detects when to hand off to a human operator |
-
 ## Creating Your Own Persona
 
 1. **Write a config file** — Copy `config/en.json` and customize:
@@ -74,7 +72,7 @@ print(response.emotion_state)  # Current emotional state
 2. **Create a derived class** — See `personas/base_template.md`:
    - Implement `generate_raw_response()` (your response logic)
    - Implement `extract_topics()` (for back-referencing)
-   - Optionally override `on_escalation()` and `post_process()`
+   - Optionally override `post_process()`
 
 3. **Test** — Run `python -m pytest tests/ -v`
 
@@ -87,8 +85,7 @@ human-persona/
 │   ├── timing_controller.py
 │   ├── style_variator.py
 │   ├── emotion_state_machine.py
-│   ├── context_referencer.py
-│   └── escalation_detector.py
+│   └── context_referencer.py
 ├── config/                  # Persona configurations
 │   ├── schema.json          # JSON Schema definition
 │   ├── ja.json              # Japanese (high-context)
@@ -120,8 +117,6 @@ human-persona/
 ## Ethics & Responsible Use
 
 This project includes mandatory safeguards:
-- **Escalation detection** is required, not optional
-- **Human handoff** for negotiations, complaints, legal matters
 - **No identity claims** — personas use roles, not fake identities
 
 See [docs/ethics.md](docs/ethics.md) for full guidelines.

@@ -72,10 +72,14 @@
     "typo_rate": 0.002,
     "punctuation_variance": false,
     "sentence_length_variance": {
-      "min_ratio": 0.20,
-      "max_ratio": 1.50
+      "min_ratio": 0.2,
+      "max_ratio": 1.5
     },
-    "filler_words": ["えっと", "あの", "まあ"],
+    "filler_words": [
+      "えっと",
+      "あの",
+      "まあ"
+    ],
     "emoji_policy": "never"
   },
   "emotion": {
@@ -163,53 +167,6 @@
       "先般ご相談いただきました{topic}ですが"
     ],
     "max_lookback_turns": 8
-  },
-  "escalation": {
-    "triggers": [
-      {
-        "type": "rate_negotiation",
-        "threshold": 1,
-        "keywords": ["単価", "報酬", "値下げ", "値上げ", "予算", "見積もり", "コスト", "減額"],
-        "action": "pause_and_notify",
-        "message_to_human": "料金交渉が発生しました。フリーランス担当者にご確認をお願いいたします。"
-      },
-      {
-        "type": "call_request",
-        "threshold": 1,
-        "keywords": ["電話", "通話", "ビデオ通話", "Zoom", "Teams", "お電話"],
-        "action": "notify_human",
-        "message_to_human": "オンライン会議のリクエストがありました。"
-      },
-      {
-        "type": "complaint",
-        "threshold": 1,
-        "keywords": ["クレーム", "不満", "怒り", "ひどい", "返金", "訴訟", "弁護士"],
-        "action": "transfer_immediately",
-        "message_to_human": "強い不満・法的リスクを検知しました。即時対応をお願いします。"
-      },
-      {
-        "type": "meeting_request",
-        "threshold": 1,
-        "keywords": ["対面", "直接会って", "オフィスに", "ご訪問"],
-        "action": "notify_human",
-        "message_to_human": "対面ミーティングのリクエストがありました。"
-      },
-      {
-        "type": "legal_mention",
-        "threshold": 1,
-        "keywords": ["契約書", "NDA", "秘密保持", "損害賠償", "著作権", "知的財産"],
-        "action": "pause_and_notify",
-        "message_to_human": "法的事項への言及がありました。"
-      },
-      {
-        "type": "scope_creep",
-        "threshold": 2,
-        "keywords": ["また", "そして", "さらに", "追加", "ついでに"],
-        "action": "notify_human",
-        "message_to_human": "スコープ拡大の可能性があります。ご確認ください。"
-      }
-    ],
-    "fallback_message": "少々お時間をいただいてもよろしいでしょうか。確認のうえ改めてご連絡いたします。"
   },
   "ambiguity": {
     "hedge_probability": 0.05,

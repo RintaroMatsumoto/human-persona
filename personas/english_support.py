@@ -4,7 +4,6 @@ EnglishSupportPersona — Concrete implementation of HumanPersonaBase for Englis
 This module implements a customer support agent persona that exhibits:
   - Friendly and empathetic communication patterns
   - Quick response times optimized for live chat interactions
-  - Escalation detection for complaints and legal mentions
   - Solution-oriented emotional state transitions
   - Context-aware conversation flow with natural references to prior issues
 
@@ -17,9 +16,8 @@ License: MIT
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from ..core.base_persona import (
     HumanPersonaBase,
@@ -34,14 +32,12 @@ class EnglishSupportPersona(HumanPersonaBase):
     """English customer support agent extending HumanPersonaBase.
 
     This concrete implementation specializes in customer support scenarios,
-    providing empathetic responses with quick turnaround times and intelligent
-    escalation detection for complaints and legal matters.
+    providing empathetic responses with quick turnaround times.
 
     Key behaviors:
       - Greeting variations that feel warm and approachable
       - Empathy patterns triggered by negative sentiment
       - Solution-focused transitions that move conversations toward resolution
-      - Escalation detection for repeated complaints, legal language, and calls
       - Chat-optimized timing (5-45 seconds) with typing indicators
       - Rare emoji usage (professional but approachable)
 
@@ -67,7 +63,6 @@ class EnglishSupportPersona(HumanPersonaBase):
         self._support_stats = {
             "complaints_count": 0,
             "issues_resolved": 0,
-            "escalations": 0,
         }
 
     # -- Overridden Methods --------------------------------------------------
@@ -167,7 +162,7 @@ class EnglishSupportPersona(HumanPersonaBase):
         message_factor = self._config.get("timing", {}).get("message_length_factor", 0.8)
         length_adjustment = (message_length / 100) * message_factor
 
-        # Get emotion multiplier (apologetic and escalation modes are slower)
+        # Get emotion multiplier (apologetic mode is slower)
         emotion_state_config = (
             self._config.get("emotion", {})
             .get("states", {})
@@ -242,7 +237,7 @@ class EnglishSupportPersona(HumanPersonaBase):
         - Start friendly_professional
         - Shift to empathetic on negative signals
         - Transition to troubleshooting for technical issues
-        - Move to apologetic/escalation for repeated complaints
+        - Move to apologetic for repeated complaints
 
         Args:
             message: The current user message.
@@ -260,12 +255,7 @@ class EnglishSupportPersona(HumanPersonaBase):
             and any(kw in msg.content.lower() for kw in complaint_keywords)
         )
 
-        # Escalation-level complaints
-        if recent_complaints >= 2:
-            self._support_stats["escalations"] += 1
-            return "escalation_mode"
-
-        # Single complaint or repeated frustration
+        # Repeated complaints
         if recent_complaints >= 1:
             return "apologetic"
 
@@ -287,133 +277,28 @@ class EnglishSupportPersona(HumanPersonaBase):
         # Default friendly
         return self._config.get("emotion", {}).get("initial_state", "friendly_professional")
 
-    def should_escalate(self, message: str, context: list[Message]) -> tuple[bool, Optional[str], Optional[str]]:
-        """Determine if conversation should be escalated to a human agent.
-
-        Escalation is triggered by:
-        - Repeated complaints (3+ occurrences)
-        - Legal language or threats
-        - Explicit call requests
-        - Customer explicitly requesting human agent
-
-        Args:
-            message: Current user message.
-            context: Conversation history.
-
-        Returns:
-            Tuple of (should_escalate, escalation_type, message_to_human).
-        """
-        message_lower = message.lower()
-        escalation_config = self._config.get("escalation", {})
-
-        # Check each escalation trigger
-        for trigger in escalation_config.get("triggers", []):
-            trigger_type = trigger.get("type")
-            threshold = trigger.get("threshold", 1)
-            action = trigger.get("action")
-            human_msg = trigger.get("message_to_human", "")
-
-            # Complaint detection
-            if trigger_type == "complaint":
-                complaint_keywords = ["frustrated", "angry", "disappointed", "upset", "poor service"]
-                complaint_count = sum(
-                    1 for msg in context[-10:] if msg.role == "user"
-                    and any(kw in msg.content.lower() for kw in complaint_keywords)
-                )
-                if complaint_count >= threshold:
-                    return True, trigger_type, human_msg
-
-            # Legal mention detection
-            elif trigger_type == "legal_mention":
-                legal_keywords = ["sue", "lawsuit", "attorney", "legal", "lawyer", "court"]
-                if any(kw in message_lower for kw in legal_keywords):
-                    return True, trigger_type, human_msg
-
-            # Call request detection
-            elif trigger_type == "call_request":
-                call_keywords = ["call me", "phone call", "call back", "speak to someone", "talk to"]
-                if any(kw in message_lower for kw in call_keywords):
-                    return True, trigger_type, human_msg
-
-            # Direct escalation request
-            elif trigger_type == "customer_demands_escalation":
-                escalation_keywords = ["escalate", "supervisor", "manager", "human", "representative"]
-                if any(kw in message_lower for kw in escalation_keywords):
-                    return True, trigger_type, human_msg
-
-        return False, None, None
-
-    def on_escalation(self, escalation_type: Optional[str]) -> PersonaResponse:
-        """Generate a response when escalation is triggered.
-
-        This provides a graceful handoff message to the customer.
-
-        Args:
-            escalation_type: Type of escalation trigger (e.g., "legal_mention").
-
-        Returns:
-            PersonaResponse with escalation-appropriate messaging.
-        """
-        escalation_config = self._config.get("escalation", {})
-        fallback_message = escalation_config.get(
-            "fallback_message",
-            "Let me get someone who can better help you with this.",
-        )
-
-        # Custom messages per escalation type
-        escalation_messages = {
-            "legal_mention": "I see legal matters are involved. Let me connect you with our compliance team immediately.",
-            "call_request": "I understand you'd like to speak with someone directly. Let me get a specialist on the line for you.",
-            "complaint": "I want to make sure we resolve this properly. Let me escalate this to a supervisor who can fully address your concerns.",
-            "customer_demands_escalation": "Of course, I'll connect you with someone right away.",
-        }
-
-        content = escalation_messages.get(escalation_type, fallback_message)
-
-        return PersonaResponse(
-            content=content,
-            delay_seconds=3.0,  # Quick acknowledgment before handoff
-            emotion_state="escalation_mode",
-            escalation_triggered=True,
-            escalation_type=escalation_type,
-            escalation_action="transfer_immediately",
-        )
-
     def respond(self, user_message: str) -> PersonaResponse:
         """Generate a complete persona response to a user message.
 
         This orchestrates the full pipeline:
         1. Add user message to history
-        2. Detect escalation
-        3. Determine emotion state
-        4. Generate raw response
-        5. Apply style variation
-        6. Insert context references
-        7. Calculate timing
+        2. Determine emotion state
+        3. Generate raw response
+        4. Apply style variation
+        5. Insert context references
+        6. Calculate timing
 
         Args:
             user_message: The incoming customer message.
 
         Returns:
-            PersonaResponse with content, timing, emotion state, and escalation info.
+            PersonaResponse with content, timing, and emotion state.
         """
         # Add to conversation history
         self._conversation.append(
             Message(role="user", content=user_message)
         )
         self._turn_count += 1
-
-        # Check for escalation first
-        should_escalate, escalation_type, escalation_msg = self.should_escalate(
-            user_message,
-            self._conversation[:-1],  # Exclude the message we just added
-        )
-        if should_escalate:
-            response = self.on_escalation(escalation_type)
-            self._conversation.append(
-                Message(role="persona", content=response.content)
-            )
-            return response
 
         # Determine emotion state
         emotion_state = self.get_emotion_state(user_message, self._conversation[:-1])
@@ -446,7 +331,6 @@ class EnglishSupportPersona(HumanPersonaBase):
             content=stylized_response,
             delay_seconds=timing,
             emotion_state=emotion_state,
-            escalation_triggered=False,
         )
 
         # Add to conversation history
@@ -484,7 +368,6 @@ if __name__ == "__main__":
         "Hi, I'm having trouble logging into my account.",
         "I've tried resetting my password three times and it still doesn't work!",
         "This is ridiculous. I've been a customer for years and you're treating me terribly.",
-        "I want to speak to a supervisor about this.",
     ]
 
     for user_msg in test_messages:
@@ -496,14 +379,9 @@ if __name__ == "__main__":
         print(f"  Content: {response.content}")
         print(f"  Delay: {response.delay_seconds:.1f}s")
         print(f"  Emotion: {response.emotion_state}")
-        print(f"  Escalation Triggered: {response.escalation_triggered}")
-        if response.escalation_type:
-            print(f"  Escalation Type: {response.escalation_type}")
-
         print("-" * 70)
 
     print(f"\nConversation Summary:")
     print(f"  Total Turns: {persona.turn_count}")
     print(f"  Complaints Detected: {persona._support_stats['complaints_count']}")
     print(f"  Issues Resolved: {persona._support_stats['issues_resolved']}")
-    print(f"  Escalations: {persona._support_stats['escalations']}")

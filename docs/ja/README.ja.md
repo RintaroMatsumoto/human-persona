@@ -4,7 +4,7 @@
 
 ## 概要
 
-human-persona は、人間らしいコミュニケーションの「構造」を5つの独立したコンポーネントに分解し、再利用可能な基底クラス `HumanPersonaBase` として提供します。テキスト生成自体は行わず、LLM の応答を人間らしくするための**振る舞いレイヤー**（タイミング・文体・感情・文脈・安全性）を担います。
+human-persona は、人間らしいコミュニケーションの「構造」を4つの独立したコンポーネントに分解し、再利用可能な基底クラス `HumanPersonaBase` として提供します。テキスト生成自体は行わず、LLM の応答を人間らしくするための**振る舞いレイヤー**（タイミング・文体・感情・文脈）を担います。
 
 ## なぜこのフレームワークが必要か
 
@@ -34,12 +34,8 @@ HumanPersonaBase（基底クラス）
 │     FORMAL → WARMING → TENSE → RELIEVED → TRUSTED
 │     Callable ベースのトリガーで遷移条件を定義
 │
-├── ContextReferencer       — 前文脈参照
-│     トピックベースの会話追跡、参照すべきかの判定
-│
-└── EscalationDetector      — エスカレーション判定
-      キーワードマッチング + 雑談長期化検知
-      COMPLAINT/NEGOTIATION 時は EmotionStateMachine に連鎖発火
+└── ContextReferencer       — 前文脈参照
+      トピックベースの会話追跡、参照すべきかの判定
 ```
 
 ## クイックスタート
@@ -59,10 +55,6 @@ response = persona.process_message(
 print(f"遅延: {response.delay_seconds:.0f}秒")
 print(f"感情: {response.emotion_state.value}")   # formal → warming → ...
 print(f"文体: {response.style_used.value}")       # confirmation, empathy, ...
-
-# エスカレーション判定
-if response.escalation and response.escalation.should_escalate:
-    print(f"人間に引き継ぎ: {response.escalation.reason.value}")
 
 # LLM システムプロンプトに注入
 context = persona.get_system_prompt_context()
@@ -108,14 +100,6 @@ context = persona.get_system_prompt_context()
         "type": "uncertain",
         "templates": ["たぶん〇〇かと思います", "おそらく〇〇ではないでしょうか"]
       }
-    ]
-  },
-  "escalation": {
-    "max_chat_turns": 3,
-    "escalation_rules": [
-      { "reason": "negotiation", "keywords": ["単価", "報酬", "値下げ"], "priority": 1 },
-      { "reason": "call_request", "keywords": ["電話", "通話", "Zoom"], "priority": 2 },
-      { "reason": "complaint", "keywords": ["不満", "クレーム", "おかしい"], "priority": 1 }
     ]
   }
 }

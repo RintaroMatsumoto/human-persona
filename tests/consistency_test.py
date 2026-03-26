@@ -7,7 +7,6 @@
     - EmotionStateMachine: 感情遷移の正当性・状態履歴の一貫性
     - ContextReferencer: 会話履歴の追跡・トピック参照の正確性
     - StyleVariator: パターン選択の偏り抑制・履歴の反映
-    - EscalationDetector: キーワード検知・雑談追跡の整合性
     - モジュール間連携: 感情状態がトーン修飾に正しく反映されるか
 """
 
@@ -23,11 +22,6 @@ from core.emotion_state_machine import (
 )
 from core.context_referencer import ContextReferencer
 from core.style_variator import StyleType, StyleVariator
-from core.escalation_detector import (
-    EscalationDetector,
-    EscalationReason,
-    EscalationResult,
-)
 
 
 # ──────────────────────────────────────────────
@@ -351,85 +345,7 @@ class TestStyleVariatorConsistency(unittest.TestCase):
 
 
 # ──────────────────────────────────────────────
-# 4. EscalationDetector の一貫性テスト
-# ──────────────────────────────────────────────
-
-class TestEscalationDetectorConsistency(unittest.TestCase):
-    """エスカレーション検知の一貫性を検証する."""
-
-    def setUp(self) -> None:
-        config_path = Path(__file__).parent.parent / "config" / "ja.json"
-        with open(config_path) as f:
-            config = json.load(f)
-        self.detector = EscalationDetector.from_config(config["escalation"])
-
-    def test_no_escalation_for_normal_message(self) -> None:
-        """通常メッセージではエスカレーションされないこと."""
-        result = self.detector.evaluate("お疲れ様です。進捗報告です。")
-        self.assertFalse(result.should_escalate)
-
-    def test_negotiation_keywords_trigger(self) -> None:
-        """金額関連キーワードでエスカレーションされること."""
-        result = self.detector.evaluate("単価を少し下げてもらえますか？")
-        self.assertTrue(result.should_escalate)
-        self.assertEqual(result.reason, EscalationReason.NEGOTIATION)
-
-    def test_call_request_triggers(self) -> None:
-        """通話要求でエスカレーションされること."""
-        result = self.detector.evaluate("一度Zoomで打ち合わせしませんか？")
-        self.assertTrue(result.should_escalate)
-        self.assertEqual(result.reason, EscalationReason.CALL_REQUEST)
-
-    def test_complaint_triggers(self) -> None:
-        """クレームでエスカレーションされること."""
-        result = self.detector.evaluate("これは最悪の対応です。返金してください。")
-        self.assertTrue(result.should_escalate)
-        self.assertEqual(result.reason, EscalationReason.COMPLAINT)
-
-    def test_highest_priority_wins(self) -> None:
-        """複数ルールにマッチした場合、最高優先度が返ること."""
-        # "最悪"(complaint, priority=5) + "Zoom"(call_request, priority=4)
-        result = self.detector.evaluate("最悪です、Zoomで話しましょう")
-        self.assertTrue(result.should_escalate)
-        # priority が小さい方が高優先度
-        self.assertEqual(result.reason, EscalationReason.CALL_REQUEST)
-
-    def test_chat_tracking_escalation(self) -> None:
-        """雑談が max_chat_turns を超えるとエスカレーションされること."""
-        for i in range(self.detector.max_chat_turns - 1):
-            result = self.detector.track_chat(is_chitchat=True)
-            self.assertFalse(result.should_escalate)
-        result = self.detector.track_chat(is_chitchat=True)
-        self.assertTrue(result.should_escalate)
-        self.assertEqual(result.reason, EscalationReason.EXTENDED_CHAT)
-
-    def test_chat_counter_resets_on_non_chitchat(self) -> None:
-        """業務メッセージで雑談カウンターがリセットされること."""
-        self.detector.track_chat(is_chitchat=True)
-        self.detector.track_chat(is_chitchat=True)
-        self.detector.track_chat(is_chitchat=False)
-        self.assertEqual(self.detector.chat_count, 0)
-
-    def test_reset_chat_counter(self) -> None:
-        """reset_chat_counter() で明示的リセットできること."""
-        self.detector.track_chat(is_chitchat=True)
-        self.detector.track_chat(is_chitchat=True)
-        self.detector.reset_chat_counter()
-        self.assertEqual(self.detector.chat_count, 0)
-
-    def test_en_config_keywords(self) -> None:
-        """英語設定ファイルのキーワードが正しく検知されること."""
-        config_path = Path(__file__).parent.parent / "config" / "en.json"
-        with open(config_path) as f:
-            config = json.load(f)
-        detector = EscalationDetector.from_config(config["escalation"])
-        result = detector.evaluate("Can we discuss the price?")
-        self.assertTrue(result.should_escalate)
-        self.assertEqual(result.reason, EscalationReason.NEGOTIATION)
-
-
-# ──────────────────────────────────────────────
-# 5. モジュール間連携の一貫性テスト
+# 4. モジュール間連携の一貫性テスト
 # ──────────────────────────────────────────────
 
 class TestCrossModuleConsistency(unittest.TestCase):
@@ -455,35 +371,6 @@ class TestCrossModuleConsistency(unittest.TestCase):
         warming_mod = sm.get_tone_modifier()
         # 値が変化していること
         self.assertNotEqual(formal_mod, warming_mod)
-
-    def test_context_tracks_escalation_scenario(self) -> None:
-        """エスカレーション発生時の会話履歴が正しく追跡されること."""
-        cr = ContextReferencer()
-        detector = EscalationDetector.from_config({
-            "escalation_rules": [
-                {
-                    "reason": "negotiation",
-                    "keywords": ["budget", "price"],
-                    "threshold": 1,
-                    "priority": 5,
-                }
-            ],
-            "max_chat_turns": 3,
-        })
-
-        # 通常の会話
-        cr.add_turn("user", "Hi, I need a website built", ["project"])
-        result = detector.evaluate("Hi, I need a website built")
-        self.assertFalse(result.should_escalate)
-
-        # エスカレーション発生
-        cr.add_turn("user", "What's your budget for this?", ["budget"])
-        result = detector.evaluate("What's your budget for this?")
-        self.assertTrue(result.should_escalate)
-
-        # 履歴にはエスカレーション前後のメッセージが両方残っている
-        self.assertEqual(len(cr.history), 2)
-        self.assertIn("budget", cr.history[1].topics)
 
     def test_emotion_context_consistency_through_conversation(self) -> None:
         """会話進行に伴い、感情・文脈・スタイルが矛盾なく変化すること."""
@@ -520,12 +407,10 @@ class TestCrossModuleConsistency(unittest.TestCase):
 
         sm = EmotionStateMachine.from_config(config["emotion"])
         sv = StyleVariator.from_config(config["style"])
-        ed = EscalationDetector.from_config(config["escalation"])
 
         # 各モジュールが独立して正しく動作
         self.assertEqual(sm.current_state, EmotionState.FORMAL)
         self.assertEqual(len(sv.patterns), 5)
-        self.assertGreater(len(ed.rules), 0)
 
         # 連携: 感情遷移 → スタイル選択
         for _ in range(3):
