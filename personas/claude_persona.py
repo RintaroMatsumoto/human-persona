@@ -1,15 +1,19 @@
 """
-ClaudePersona — Inner Shell-aware persona backed by Claude API.
+LLM-backed Personas — Inner Shell-aware persona with Claude and OpenAI-compatible APIs.
 
-Connects the inner shell's 6-pillar state to Claude's system prompt,
+Connects the inner shell's 6-pillar state to LLM system prompts,
 enabling the metamorphose: internal state modulates language generation.
+
+Supported backends:
+    - ClaudePersona: Anthropic Claude API (ANTHROPIC_API_KEY)
+    - DeepSeekPersona: DeepSeek API via OpenAI-compatible endpoint (DEEPSEEK_API_KEY)
 
 Usage:
     from core.inner_shell.api import create_inner_shell
-    from personas.claude_persona import ClaudePersona
+    from personas.claude_persona import ClaudePersona, DeepSeekPersona
 
     inner = create_inner_shell({"total_lifespan": 50.0})
-    persona = ClaudePersona(
+    persona = DeepSeekPersona(
         persona_id="metamorphose_ja",
         config_path="config/ja.json",
         inner_shell=inner,
@@ -236,3 +240,119 @@ class ClaudePersona(HumanPersonaBase):
         )
 
         return response.content[0].text
+
+
+class DeepSeekPersona(HumanPersonaBase):
+    """Persona backed by DeepSeek API (OpenAI-compatible) with inner shell integration.
+
+    Uses the same inner shell → system prompt mechanism as ClaudePersona,
+    but calls the DeepSeek (or any OpenAI-compatible) endpoint.
+    """
+
+    def __init__(
+        self,
+        persona_id: str,
+        config: dict[str, Any] | None = None,
+        config_path: str | Path | None = None,
+        platform: Platform = Platform.GENERIC,
+        inner_shell: Any = None,
+        model: str = "deepseek-chat",
+        max_tokens: int = 500,
+        api_key: str | None = None,
+        base_url: str = "https://api.deepseek.com",
+    ) -> None:
+        """Initialize DeepSeekPersona.
+
+        Args:
+            persona_id: Unique persona identifier.
+            config: Configuration dict. If None, loaded from config_path.
+            config_path: Path to JSON config file.
+            platform: Communication platform.
+            inner_shell: Optional InnerShellSession for metamorphose.
+            model: Model name (default: deepseek-chat).
+            max_tokens: Maximum response tokens.
+            api_key: API key. Falls back to DEEPSEEK_API_KEY env var.
+            base_url: API base URL (default: https://api.deepseek.com).
+        """
+        if config is None and config_path is not None:
+            config = _load_config(config_path)
+        if config is None:
+            config = {"language": "ja", "culture_context": "neutral"}
+
+        super().__init__(
+            persona_id=persona_id,
+            config=config,
+            platform=platform,
+            inner_shell=inner_shell,
+        )
+
+        self.model = model
+        self.max_tokens = max_tokens
+        self.base_url = base_url
+
+        self._api_key = api_key or os.environ.get("DEEPSEEK_API_KEY")
+        self._client = None
+
+    @property
+    def client(self):
+        """Lazy-initialize OpenAI-compatible client."""
+        if self._client is None:
+            if not self._api_key:
+                raise EnvironmentError(
+                    "DEEPSEEK_API_KEY not set. "
+                    "Pass api_key= or set the environment variable."
+                )
+            from openai import OpenAI
+            self._client = OpenAI(api_key=self._api_key, base_url=self.base_url)
+        return self._client
+
+    def _build_system_prompt(self, emotion_bias: str | None) -> str:
+        """Build system prompt incorporating inner shell state."""
+        language = self.config.get("language", "ja")
+
+        if self.inner_shell is not None:
+            state = self.inner_shell.get_state()
+            inner_context = _build_inner_shell_context(state)
+        else:
+            inner_context = "（内殻未接続 — デフォルト状態）"
+
+        template = _SYSTEM_TEMPLATE if language == "ja" else _SYSTEM_TEMPLATE_EN
+
+        return template.format(
+            inner_context=inner_context,
+            language=language,
+            culture=self.config.get("culture_context", "neutral"),
+            emotion=emotion_bias or "neutral",
+        )
+
+    def _build_messages(self, user_message: str) -> list[dict[str, str]]:
+        """Convert conversation history to OpenAI messages format."""
+        messages: list[dict[str, str]] = []
+        for msg in self.conversation_history[-10:]:
+            role = "user" if msg.role == "user" else "assistant"
+            messages.append({"role": role, "content": msg.content})
+        return messages
+
+    def generate_raw_response(
+        self, user_message: str, emotion_bias: str | None
+    ) -> str:
+        """Generate response using DeepSeek API with inner shell context.
+
+        Args:
+            user_message: User input.
+            emotion_bias: Optional emotion to bias the response.
+
+        Returns:
+            Raw response text from DeepSeek.
+        """
+        system_prompt = self._build_system_prompt(emotion_bias)
+        messages = [{"role": "system", "content": system_prompt}]
+        messages.extend(self._build_messages(user_message))
+
+        response = self.client.chat.completions.create(
+            model=self.model,
+            max_tokens=self.max_tokens,
+            messages=messages,
+        )
+
+        return response.choices[0].message.content

@@ -20,6 +20,7 @@ from core.base_persona import Platform
 from core.inner_shell.api import create_inner_shell
 from personas.claude_persona import (
     ClaudePersona,
+    DeepSeekPersona,
     _build_inner_shell_context,
 )
 
@@ -247,6 +248,82 @@ class TestEdgeCases(unittest.TestCase):
             api_key="fake-key",
         )
         self.assertEqual(persona.language, "ja")
+
+
+# ---------------------------------------------------------------------------
+# 5. DeepSeekPersona tests
+# ---------------------------------------------------------------------------
+
+class TestDeepSeekPersona(unittest.TestCase):
+    """DeepSeekPersona の検証."""
+
+    def _make_mock_openai_response(self, text: str = "DeepSeek応答") -> MagicMock:
+        choice = MagicMock()
+        choice.message.content = text
+        response = MagicMock()
+        response.choices = [choice]
+        return response
+
+    def test_deepseek_without_inner_shell(self) -> None:
+        """inner_shell なしで動作すること."""
+        persona = DeepSeekPersona(
+            persona_id="ds_test",
+            config=_make_config(),
+            api_key="fake-key",
+        )
+        mock_client = MagicMock()
+        mock_client.chat.completions.create.return_value = self._make_mock_openai_response()
+        persona._client = mock_client
+
+        result = persona.generate_raw_response("テスト", "neutral")
+        self.assertEqual(result, "DeepSeek応答")
+
+    def test_deepseek_with_inner_shell(self) -> None:
+        """inner_shell ありでシステムプロンプトに内殻状態が含まれること."""
+        inner = create_inner_shell({"total_lifespan": 50.0})
+        persona = DeepSeekPersona(
+            persona_id="ds_inner",
+            config=_make_config(),
+            inner_shell=inner,
+            api_key="fake-key",
+        )
+        mock_client = MagicMock()
+        mock_client.chat.completions.create.return_value = self._make_mock_openai_response()
+        persona._client = mock_client
+
+        persona.process_message("はじめまして")
+        call_args = mock_client.chat.completions.create.call_args
+        messages = call_args.kwargs["messages"]
+        system_msg = messages[0]
+        self.assertEqual(system_msg["role"], "system")
+        self.assertIn("人生フェーズ", system_msg["content"])
+
+    def test_deepseek_no_key_raises(self) -> None:
+        """APIキーなしで例外."""
+        persona = DeepSeekPersona(
+            persona_id="ds_nokey",
+            config=_make_config(),
+        )
+        with self.assertRaises(EnvironmentError):
+            _ = persona.client
+
+    def test_deepseek_process_message_lifecycle(self) -> None:
+        """process_message で内殻変調 + API呼び出しが通ること."""
+        inner = create_inner_shell({"total_lifespan": 50.0})
+        inner.encounter_other("User", depth="partner", initial_bond=0.4)
+        persona = DeepSeekPersona(
+            persona_id="ds_lifecycle",
+            config=_make_config(),
+            inner_shell=inner,
+            api_key="fake-key",
+        )
+        mock_client = MagicMock()
+        mock_client.chat.completions.create.return_value = self._make_mock_openai_response("よろしくお願いします")
+        persona._client = mock_client
+
+        response = persona.process_message("お願いします")
+        self.assertIn("life_phase", response.metadata)
+        self.assertIn("hope_level", response.metadata)
 
 
 if __name__ == "__main__":
