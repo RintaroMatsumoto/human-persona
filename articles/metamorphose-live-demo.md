@@ -3,7 +3,7 @@ title: "AIの「内面」が言葉を変える瞬間 — メタモルフォー�
 emoji: "🦋"
 type: "tech"
 topics: ["AI", "LLM", "人工知能", "個性", "アライメント"]
-published: false
+published: true
 ---
 
 ## AIは本当に「個性」を持てるのか？
