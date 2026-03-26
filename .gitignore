@@ -10,11 +10,27 @@ CLAUDE.md
 
 # Temp scripts from debug sessions
 check_git.py
+check_237.py
+check_head.py
+check_lines.py
+check_problem_lines.py
+commit_experiment.py
+debug_alignment.py
 final_check.py
 final_report.py
+find_alignment.py
+find_docstring_end.py
+find_japanese_comments.py
+find_unicode.py
+fix_docstrings.py
+force_ascii.py
 git_commit.py
+remove_all_jp.py
+replace_docstring.py
 run_final_check.py
 run_verify.py
+sanitize_comments.py
+show_docstring.py
 simple_test.py
 verify_humanize.py
 SETUP_COMPLETE.md
