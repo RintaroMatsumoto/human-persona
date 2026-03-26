@@ -446,6 +446,25 @@ class _InnerShellSession(InnerShell):
             },
         )
 
+    def get_bridge_modulation(self) -> Dict[str, float]:
+        """Convert inner shell state to InnerOuterBridge-compatible dict.
+
+        Maps internal state to the modulation keys that InnerOuterBridge
+        expects: style_openness, emotion_amplitude, timing_exploration,
+        context_depth, emotion_volatility, style_mimicry, emotion_curiosity.
+        """
+        state = self.get_state()
+        exploration = self._compute_exploration(state.life_phase)
+        return {
+            "style_openness": 0.5 + (0.5 * state.acceptance_score),
+            "emotion_amplitude": 0.8 + (0.4 * state.deepest_bond),
+            "timing_exploration": exploration,
+            "context_depth": 1.0 + (0.3 * state.wisdom_score),
+            "emotion_volatility": 0.2 * state.hope_level,
+            "style_mimicry": 0.7 + (0.3 * state.acceptance_score),
+            "emotion_curiosity": min(1.0, state.unresolved_questions / 10.0),
+        }
+
     def experience(
         self,
         description: str,

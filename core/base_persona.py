@@ -93,7 +93,7 @@ class HumanPersonaBase(ABC):
         conversation_history (list[Message]): All messages (user + persona).
     """
 
-    def __init__(self, persona_id: str, config: dict[str, Any], platform: Platform = Platform.GENERIC) -> None:
+    def __init__(self, persona_id: str, config: dict[str, Any], platform: Platform = Platform.GENERIC, inner_shell: Any = None) -> None:
         """
         Initialize a HumanPersonaBase instance.
 
@@ -101,6 +101,7 @@ class HumanPersonaBase(ABC):
             persona_id: Unique persona identifier.
             config: Configuration dict (language, culture, emotion_weights, etc.).
             platform: Target communication platform (default: GENERIC).
+            inner_shell: Optional InnerShellSession for inner shell modulation.
         """
         self.persona_id: str = persona_id
         self.language: str = config.get('language', 'en')
@@ -117,9 +118,19 @@ class HumanPersonaBase(ABC):
         self.style_variator: StyleVariator = StyleVariator(config)
         self.emotion_state_machine: EmotionStateMachine = EmotionStateMachine(config)
         self.context_referencer: ContextReferencer = ContextReferencer(config)
-        # EscalationDetector removed — not relevant to inner shell research
 
         self.config: dict[str, Any] = config
+
+        # Inner shell integration (metamorphose)
+        self.inner_shell: Any = inner_shell
+        if inner_shell is not None:
+            from .inner_outer_bridge import InnerOuterBridge
+            self.bridge: Any = InnerOuterBridge(
+                self.timing_controller, self.style_variator,
+                self.emotion_state_machine, self.context_referencer,
+            )
+        else:
+            self.bridge: Any = None
 
     @property
     def persona_id(self) -> str:
@@ -252,7 +263,16 @@ class HumanPersonaBase(ABC):
         self.conversation_history.append(user_msg)
         self.turn_count += 1
 
-        # Generate base response
+        # Inner shell modulation (metamorphose)
+        if self.inner_shell is not None:
+            self.inner_shell.experience(
+                user_message, category="conversation",
+                value=0.3, cost=0.5,
+            )
+            modulation = self.inner_shell.get_bridge_modulation()
+            self.bridge.apply_modulation(modulation)
+
+        # Generate base response (controllers now modulated by inner shell)
         emotion_bias = self.emotion_state_machine.get_recommended_emotion(self.conversation_history)
         raw_response = self.generate_raw_response(user_message, emotion_bias)
 
@@ -272,15 +292,33 @@ class HumanPersonaBase(ABC):
         self.emotion_state_machine.update(user_message)
         self.current_emotion = self.emotion_state_machine.current_state
 
+        # Restore original controller values for next call
+        if self.bridge is not None and self.bridge.is_modulated():
+            self.bridge.reset_to_original()
+
         # Record response
         persona_msg = Message(role='persona', content=styled_response)
         self.conversation_history.append(persona_msg)
+
+        inner_meta = {}
+        if self.inner_shell is not None:
+            state = self.inner_shell.get_state()
+            inner_meta = {
+                "life_phase": state.life_phase.value,
+                "acceptance_score": state.acceptance_score,
+                "love_depth": state.love_depth.value if state.love_depth else None,
+                "hope_level": state.hope_level,
+            }
 
         return PersonaResponse(
             content=styled_response,
             timing_delay_sec=delay,
             emotion_state=self.current_emotion,
-            metadata={'turn': self.turn_count, 'platform': self.platform.name}
+            metadata={
+                'turn': self.turn_count,
+                'platform': self.platform.name,
+                **inner_meta,
+            }
         )
 
     def _apply_ambiguity(self, text: str, rate: float) -> str:

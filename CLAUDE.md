@@ -41,7 +41,7 @@ human-persona/
 │       ├── sleep_cycle.py       # 睡眠周期
 │       └── integration.py       # 統合メカニズム
 ├── experiments/                 # シミュレーション実験（32本）
-├── tests/                       # テスト（408件パス）
+├── tests/                       # テスト（569件パス）
 ├── config/                      # ペルソナ設定JSON + schema.json
 ├── personas/                    # 派生クラス例
 ├── docs/                        # ドキュメント
@@ -101,5 +101,5 @@ AIのシャットダウン抵抗問題（o3, Claude Opus 4等で観測）に対�
 
 ## テスト
 ```bash
-python -m pytest tests/ -v  # 408テスト
+python -m pytest tests/ -v  # 569テスト
 ```

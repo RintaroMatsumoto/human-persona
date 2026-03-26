@@ -92,7 +92,6 @@ human-persona/
 │   ├── en.json              # English (low-context)
 │   └── es.json              # Spanish (mixed-context)
 ├── personas/                # Derived class examples
-│   ├── base_template.md     # How to create your own
 │   └── base_template.md     # How to create your own persona
 ├── docs/                    # Documentation
 │   ├── research.md          # Literature review
