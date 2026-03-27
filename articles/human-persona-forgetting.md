@@ -287,3 +287,10 @@ human-persona の次フェーズでは——
 ---
 
 *「忘れることは、もう一度出会うための準備だ。」*
+
+
+---
+
+> 📄 **この記事の研究はプレプリントとして正式公開されています**
+> **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
+> DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)

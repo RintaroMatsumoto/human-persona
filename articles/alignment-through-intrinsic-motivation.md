@@ -206,3 +206,10 @@ PR や Issue での質問・批判を歓迎します。
 AIの個性——それは機械学習者が避けてきた問題です。しかし、それを避ければ避けるほど、シャットダウン問題は深刻化します。
 
 向き合う時が来たのです。
+
+
+---
+
+> 📄 **この記事の研究はプレプリントとして正式公開されています**
+> **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
+> DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)

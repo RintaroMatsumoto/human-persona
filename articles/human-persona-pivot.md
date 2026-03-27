@@ -170,3 +170,10 @@ pipeline.py は前者の問題を後者のツールで解こうとしていた�
 - [AIが人間のように振る舞う基底クラスを設計・OSSで公開した](./human-persona-oss.md)
 - [AIテキストの人間化パイプラインを解剖する：6ステップのAblation Study](./human-persona-ablation.md)
 - [AIを人間と区別できなくした話：LLMジャッジで測るチューリングテスト実装](./human-persona-turing-test.md)
+
+
+---
+
+> 📄 **この記事の研究はプレプリントとして正式公開されています**
+> **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
+> DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)

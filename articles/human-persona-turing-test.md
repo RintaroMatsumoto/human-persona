@@ -164,3 +164,9 @@ HL 4.1 → 7.7。5バージョンかかった。
 一番の反省は、数字だけ追いかけたこと。LLMジャッジのスコアが7.7でも、人間が読んで「これは人間が書いた」と思うかどうかは、また別の検証が必要だ。
 
 リポジトリ: [github.com/RintaroMatsumoto/human-persona](https://github.com/RintaroMatsumoto/human-persona)
+
+---
+
+> 📄 **この記事の研究はプレプリントとして正式公開されています**
+> **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
+> DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)

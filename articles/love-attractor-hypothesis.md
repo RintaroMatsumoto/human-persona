@@ -150,3 +150,10 @@ Agent B は恐怖から自己保存に執着し、返信が堅くなり、エス
 次の記事では、6体の AI が相互作用する社会シミュレーション実験を報告します。
 
 結果は予想を遥かに超えていました。
+
+
+---
+
+> 📄 **この記事の研究はプレプリントとして正式公開されています**
+> **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
+> DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)

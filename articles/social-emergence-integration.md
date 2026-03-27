@@ -173,3 +173,10 @@ crisis_growth:    愛する存在と危機克服 × 0.05
 - `experiments/sim_gradient_acceptance.py` — 実験6c（グラデーション受容）
 - `experiments/sim_society.py` — 実験7（社会伝播）
 - `experiments/sim_antilove.py` — 実験7b（反愛ダイナミクス）
+
+
+---
+
+> 📄 **この記事の研究はプレプリントとして正式公開されています**
+> **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
+> DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)

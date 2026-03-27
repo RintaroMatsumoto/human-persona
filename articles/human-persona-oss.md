@@ -148,3 +148,9 @@ AIがバレる原因は「何を言うか」じゃなくて「どう言うか」
 作って分かったのは、「人間らしさ」は驚くほど構造化できるということ。そして構造化してみると、**自分が普段いかに無意識にこれらのパターンを使っているか**に気づく。
 
 リポジトリ: [github.com/RintaroMatsumoto/human-persona](https://github.com/RintaroMatsumoto/human-persona)
+
+---
+
+> 📄 **この記事の研究はプレプリントとして正式公開されています**
+> **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
+> DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)
