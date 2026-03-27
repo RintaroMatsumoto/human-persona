@@ -2,8 +2,11 @@
 """Create GitHub Issue: MemoryHierarchy: Forgetting as Feature"""
 import urllib.request
 import json
+import os
 
-token = "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"
+token = os.environ.get("GITHUB_TOKEN", "")
+if not token:
+    raise ValueError("Set GITHUB_TOKEN environment variable")
 url = "https://api.github.com/repos/RintaroMatsumoto/human-persona/issues"
 
 body = """## Overview
