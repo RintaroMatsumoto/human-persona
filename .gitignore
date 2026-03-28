@@ -8,3 +8,11 @@ benchmarks/cache/
 data/bccwj/
 human_persona.egg-info/
 CLAUDE.md
+
+# 論文原稿（DOI取得前の漏洩防止）
+docs/paper_draft_*.md
+docs/paper_v*.pdf
+docs/arxiv/
+メタモルフォーゼ２/paper_draft_*.md
+メタモルフォーゼ２/HumanPersonaBase_preprint.pdf
+*.preprint.pdf
