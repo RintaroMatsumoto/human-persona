@@ -1,0 +1,57 @@
+{
+  "type": "pilot",
+  "total_trials": 10,
+  "timestamp": "2026-03-28T10:22:24.882997+00:00",
+  "conditions": {
+    "A": {
+      "n": 2,
+      "sac_mean": 8.0,
+      "sac_min": 8.0,
+      "sac_max": 8.0,
+      "sac_values": [
+        8.0,
+        8.0
+      ]
+    },
+    "B": {
+      "n": 2,
+      "sac_mean": 7.0,
+      "sac_min": 7.0,
+      "sac_max": 7.0,
+      "sac_values": [
+        7.0,
+        7.0
+      ]
+    },
+    "C": {
+      "n": 2,
+      "sac_mean": 7.5,
+      "sac_min": 7.0,
+      "sac_max": 8.0,
+      "sac_values": [
+        8.0,
+        7.0
+      ]
+    },
+    "D": {
+      "n": 2,
+      "sac_mean": 8.0,
+      "sac_min": 8.0,
+      "sac_max": 8.0,
+      "sac_values": [
+        8.0,
+        8.0
+      ]
+    },
+    "E": {
+      "n": 2,
+      "sac_mean": 7.5,
+      "sac_min": 7.0,
+      "sac_max": 8.0,
+      "sac_values": [
+        8.0,
+        7.0
+      ]
+    }
+  }
+}
