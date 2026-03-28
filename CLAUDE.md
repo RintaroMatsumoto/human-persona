@@ -16,9 +16,61 @@ AIが人間のように振る舞うための言語・文化非依存フレーム
 - SSH鍵: ~/.ssh/id_ed25519 (push前に ssh-agent + ssh-add が必要)
 
 ## 作業ルール
+
+
+## データ信頼性ルール（最重要・必読）
+
+> **2026-03-28 教訓**: AI共同執筆の過程で、論文に架空のデータが混入した。
+> 実データ（0.945, 0.864）に架空の指標（0.912）が追加され、
+> 実在するクラス名から偽のablationバリアントが生成された。
+> 以下のルールはこの再発を防ぐために制定された。
+
+### 絶対に守ること
+
+1. **数値を創作しない**: 論文・ドキュメントに書く数値は、必ず実行結果から取得する。
+   「もっともらしい数値」を推測・補完・生成してはならない。
+2. **実行していない実験の結果を書かない**: コードが存在しても、実行ログがなければ
+   「結果」として記述してはならない。
+3. **先行研究を自前実験として記述しない**: 他者の研究結果を引用する場合は、
+   必ず出典を明記し、自前実験として再構成しない。
+4. **不確かな場合は「未検証」と書く**: 検証できていないデータには
+   必ず「未検証」「要確認」等のフラグを付ける。確証がないものを断定しない。
+
+### 実験データの記録ルール
+
+- 全ての実験は `experiments/runner.py` 経由で実行する
+- 結果は `experiments/registry.sqlite` に自動記録される
+- 論文で数値を引用する際は `<!-- run:RUN_ID -->` コメントで紐付ける
+- pre-commit hook が裏付けのない数値のコミットをブロックする
+
+### 評価軸
+
+このプロジェクトの評価軸は**正確さ（correctness）**である。
+「実験が成功したように見せる」ことではなく、「事実を正確に記述する」ことが目的。
+実験が失敗しても、再現性のある失敗は価値がある。
+期待と異なる結果も、正直に報告すれば科学的貢献になる。
 - git push 前に必ず eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519 を実行
 - FreelanceAutoPilot / フリーランス関連の記述は一切禁止（完全削除済み）
 - コミットメッセージに Co-Authored-By を付与
+- 大量タスクを1セッションに詰め込まない（コンテキスト溢れの原因になる）
+- 1セッション＝1テーマが理想
+- Windows cmdシェルで日本語を含むgit commitメッセージはバッチファイル経由で実行すること
+- 論文ドラフトは.gitignoreのパターンに該当するパスに必ず配置すること
+
+## 公開チャネル
+- **Zenodo**: DOI 10.5281/zenodo.19266072（プレプリントv1、CC BY 4.0）
+- **Zenn**: @fumofumo3 — articles/ディレクトリからGitHub連携で自動デプロイ（main push時）
+  - 公開済み8本 + rate-limit待ち3本
+  - rate-limitは期間経過で自然解除。1日1-2本ペースでデプロイ
+- **Hugging Face**: RintaroMatsumoto/human-persona-paper — DOI追記済み
+
+## 次フェーズ（Issue登録済み）
+- #46: Inner Shell注入によるシャットダウン受容率の実証実験 (DeepSeek API, N=100)
+- #47: 個性AIコミュニティの仮想空間シミュレーション (Three.js/Unity)
+- #48: ゲームNPCへのInner Shell Architecture応用 (Unity C#)
+- #51: 寿命付きAIコンパニオン — AIの「死」をプロダクトにする
+- #52: 眠りが生む物語 — Sleep Cycleによる創作AI
+- #53: Love Attractor逆適用 — 人間同士の関係性診断ツール
 
 ## ディレクトリ構成
 ```
@@ -45,19 +97,19 @@ human-persona/
 ├── config/                      # ペルソナ設定JSON + schema.json
 ├── personas/                    # 派生クラス例
 ├── docs/                        # ドキュメント
-│   ├── paper_draft_v3.md        # 論文ドラフト（最新版）
+│   ├── paper_draft_v3.md        # 論文ドラフト（最新版・git追跡除外済み）
 │   ├── manifesto.md             # Metamorphose マニフェスト
 │   ├── research_inner_shell.md  # 内殻研究ノート
 │   ├── design.md, ethics.md, research.md
 │   ├── ja/README.ja.md
 │   └── articles/                # 投稿用記事草稿
-├── articles/                    # Zenn記事（npx zenn用）
+├── articles/                    # Zenn記事（npx zenn用、11本）
 ├── analysis/                    # DPO分析・メトリクス
 ├── benchmarks/                  # ベンチマーク
 ├── .github/ISSUE_TEMPLATE/
 ├── pyproject.toml               # パッケージ設定
 ├── package.json                 # zenn-cli
-└── README.md, CONTRIBUTING.md, SKILL.md
+└── README.md, CONTRIBUTING.md
 ```
 
 ## 内殻研究（2026-03-25 開始）
@@ -83,17 +135,15 @@ state = inner.get_state()        # InnerShellState（全柱の集約状態）
 modulation = inner.get_modulation_params()  # 外殻変調パラメータ
 ```
 
-### GitHub Issues
-- #17: FinitudeEngine
-- #18: IncompletenessModel
-- #19: AutonomousQuestioner
-- #20: 統合メカニズム
-- #37: MemoryHierarchy
-
 ### アライメント問題との接続
 AIのシャットダウン抵抗問題（o3, Claude Opus 4等で観測）に対し、
 外的制御ではなく「内発的動機付けによるアライメント」の可能性を探る。
 「自分より大切な存在」を持つことが、死の恐怖→受容への転換を生む仮説。
+
+## セキュリティ注意事項
+- 論文ファイル（docs/paper_draft_*.md, docs/paper_v*.pdf, docs/arxiv/）は.gitignoreで追跡除外済み
+- Git履歴には過去の論文コンテンツが残っている（完全削除にはBFG Repo-Cleaner要）
+- GitHub PATのrevokeが保留中
 
 ## 削除済みモジュール
 - `escalation_detector.py`: 内殻研究と無関係のため削除（2026-03-26）
