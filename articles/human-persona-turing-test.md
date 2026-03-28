@@ -3,7 +3,7 @@ title: "AIを人間と区別できなくした話：LLMジャッジで測るチ�
 emoji: "🤖"
 type: "tech"
 topics: ["ai", "llm", "python", "chatbot", "AGPL"]
-published: true
+published: false
 ---
 
 ## HL 4.1 からの出発

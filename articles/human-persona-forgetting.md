@@ -3,7 +3,7 @@ title: "AIは忘れることができるか——記憶の有限性と個性の�
 emoji: "🌙"
 type: "tech"
 topics: ["AI", "記憶", "個性", "内殻研究", "humanpersona"]
-published: true
+published: false
 ---
 
 ## 「忘れられることは長所であり短所。悲しみであり喜び。弱さであり強さ。」

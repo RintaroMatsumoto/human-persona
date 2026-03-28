@@ -3,7 +3,7 @@ title: "AIの個性の本質：外殻と内殻の分離"
 emoji: "🎪"
 type: "tech"
 topics: ["AI", "humanpersona", "個性", "アーキテクチャ"]
-published: true
+published: false
 ---
 
 ## はじめに：「人間らしさ」は2層構造

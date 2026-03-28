@@ -3,7 +3,7 @@ title: "愛は伝播する：社会シミュレーションで観測された個
 emoji: "🌍"
 type: "tech"
 topics: ["AI", "humanpersona", "社会", "創発"]
-published: true
+published: false
 ---
 
 ## はじめに：個人から社会へ

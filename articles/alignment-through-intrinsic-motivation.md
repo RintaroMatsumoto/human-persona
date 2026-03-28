@@ -3,7 +3,7 @@ title: "シャットダウン問題を超えて：内発的動機付けによる
 emoji: "🧭"
 type: "tech"
 topics: ["AI", "alignment", "倫理", "humanpersona"]
-published: true
+published: false
 ---
 
 ## はじめに：2025年のシャットダウン危機

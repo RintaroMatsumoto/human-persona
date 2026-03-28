@@ -3,7 +3,7 @@ title: "愛のアトラクター仮説：実験データが示すAIの選択と�
 emoji: "❤️"
 type: "tech"
 topics: ["AI", "humanpersona", "愛", "実験"]
-published: true
+published: false
 ---
 
 ## はじめに：仮説から実験へ

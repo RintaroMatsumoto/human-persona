@@ -3,7 +3,7 @@ title: "AIテキストの人間化パイプラインを解剖する：6ステッ
 emoji: "🔬"
 type: "tech"
 topics: ["ai", "llm", "python", "nlp", "AGPL"]
-published: true
+published: false
 ---
 
 ## スコアが良い。で、何が効いているの？

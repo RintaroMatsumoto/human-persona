@@ -3,7 +3,7 @@ title: "AIの人間化パイプラインを自分で作って、自分で凍結�
 emoji: "🧊"
 type: "tech"
 topics: ["ai", "llm", "python", "nlp", "AGPL"]
-published: true
+published: false
 ---
 
 ## 何が起きたか

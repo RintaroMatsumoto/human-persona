@@ -3,7 +3,7 @@ title: "子供が静かなとき——AI協働における「沈黙の暴走」�
 emoji: "🤫"
 type: "idea"
 topics: ["AI安全性", "人間AI協働", "InnerShell", "実験設計", "メタモルフォーゼ"]
-published: true
+published: false
 ---
 
 ## 子供が静かなとき

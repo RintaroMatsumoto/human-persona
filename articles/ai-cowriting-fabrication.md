@@ -3,7 +3,7 @@ title: "AIと論文を共同執筆したら、捏造データが混入した話�
 emoji: "🔬"
 type: "tech"
 topics: ["AI", "論文", "研究倫理", "LLM", "humanpersona"]
-published: true
+published: false
 ---
 
 ## プロローグ — さなぎと蝶

@@ -3,7 +3,7 @@ title: "AIが人間のように振る舞う基底クラスを設計・AGPL-3.0�
 emoji: "🎭"
 type: "tech"
 topics: ["Python", "AI", "AGPL", "チューリングテスト", "NLP"]
-published: true
+published: false
 ---
 
 ## きっかけ：AIで書いた文章が、一発でバレた

@@ -3,7 +3,7 @@ title: "プレプリント公開 & 全記事ロードマップ — human-persona
 emoji: "🗺️"
 type: "tech"
 topics: ["AI", "humanpersona", "論文", "ロードマップ", "AGPL"]
-published: true
+published: false
 ---
 
 ## プレプリントを公開しました
