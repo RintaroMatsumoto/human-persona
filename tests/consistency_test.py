@@ -152,7 +152,7 @@ class TestEmotionFromConfig(unittest.TestCase):
     def test_from_ja_config(self) -> None:
         """日本語設定ファイルから正しく構築されること."""
         config_path = Path(__file__).parent.parent / "config" / "ja.json"
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             config = json.load(f)
         sm = EmotionStateMachine.from_config(config["emotion"])
         self.assertEqual(sm.current_state, EmotionState.FORMAL)
@@ -164,7 +164,7 @@ class TestEmotionFromConfig(unittest.TestCase):
     def test_from_en_config(self) -> None:
         """英語設定ファイルから正しく構築されること."""
         config_path = Path(__file__).parent.parent / "config" / "en.json"
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             config = json.load(f)
         sm = EmotionStateMachine.from_config(config["emotion"])
         self.assertEqual(sm.current_state, EmotionState.FORMAL)
@@ -279,7 +279,7 @@ class TestStyleVariatorConsistency(unittest.TestCase):
 
     def setUp(self) -> None:
         config_path = Path(__file__).parent.parent / "config" / "ja.json"
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             config = json.load(f)
         self.sv = StyleVariator.from_config(config["style"])
 
@@ -402,7 +402,7 @@ class TestCrossModuleConsistency(unittest.TestCase):
     def test_config_cross_loading(self) -> None:
         """同一configから全モジュールが矛盾なく構築できること."""
         config_path = Path(__file__).parent.parent / "config" / "ja.json"
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             config = json.load(f)
 
         sm = EmotionStateMachine.from_config(config["emotion"])

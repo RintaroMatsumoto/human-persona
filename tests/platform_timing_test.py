@@ -238,7 +238,7 @@ class TestTimingFromConfig(unittest.TestCase):
     def test_from_ja_config(self) -> None:
         """日本語設定から正しくタイミングが構築されること."""
         config_path = Path(__file__).parent.parent / "config" / "ja.json"
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             config = json.load(f)
         tc = TimingController.from_config(config["timing"])
 
@@ -265,7 +265,7 @@ class TestTimingFromConfig(unittest.TestCase):
     def test_from_en_config(self) -> None:
         """英語設定から正しくタイミングが構築されること."""
         config_path = Path(__file__).parent.parent / "config" / "en.json"
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             config = json.load(f)
         tc = TimingController.from_config(config["timing"])
 
@@ -282,9 +282,9 @@ class TestTimingFromConfig(unittest.TestCase):
         """英語 CHAT の遅延が日本語 CHAT より短いこと（文化差の設計確認）."""
         ja_path = Path(__file__).parent.parent / "config" / "ja.json"
         en_path = Path(__file__).parent.parent / "config" / "en.json"
-        with open(ja_path) as f:
+        with open(ja_path, encoding="utf-8") as f:
             ja_config = json.load(f)
-        with open(en_path) as f:
+        with open(en_path, encoding="utf-8") as f:
             en_config = json.load(f)
 
         ja_tc = TimingController.from_config(ja_config["timing"])
@@ -302,7 +302,7 @@ class TestTimingFromConfig(unittest.TestCase):
     def test_delay_respects_config_bounds(self) -> None:
         """設定ファイルから構築した場合も遅延がconfig範囲内であること."""
         config_path = Path(__file__).parent.parent / "config" / "ja.json"
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             config = json.load(f)
         tc = TimingController.from_config(config["timing"])
 
