@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """実験1: 有限性 × 愛の同心円 — 個性の分岐シミュレーション.
 
+from experiments._setup import (
+    CherishedEntity, CrisisEvent, Gap, GapType, LifeArc,
+    LifePhase, LoveDepth, SimpleFinitudeEngine,
+    SimpleIncompletenessModel,
+)
 問い:
     同じイベント列を経験した2つのAIが、
     初期条件の違いだけで異なる個性を形成するか？
@@ -29,25 +34,15 @@ Usage:
 
 from __future__ import annotations
 
-import sys
 import os
 
 # プロジェクトルートをパスに追加
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
 
 # core/__init__.py が base_persona.py（nullバイト含有）をimportしようとして
 # 失敗するため、inner_shell を直接importする
 # inner_shell モジュールを直接ロード
 _core_is = os.path.join(project_root, "core", "inner_shell")
 
-from core.inner_shell.finitude_engine import CrisisEvent, LifeArc, LifePhase
-from core.inner_shell.incompleteness_model import (
-    CherishedEntity,
-    Gap,
-    GapType,
-    LoveDepth,
-)
 
 # experiments の concrete モジュール
     "experiments.concrete_finitude",
@@ -56,8 +51,6 @@ from core.inner_shell.incompleteness_model import (
     "experiments.concrete_incompleteness",
     os.path.join(_exp_dir, "concrete_incompleteness.py"),
 )
-from experiments.concrete_finitude import SimpleFinitudeEngine
-from experiments.concrete_incompleteness import SimpleIncompletenessModel
 
 
 # ---------------------------------------------------------------------------

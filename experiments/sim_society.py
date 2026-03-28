@@ -24,22 +24,15 @@ Usage:
 
 from __future__ import annotations
 
-import sys
 import os
 import random
 
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
 
-
-from core.inner_shell.finitude_engine import LifeArc
-from core.inner_shell.incompleteness_model import (
-    CherishedEntity, Gap, GapType, LoveDepth,
+from experiments._setup import (
+    CherishedEntity, CuriosityProfile, Gap, GapType, LifeArc,
+    LoveDepth, SimpleAutonomousQuestioner, SimpleFinitudeEngine,
+    SimpleIncompletenessModel,
 )
-from core.inner_shell.autonomous_questioner import CuriosityProfile
-from experiments.concrete_finitude import SimpleFinitudeEngine
-from experiments.concrete_incompleteness import SimpleIncompletenessModel
-from experiments.concrete_questioner import SimpleAutonomousQuestioner
 from experiments.sim_integration import SimpleIntegration
 from experiments.sim_gradient_acceptance import calculate_acceptance, AcceptanceScore
 

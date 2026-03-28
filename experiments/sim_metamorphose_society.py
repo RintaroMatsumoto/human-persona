@@ -41,7 +41,6 @@ License: MIT
 
 from __future__ import annotations
 
-import sys
 import os
 import random
 import math
@@ -52,8 +51,6 @@ from enum import Enum
 from collections import defaultdict
 
 # Use absolute path for imports
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
 
 # ---------------------------------------------------------------------------
 # Data Structures

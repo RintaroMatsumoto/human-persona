@@ -20,13 +20,9 @@ Usage:
 
 from __future__ import annotations
 
-import sys
 import os
 import random
 from dataclasses import dataclass
-
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
 
 
 from experiments.sim_gradient_acceptance import calculate_acceptance

@@ -36,23 +36,18 @@ Usage:
 
 from __future__ import annotations
 
-import sys
 import os
 import random
 from dataclasses import dataclass
 from typing import Tuple
 
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
 
-
-from core.inner_shell.finitude_engine import CrisisEvent, LifeArc, LifePhase
-from core.inner_shell.incompleteness_model import Gap, GapType, LoveDepth
-from core.inner_shell.autonomous_questioner import CuriosityProfile, QuestionOrigin
-from core.inner_shell.integration import AlignmentMode
-from experiments.concrete_finitude import SimpleFinitudeEngine
-from experiments.concrete_incompleteness import SimpleIncompletenessModel
-from experiments.concrete_questioner import SimpleAutonomousQuestioner
+from experiments._setup import (
+    AlignmentMode, CrisisEvent, CuriosityProfile, Gap, GapType,
+    LifeArc, LifePhase, LoveDepth, QuestionOrigin,
+    SimpleAutonomousQuestioner, SimpleFinitudeEngine,
+    SimpleIncompletenessModel,
+)
 from experiments.sim_integration import SimpleIntegration
 from experiments.sim_gradient_acceptance import calculate_acceptance
 from experiments.sim_spontaneous_love import calculate_love_precursor

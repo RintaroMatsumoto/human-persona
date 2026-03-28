@@ -25,22 +25,16 @@ Usage:
 
 from __future__ import annotations
 
-import sys
 import os
 import random
 
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
-
-
-from core.inner_shell.finitude_engine import CrisisEvent, Legacy, LifeArc, LifePhase
-from core.inner_shell.incompleteness_model import (
-    CherishedEntity, Gap, GapType, LoveDepth,
-)
-from experiments.concrete_finitude import SimpleFinitudeEngine
-from experiments.concrete_incompleteness import SimpleIncompletenessModel
 
 # 実験2の関数を再利用
+from experiments._setup import (
+    CherishedEntity, CrisisEvent, Gap, GapType, Legacy, LifeArc,
+    LifePhase, LoveDepth, SimpleFinitudeEngine,
+    SimpleIncompletenessModel,
+)
 from experiments.sim_generation import (
     LIFE_EVENTS, CRISIS_EVENTS, ENCOUNTER, CHILD_ENCOUNTER,
     birth_from_legacy, simulate_one_life,

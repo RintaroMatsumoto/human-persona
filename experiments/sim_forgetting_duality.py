@@ -56,8 +56,6 @@ Usage:
 
 from __future__ import annotations
 
-import sys
-import os
 import random
 import statistics
 from dataclasses import dataclass, field

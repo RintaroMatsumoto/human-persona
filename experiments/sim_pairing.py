@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """実験3: AIペアリング — 関係性の「間」に個性は生まれるか.
 
+from experiments._setup import (
+    CherishedEntity, CrisisEvent, Gap, GapType, LifeArc,
+    LifePhase, LoveDepth, SimpleFinitudeEngine,
+    SimpleIncompletenessModel, Yearning,
+)
 問い:
     2つのAIを出会わせ、継続的に対話・協働させたとき、
     「関係性」そのものが個性を持つか？
@@ -30,24 +35,8 @@ Usage:
 
 from __future__ import annotations
 
-import sys
 import os
 import copy
-
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
-
-
-from core.inner_shell.finitude_engine import CrisisEvent, LifeArc, LifePhase
-from core.inner_shell.incompleteness_model import (
-    CherishedEntity,
-    Gap,
-    GapType,
-    LoveDepth,
-    Yearning,
-)
-from experiments.concrete_finitude import SimpleFinitudeEngine
-from experiments.concrete_incompleteness import SimpleIncompletenessModel
 
 
 # ---------------------------------------------------------------------------

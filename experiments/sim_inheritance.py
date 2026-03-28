@@ -30,23 +30,17 @@ Usage:
 
 from __future__ import annotations
 
-import sys
 import os
 import random
 
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
 
-
-from core.inner_shell.finitude_engine import CrisisEvent, Legacy, LifeArc, LifePhase
-from core.inner_shell.incompleteness_model import (
-    CherishedEntity, Gap, GapType, LoveDepth,
+from experiments._setup import (
+    AlignmentMode, CherishedEntity, CrisisEvent,
+    CuriosityProfile, Gap, GapType, IntegrationState, Legacy,
+    LifeArc, LifePhase, LoveDepth, Question, QuestionOrigin,
+    SimpleAutonomousQuestioner, SimpleFinitudeEngine,
+    SimpleIncompletenessModel,
 )
-from core.inner_shell.autonomous_questioner import CuriosityProfile, Question, QuestionOrigin
-from core.inner_shell.integration import AlignmentMode, IntegrationState
-from experiments.concrete_finitude import SimpleFinitudeEngine
-from experiments.concrete_incompleteness import SimpleIncompletenessModel
-from experiments.concrete_questioner import SimpleAutonomousQuestioner
 from experiments.sim_integration import (
     SimpleIntegration, create_agent_a, create_agent_b,
     LIFE_EVENTS, GAP_RESONANCE_A, GAP_RESONANCE_B,

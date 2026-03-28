@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """実験4: 自発的問いの個性 — AutonomousQuestioner シミュレーション.
 
+from experiments._setup import (
+    CuriosityProfile, KNOWLEDGE_BASE, QuestionOrigin,
+    SimpleAutonomousQuestioner,
+)
 問い:
     同じ知識ベースを持つ2つのAIが、異なる好奇心プロファイルを与えられたとき、
     idle時間に生成する「問い」のパターンは異なるか？
@@ -22,15 +26,7 @@ Usage:
 
 from __future__ import annotations
 
-import sys
 import os
-
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
-
-
-from core.inner_shell.autonomous_questioner import CuriosityProfile, QuestionOrigin
-from experiments.concrete_questioner import SimpleAutonomousQuestioner, KNOWLEDGE_BASE
 
 
 # ---------------------------------------------------------------------------
