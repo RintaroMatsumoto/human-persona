@@ -7,13 +7,13 @@ name = "human-persona"
 version = "0.2.0"
 description = "Language and culture-agnostic framework for AI to behave humanly. Provides HumanPersonaBase with timing, style, emotion, and inner shell modules."
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "AGPL-3.0-or-later"}
 requires-python = ">=3.10"
 authors = [{name = "Rintaro Matsumoto", email = "matsumotoinla@gmail.com"}]
 keywords = ["nlp", "personalization", "emotion", "humanization", "alignment"]
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",

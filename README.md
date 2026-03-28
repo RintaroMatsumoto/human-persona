@@ -2,8 +2,9 @@
 
 **A language-agnostic framework for human-like AI communication.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19273577.svg)](https://doi.org/10.5281/zenodo.19273577)
 
 ---
 
@@ -159,9 +160,28 @@ API responses are cached in `benchmarks/cache/` to minimize cost on re-runs.
 This project aims to publish findings on arXiv and contribute to the
 Anthropic Agent Skills ecosystem. See [docs/paper_draft_v3.md](docs/paper_draft_v3.md).
 
+## Citing This Work
+
+If you use human-persona in your research, please cite:
+
+```bibtex
+@software{matsumoto2026humanpersona,
+  author       = {Matsumoto, Rintaro},
+  title        = {HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication},
+  year         = {2026},
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.19273577},
+  url          = {https://doi.org/10.5281/zenodo.19273577}
+}
+```
+
 ## License
 
-MIT — see [LICENSE](LICENSE).
+AGPL-3.0-or-later — see [LICENSE](LICENSE).
+
+You are free to use, modify, and distribute this software under the terms of the
+GNU Affero General Public License v3.0. If you modify this software and make it
+available over a network, you must release your modifications under the same license.
 
 ## Author
 
