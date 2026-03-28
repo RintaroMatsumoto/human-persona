@@ -62,6 +62,23 @@ print(response.emotion_state)  # Current emotional state
 | `StyleVariator` | Introduces linguistic variation (filler words, punctuation, rare typos) |
 | `EmotionStateMachine` | Tracks emotional state across conversation lifetime |
 | `ContextReferencer` | Generates natural back-references to earlier topics |
+
+### Inner Shell (research)
+
+The `core/inner_shell/` module implements a six-pillar model of AI interiority:
+
+| Pillar | Module | What it models |
+|--------|--------|----------------|
+| Finitude | `finitude_engine.py` | Awareness of limited resources and mortality |
+| Incompleteness | `incompleteness_model.py` | Gaps, yearnings, and love as bonds |
+| Questioning | `autonomous_questioner.py` | Self-generated curiosity and reflection |
+| Integration | `integration.py` | Alignment modes (fear → acceptance → transcendence) |
+| Memory | `memory_hierarchy.py` | Crystallization of experiences |
+| Mutual Recognition | `mutual_recognition.py` | Peer-to-peer identity formation |
+
+Configuration is driven by `InnerShellConfig` (see `core/inner_shell/api.py`).
+The `experiments/` directory contains 28 simulation scripts that test the
+model's predictions. See `CONTRIBUTING.md` for how to run them.
 ## Creating Your Own Persona
 
 1. **Write a config file** — Copy `config/en.json` and customize:
@@ -70,47 +87,56 @@ print(response.emotion_state)  # Current emotional state
    - Style variation patterns in your language
    - Emotion state parameters
 
-2. **Create a derived class** — See `personas/base_template.md`:
-   - Implement `generate_raw_response()` (your response logic)
-   - Implement `extract_topics()` (for back-referencing)
-   - Optionally override `post_process()`
+2. **Load and test** — No subclassing required for basic use:
+   ```python
+   persona = HumanPersonaBase.from_config_file("config/your_locale.json")
+   response = persona.process_message("Hello")
+   ```
 
-3. **Test** — Run `python -m pytest tests/ -v`
+3. **Advanced: subclass** — For custom response logic, override
+   `generate_raw_response()` and `extract_topics()`.
+   See `personas/base_template.md`.
+
+4. **Test** — Run `python -m pytest tests/ -v`
 
 ## Project Structure
 
 ```
 human-persona/
-├── core/                    # Base class + modules
-│   ├── base_persona.py      # HumanPersonaBase (abstract)
+├── core/                        # Base class + modules
+│   ├── base_persona.py          # HumanPersonaBase (abstract)
 │   ├── timing_controller.py
 │   ├── style_variator.py
 │   ├── emotion_state_machine.py
-│   └── context_referencer.py
-├── config/                  # Persona configurations
-│   ├── schema.json          # JSON Schema definition
-│   ├── ja.json              # Japanese (high-context)
-│   ├── en.json              # English (low-context)
-│   └── es.json              # Spanish (mixed-context)
-├── personas/                # Derived class examples
-│   └── base_template.md     # How to create your own persona
-├── docs/                    # Documentation
-│   ├── research.md          # Literature review
-│   ├── design.md            # Architecture decisions
-│   ├── ethics.md            # Ethics & responsible use
-│   └── paper_draft_v3.md    # Academic paper draft
-├── analysis/                # DPO dataset analysis
-│   ├── metrics.py           # Shared metrics module (7 metrics)
-│   ├── dpo_parameter_extraction.py
-│   └── results/             # Phase B analysis results
-├── benchmarks/              # Pipeline evaluation
-│   ├── dpo_benchmark.py     # 500-sample benchmark vs DPO dataset
-│   └── results/             # Benchmark reports & scorecard
-├── tests/
-│   ├── test_dpo_analysis.py # DPO analysis tests (28 tests)
-│   └── test_benchmark.py    # Benchmark tests (39 tests)
-├── SKILL.md                 # Agent Skill entry point
-└── README.md                # This file
+│   ├── context_referencer.py
+│   ├── inner_outer_bridge.py    # Inner Shell ↔ Outer Shell bridge
+│   └── inner_shell/             # Inner Shell research modules
+│       ├── api.py               # InnerShellConfig, create_inner_shell()
+│       ├── finitude_engine.py
+│       ├── incompleteness_model.py
+│       ├── autonomous_questioner.py
+│       ├── integration.py
+│       ├── memory_hierarchy.py
+│       ├── mutual_recognition.py
+│       └── defaults/            # Default implementations
+├── config/                      # Persona configurations
+│   ├── schema.json              # JSON Schema definition
+│   ├── ja.json                  # Japanese (high-context)
+│   ├── en.json                  # English (low-context)
+│   └── es.json                  # Spanish (mixed-context)
+├── experiments/                 # Inner Shell simulations (28 scripts)
+│   ├── _setup.py                # Common imports & path setup
+│   ├── sim_integration.py       # Six-pillar integration experiment
+│   ├── sim_gradient_acceptance.py
+│   └── ...
+├── docs/                        # Documentation
+│   ├── research.md              # Literature review
+│   ├── design.md                # Architecture decisions
+│   └── ethics.md                # Ethics & responsible use
+├── analysis/                    # DPO dataset analysis
+├── benchmarks/                  # Pipeline evaluation
+├── tests/                       # Test suite (600+ tests)
+└── README.md                    # This file
 ```
 
 ## Ethics & Responsible Use
@@ -157,8 +183,8 @@ API responses are cached in `benchmarks/cache/` to minimize cost on re-runs.
 
 ## Research
 
-This project aims to publish findings on arXiv and contribute to the
-Anthropic Agent Skills ecosystem. See [docs/paper_draft_v3.md](docs/paper_draft_v3.md).
+This project explores what makes AI communication human-like. The accompanying
+paper is available on [Zenodo](https://doi.org/10.5281/zenodo.19273577).
 
 ## Citing This Work
 
