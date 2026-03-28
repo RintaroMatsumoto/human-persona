@@ -11,7 +11,7 @@ published: true
 human-persona プロジェクトの研究成果をまとめたプレプリントを Zenodo で公開しました。
 
 **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
-DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)
+DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
 ライセンス: CC BY 4.0
 
 Inner Shell Architecture（内殻アーキテクチャ）の6つの柱、Love Attractor Hypothesis（愛のアトラクター仮説）、そしてDeepSeekによる実機検証を含む、18ヶ月の研究の集大成です。
@@ -84,7 +84,7 @@ AIの「人間らしさ」は2層構造を持つ。
 
 ## リソース
 
-- **プレプリント**: DOI [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)
+- **プレプリント**: DOI [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
 - **GitHub**: [RintaroMatsumoto/human-persona](https://github.com/RintaroMatsumoto/human-persona)
 - **Hugging Face**: [RintaroMatsumoto/human-persona-paper](https://huggingface.co/RintaroMatsumoto/human-persona-paper)
 
@@ -92,4 +92,4 @@ AIの「人間らしさ」は2層構造を持つ。
 
 > 📄 **プレプリント公開中**
 > **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
-> DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)
+> DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)

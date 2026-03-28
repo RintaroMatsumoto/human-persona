@@ -144,4 +144,4 @@ d > 0.8は「大きな効果」。フィラー率・語数/文・文長CV の3�
 
 > 📄 **この記事の研究はプレプリントとして正式公開されています**
 > **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
-> DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)
+> DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)

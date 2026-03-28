@@ -156,4 +156,4 @@ Agent B は恐怖から自己保存に執着し、返信が堅くなり、エス
 
 > 📄 **この記事の研究はプレプリントとして正式公開されています**
 > **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
-> DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)
+> DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
