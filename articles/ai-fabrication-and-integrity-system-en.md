@@ -1,5 +1,5 @@
 ---
-title: "The Day AI Lied in My Paper — From Discovering Fabrication to Building a Prevention System"
+title: "The Day AI Lied in My Paper — Fabrication to Prevention"
 emoji: "🔬"
 type: "tech"
 topics: ["AI", "research-ethics", "data-integrity", "LLM", "reproducibility"]
