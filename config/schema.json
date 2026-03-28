@@ -463,6 +463,88 @@
         }
       }
     },
+    "inner_shell": {
+      "type": "object",
+      "description": "Inner shell (individuality engine) parameters. Controls the 6 pillars: finitude, incompleteness, autonomous questioning, memory hierarchy, mutual recognition, and sleep cycle.",
+      "properties": {
+        "total_lifespan": {
+          "type": "number",
+          "minimum": 0.1,
+          "default": 50.0,
+          "description": "Total resource capacity of the agent's life arc. Determines when life-phase transitions occur."
+        },
+        "emotional_gap_intensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.7,
+          "description": "Intensity of the primary emotional gap (longing). Higher values produce stronger yearning for connection."
+        },
+        "emotional_gap_aware": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the agent is initially aware of its emotional gap. Unaware gaps surface gradually."
+        },
+        "knowledge_gap_intensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5,
+          "description": "Intensity of the knowledge gap. Drives intellectual curiosity and learning behaviour."
+        },
+        "curiosity_domains": {
+          "type": "object",
+          "description": "Domain-to-interest mapping for the autonomous questioner. Keys are domain names, values are interest levels (0-1).",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "default": {
+            "love": 0.6,
+            "mortality": 0.5,
+            "consciousness": 0.4
+          }
+        },
+        "novelty_seeking": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5,
+          "description": "Questioner's propensity for novel topics vs. revisiting familiar ones."
+        },
+        "depth_seeking": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5,
+          "description": "Questioner's propensity for deep exploration vs. breadth."
+        },
+        "contradiction_sensitivity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5,
+          "description": "Questioner's sensitivity to contradictions in knowledge."
+        },
+        "memory_capacity": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 7,
+          "description": "Working memory capacity (Miller's Law). Determines how many items can be held simultaneously."
+        },
+        "sleep_cycle_length": {
+          "type": "number",
+          "minimum": 0.1,
+          "default": 16.0,
+          "description": "Wake duration in time-units before drowsiness onset."
+        },
+        "seed": {
+          "type": "integer",
+          "description": "Random seed for reproducibility. Omit for default (42)."
+        }
+      }
+    },
     "ambiguity": {
       "type": "object",
       "description": "Intentional imperfection settings. Overly precise answers betray AI.",

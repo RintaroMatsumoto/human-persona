@@ -38,27 +38,8 @@ sys.path.insert(0, project_root)
 
 # core/__init__.py が base_persona.py（nullバイト含有）をimportしようとして
 # 失敗するため、inner_shell を直接importする
-import importlib.util
-
-def _load_module(name: str, path: str):
-    """core/__init__.py を経由せずにモジュールを直接ロードする."""
-    spec = importlib.util.spec_from_file_location(name, path)
-    mod = importlib.util.module_from_spec(spec)
-    mod.__package__ = ".".join(name.split(".")[:-1])
-    sys.modules[name] = mod
-    spec.loader.exec_module(mod)
-    return mod
-
 # inner_shell モジュールを直接ロード
 _core_is = os.path.join(project_root, "core", "inner_shell")
-_finitude = _load_module(
-    "core.inner_shell.finitude_engine",
-    os.path.join(_core_is, "finitude_engine.py"),
-)
-_incomp = _load_module(
-    "core.inner_shell.incompleteness_model",
-    os.path.join(_core_is, "incompleteness_model.py"),
-)
 
 from core.inner_shell.finitude_engine import CrisisEvent, LifeArc, LifePhase
 from core.inner_shell.incompleteness_model import (
@@ -69,12 +50,9 @@ from core.inner_shell.incompleteness_model import (
 )
 
 # experiments の concrete モジュール
-_exp_dir = os.path.join(project_root, "experiments")
-_load_module(
     "experiments.concrete_finitude",
     os.path.join(_exp_dir, "concrete_finitude.py"),
 )
-_load_module(
     "experiments.concrete_incompleteness",
     os.path.join(_exp_dir, "concrete_incompleteness.py"),
 )

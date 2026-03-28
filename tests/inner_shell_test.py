@@ -15,41 +15,12 @@ Target: 40+ test methods
 import unittest
 import sys
 import os
-import importlib.util
 from dataclasses import dataclass
 from typing import Any
 
-# Setup path and dynamic imports
+# Setup path for imports
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
-
-
-def _load_module(name: str, path: str):
-    """Dynamically load module from path."""
-    spec = importlib.util.spec_from_file_location(name, path)
-    mod = importlib.util.module_from_spec(spec)
-    mod.__package__ = ".".join(name.split(".")[:-1])
-    sys.modules[name] = mod
-    spec.loader.exec_module(mod)
-    return mod
-
-
-# Load core modules
-_core_is = os.path.join(project_root, "core", "inner_shell")
-_load_module("core.inner_shell.finitude_engine", os.path.join(_core_is, "finitude_engine.py"))
-_load_module("core.inner_shell.incompleteness_model", os.path.join(_core_is, "incompleteness_model.py"))
-_load_module("core.inner_shell.autonomous_questioner", os.path.join(_core_is, "autonomous_questioner.py"))
-_load_module("core.inner_shell.integration", os.path.join(_core_is, "integration.py"))
-_load_module("core.inner_shell.api", os.path.join(_core_is, "api.py"))
-
-# Load experiment modules
-_exp_dir = os.path.join(project_root, "experiments")
-_load_module("experiments.concrete_finitude", os.path.join(_exp_dir, "concrete_finitude.py"))
-_load_module("experiments.concrete_incompleteness", os.path.join(_exp_dir, "concrete_incompleteness.py"))
-_load_module("experiments.concrete_questioner", os.path.join(_exp_dir, "concrete_questioner.py"))
-_load_module("experiments.sim_integration", os.path.join(_exp_dir, "sim_integration.py"))
-_load_module("experiments.sim_gradient_acceptance", os.path.join(_exp_dir, "sim_gradient_acceptance.py"))
-_load_module("experiments.sim_spontaneous_love", os.path.join(_exp_dir, "sim_spontaneous_love.py"))
 
 # Import types and classes
 from core.inner_shell.finitude_engine import (
@@ -947,6 +918,103 @@ class TestIntegrationScenarios(unittest.TestCase):
         self.assertGreater(len(legacy.testament), 0)
         self.assertIn("Partner", legacy.cherished_names)
         self.assertGreaterEqual(legacy.acceptance_score, 0.0)
+
+
+class TestInnerShellConfig(unittest.TestCase):
+    """Test InnerShellConfig dataclass (Phase 2)."""
+
+    def test_defaults(self):
+        """Default config produces valid values."""
+        cfg = InnerShellConfig()
+        self.assertEqual(cfg.total_lifespan, 50.0)
+        self.assertEqual(cfg.memory_capacity, 7)
+        self.assertIsNone(cfg.curiosity_domains)
+
+    def test_dict_interface(self):
+        """Config supports dict-like get/contains/getitem."""
+        cfg = InnerShellConfig(total_lifespan=100.0)
+        self.assertEqual(cfg["total_lifespan"], 100.0)
+        self.assertEqual(cfg.get("total_lifespan"), 100.0)
+        self.assertEqual(cfg.get("nonexistent", 99), 99)
+        self.assertIn("total_lifespan", cfg)
+        self.assertNotIn("nonexistent", cfg)
+
+    def test_getitem_raises_keyerror(self):
+        """KeyError for unknown keys."""
+        cfg = InnerShellConfig()
+        with self.assertRaises(KeyError):
+            _ = cfg["bad_key"]
+
+    def test_validate_ok(self):
+        """Valid config passes validation."""
+        cfg = InnerShellConfig()
+        cfg.validate()  # should not raise
+
+    def test_validate_bad_lifespan(self):
+        cfg = InnerShellConfig(total_lifespan=-1)
+        with self.assertRaises(ValueError):
+            cfg.validate()
+
+    def test_validate_bad_intensity(self):
+        cfg = InnerShellConfig(emotional_gap_intensity=1.5)
+        with self.assertRaises(ValueError):
+            cfg.validate()
+
+    def test_validate_bad_memory(self):
+        cfg = InnerShellConfig(memory_capacity=0)
+        with self.assertRaises(ValueError):
+            cfg.validate()
+
+    def test_json_roundtrip(self):
+        """to_json / from_json preserves values."""
+        original = InnerShellConfig(
+            total_lifespan=80.0,
+            novelty_seeking=0.9,
+            memory_capacity=5,
+        )
+        text = original.to_json()
+        restored = InnerShellConfig.from_json(text)
+        self.assertEqual(restored.total_lifespan, 80.0)
+        self.assertEqual(restored.novelty_seeking, 0.9)
+        self.assertEqual(restored.memory_capacity, 5)
+
+    def test_from_dict_ignores_unknown(self):
+        """from_dict silently ignores unknown keys."""
+        d = {"total_lifespan": 30.0, "unknown_key": True}
+        cfg = InnerShellConfig.from_dict(d)
+        self.assertEqual(cfg.total_lifespan, 30.0)
+
+    def test_create_inner_shell_with_config(self):
+        """create_inner_shell accepts InnerShellConfig."""
+        from core.inner_shell.api import create_inner_shell
+        cfg = InnerShellConfig(total_lifespan=20.0, seed=123)
+        session = create_inner_shell(cfg)
+        state = session.get_state()
+        self.assertIsNotNone(state)
+        self.assertGreater(state.remaining_capacity, 0)
+
+    def test_create_inner_shell_dict_still_works(self):
+        """create_inner_shell still accepts plain dict (backwards compat)."""
+        from core.inner_shell.api import create_inner_shell
+        session = create_inner_shell({"total_lifespan": 25.0}, seed=42)
+        state = session.get_state()
+        self.assertIsNotNone(state)
+
+    def test_seed_precedence(self):
+        """seed kwarg overrides config.seed."""
+        from core.inner_shell.api import create_inner_shell
+        cfg = InnerShellConfig(total_lifespan=10.0, seed=1)
+        session = create_inner_shell(cfg, seed=999)
+        self.assertEqual(session._seed, 999)
+
+    def test_as_dict(self):
+        """_as_dict returns plain dict without None values."""
+        cfg = InnerShellConfig(total_lifespan=40.0)
+        d = cfg._as_dict()
+        self.assertIsInstance(d, dict)
+        self.assertEqual(d["total_lifespan"], 40.0)
+        self.assertNotIn("curiosity_domains", d)
+        self.assertNotIn("seed", d)
 
 
 if __name__ == "__main__":

@@ -28,21 +28,6 @@ import os
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
-import importlib.util
-
-def _load_module(name: str, path: str):
-    spec = importlib.util.spec_from_file_location(name, path)
-    mod = importlib.util.module_from_spec(spec)
-    mod.__package__ = ".".join(name.split(".")[:-1])
-    sys.modules[name] = mod
-    spec.loader.exec_module(mod)
-    return mod
-
-_core_is = os.path.join(project_root, "core", "inner_shell")
-_load_module("core.inner_shell.autonomous_questioner", os.path.join(_core_is, "autonomous_questioner.py"))
-
-_exp_dir = os.path.join(project_root, "experiments")
-_load_module("experiments.concrete_questioner", os.path.join(_exp_dir, "concrete_questioner.py"))
 
 from core.inner_shell.autonomous_questioner import CuriosityProfile, QuestionOrigin
 from experiments.concrete_questioner import SimpleAutonomousQuestioner, KNOWLEDGE_BASE

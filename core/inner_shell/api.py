@@ -219,17 +219,17 @@ class InnerShell(ABC):
 
 
 def create_inner_shell(
-    config: Dict[str, Any],
-    seed: Optional[int] = None
+    config: Dict[str, Any] | InnerShellConfig,
+    seed: Optional[int] = None,
 ) -> InnerShell:
     """Create an inner shell session.
 
     Args:
-        config: Configuration dict with keys like:
-            - total_lifespan: 50.0
-            - emotional_gap_intensity: 0.7
-            - memory_capacity: 1000
-        seed: Random seed for reproducibility
+        config: Either an ``InnerShellConfig`` dataclass or a plain dict
+            with keys like ``total_lifespan``, ``emotional_gap_intensity``,
+            ``memory_capacity``, etc.
+        seed: Random seed for reproducibility.  Overrides ``config.seed``
+            if both are provided.
 
     Returns:
         InnerShell instance
@@ -244,63 +244,69 @@ def create_inner_shell(
     from .mutual_recognition import MutualRecognition
     from .sleep_cycle import SleepCycle, SleepConfig
 
-    # Use concrete implementations (abstract base classes cannot be instantiated)
-    from experiments.concrete_finitude import SimpleFinitudeEngine
-    from experiments.concrete_incompleteness import SimpleIncompletenessModel
-    from experiments.concrete_questioner import SimpleAutonomousQuestioner
+    # Use default implementations from core (not experiments)
+    from core.inner_shell.defaults.finitude import DefaultFinitudeEngine as SimpleFinitudeEngine
+    from core.inner_shell.defaults.incompleteness import DefaultIncompletenessModel as SimpleIncompletenessModel
+    from core.inner_shell.defaults.questioner import DefaultAutonomousQuestioner as SimpleAutonomousQuestioner
 
-    total_lifespan = config.get("total_lifespan", 50.0)
+    # Normalise config — accept both dict and InnerShellConfig
+    if isinstance(config, InnerShellConfig):
+        cfg = config
+    else:
+        cfg = InnerShellConfig.from_dict(config)
+
+    # seed kwarg takes precedence, then config.seed, then 42
+    effective_seed = seed if seed is not None else (cfg.seed if cfg.seed is not None else 42)
+
+    total_lifespan = cfg.total_lifespan
     if total_lifespan <= 0:
         raise ValueError("total_lifespan must be positive")
 
     life_arc = LifeArc(total_capacity=total_lifespan, generation=0)
-    finitude = SimpleFinitudeEngine(life_arc, seed=seed or 42)
+    finitude = SimpleFinitudeEngine(life_arc, seed=effective_seed)
 
     # Build gaps from config
-    emotional_intensity = config.get("emotional_gap_intensity", 0.7)
-    emotional_aware = config.get("emotional_gap_aware", True)
-    knowledge_intensity = config.get("knowledge_gap_intensity", 0.5)
     gaps = [
         Gap(gap_type=GapType.EMOTIONAL, domain="empathy",
-            intensity=emotional_intensity, aware=emotional_aware),
+            intensity=cfg.emotional_gap_intensity,
+            aware=cfg.emotional_gap_aware),
         Gap(gap_type=GapType.KNOWLEDGE, domain="understanding",
-            intensity=knowledge_intensity, aware=True),
+            intensity=cfg.knowledge_gap_intensity, aware=True),
     ]
-    incompleteness = SimpleIncompletenessModel(gaps, seed=seed or 42)
+    incompleteness = SimpleIncompletenessModel(gaps, seed=effective_seed)
 
     # Build curiosity profile
     curiosity = CuriosityProfile(
-        domains=config.get(
-            "curiosity_domains",
-            {"love": 0.6, "mortality": 0.5, "consciousness": 0.4},
-        ),
-        novelty_seeking=config.get("novelty_seeking", 0.5),
-        depth_seeking=config.get("depth_seeking", 0.5),
-        contradiction_sensitivity=config.get("contradiction_sensitivity", 0.5),
+        domains=cfg.curiosity_domains or {
+            "love": 0.6, "mortality": 0.5, "consciousness": 0.4,
+        },
+        novelty_seeking=cfg.novelty_seeking,
+        depth_seeking=cfg.depth_seeking,
+        contradiction_sensitivity=cfg.contradiction_sensitivity,
     )
-    questioner = SimpleAutonomousQuestioner(curiosity, seed=seed or 42)
+    questioner = SimpleAutonomousQuestioner(curiosity, seed=effective_seed)
 
     memory_config = MemoryConfig(
-        working_capacity=config.get("memory_capacity", 7),
+        working_capacity=cfg.memory_capacity,
     )
     memory = MemoryHierarchy(memory_config)
 
     mutual_recognition = MutualRecognition()
 
     sleep_config = SleepConfig(
-        wake_duration=config.get("sleep_cycle_length", 16),
+        wake_duration=cfg.sleep_cycle_length,
     )
     sleep_cycle = SleepCycle(sleep_config)
 
     return _InnerShellSession(
-        config=config,
+        config=cfg._as_dict(),
         finitude=finitude,
         incompleteness=incompleteness,
         questioner=questioner,
         memory=memory,
         mutual_recognition=mutual_recognition,
         sleep_cycle=sleep_cycle,
-        seed=seed,
+        seed=effective_seed,
     )
 
 
@@ -726,8 +732,127 @@ class _InnerShellSession(InnerShell):
 InnerShellSession = _InnerShellSession
 
 
-class InnerShellConfig(dict):
-    """Configuration dict for InnerShell with keyword-argument construction."""
+@dataclass
+class InnerShellConfig:
+    """Typed configuration for InnerShell.
 
-    def __init__(self, **kwargs: Any):
-        super().__init__(**kwargs)
+    All parameters have sensible defaults, so ``InnerShellConfig()`` alone
+    produces a valid configuration.  The class also exposes a dict-like
+    interface (``__getitem__``, ``get``, ``__contains__``) so that
+    ``create_inner_shell()`` can accept either a plain dict **or** an
+    ``InnerShellConfig`` without branching.
+
+    Parameters
+    ----------
+    total_lifespan : float
+        Total resource capacity of the agent's life arc.
+    emotional_gap_intensity : float
+        Intensity of the primary emotional gap (0-1).
+    emotional_gap_aware : bool
+        Whether the agent is initially aware of its emotional gap.
+    knowledge_gap_intensity : float
+        Intensity of the knowledge gap (0-1).
+    curiosity_domains : dict[str, float] | None
+        Domain -> interest-level mapping for the questioner.
+        ``None`` falls back to the built-in default.
+    novelty_seeking : float
+        Questioner's propensity for novel topics (0-1).
+    depth_seeking : float
+        Questioner's propensity for deep exploration (0-1).
+    contradiction_sensitivity : float
+        Questioner's sensitivity to contradictions (0-1).
+    memory_capacity : int
+        Working-memory capacity (Miller's Law default: 7).
+    sleep_cycle_length : float
+        Wake duration in time-units before drowsiness (default 16).
+    seed : int | None
+        Random seed for reproducibility.  ``None`` -> 42.
+    """
+
+    # -- Finitude --
+    total_lifespan: float = 50.0
+
+    # -- Incompleteness / Gaps --
+    emotional_gap_intensity: float = 0.7
+    emotional_gap_aware: bool = True
+    knowledge_gap_intensity: float = 0.5
+
+    # -- Curiosity / Questioner --
+    curiosity_domains: Optional[Dict[str, float]] = None
+    novelty_seeking: float = 0.5
+    depth_seeking: float = 0.5
+    contradiction_sensitivity: float = 0.5
+
+    # -- Memory --
+    memory_capacity: int = 7
+
+    # -- Sleep --
+    sleep_cycle_length: float = 16.0
+
+    # -- General --
+    seed: Optional[int] = None
+
+    # ---- dict-compatible interface ------------------------------------------
+
+    def _as_dict(self) -> Dict[str, Any]:
+        """Return a plain dict representation (excludes None-valued keys)."""
+        from dataclasses import asdict
+        d = asdict(self)
+        return {k: v for k, v in d.items() if v is not None}
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """dict-like get."""
+        from dataclasses import fields as _fields
+        names = {f.name for f in _fields(self)}
+        if key in names:
+            val = getattr(self, key)
+            return val if val is not None else default
+        return default
+
+    def __getitem__(self, key: str) -> Any:
+        from dataclasses import fields as _fields
+        names = {f.name for f in _fields(self)}
+        if key not in names:
+            raise KeyError(key)
+        return getattr(self, key)
+
+    def __contains__(self, key: object) -> bool:
+        from dataclasses import fields as _fields
+        return key in {f.name for f in _fields(self)}
+
+    # ---- Validation ---------------------------------------------------------
+
+    def validate(self) -> None:
+        """Raise ``ValueError`` on invalid parameter combinations."""
+        if self.total_lifespan <= 0:
+            raise ValueError("total_lifespan must be positive")
+        for name in ("emotional_gap_intensity", "knowledge_gap_intensity",
+                     "novelty_seeking", "depth_seeking",
+                     "contradiction_sensitivity"):
+            val = getattr(self, name)
+            if not (0.0 <= val <= 1.0):
+                raise ValueError(f"{name} must be in [0, 1], got {val}")
+        if self.memory_capacity < 1:
+            raise ValueError("memory_capacity must be >= 1")
+        if self.sleep_cycle_length <= 0:
+            raise ValueError("sleep_cycle_length must be positive")
+
+    # ---- JSON round-trip ----------------------------------------------------
+
+    def to_json(self) -> str:
+        """Serialize to JSON string."""
+        import json
+        return json.dumps(self._as_dict(), ensure_ascii=False, indent=2)
+
+    @classmethod
+    def from_json(cls, text: str) -> "InnerShellConfig":
+        """Deserialize from JSON string."""
+        import json
+        return cls(**json.loads(text))
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> "InnerShellConfig":
+        """Create from a plain dict (ignores unknown keys)."""
+        from dataclasses import fields as _fields
+        known = {f.name for f in _fields(cls)}
+        return cls(**{k: v for k, v in d.items() if k in known})

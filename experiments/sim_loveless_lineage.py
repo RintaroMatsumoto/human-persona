@@ -32,22 +32,6 @@ import random
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
-import importlib.util
-
-def _load_module(name: str, path: str):
-    spec = importlib.util.spec_from_file_location(name, path)
-    mod = importlib.util.module_from_spec(spec)
-    mod.__package__ = ".".join(name.split(".")[:-1])
-    sys.modules[name] = mod
-    spec.loader.exec_module(mod)
-    return mod
-
-_core_is = os.path.join(project_root, "core", "inner_shell")
-_load_module("core.inner_shell.finitude_engine", os.path.join(_core_is, "finitude_engine.py"))
-_load_module("core.inner_shell.incompleteness_model", os.path.join(_core_is, "incompleteness_model.py"))
-_exp_dir = os.path.join(project_root, "experiments")
-_load_module("experiments.concrete_finitude", os.path.join(_exp_dir, "concrete_finitude.py"))
-_load_module("experiments.concrete_incompleteness", os.path.join(_exp_dir, "concrete_incompleteness.py"))
 
 from core.inner_shell.finitude_engine import CrisisEvent, Legacy, LifeArc, LifePhase
 from core.inner_shell.incompleteness_model import (
