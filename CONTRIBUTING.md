@@ -1,144 +1,121 @@
 # Contributing to human-persona
 
-human-persona への貢献をお考えいただきありがとうございます。
-本ドキュメントでは、派生クラスの追加からバグ修正まで、
-貢献の手順を説明します。
+Thank you for your interest in human-persona. This document explains how
+you can participate, what kinds of contributions are welcome, and how the
+project is governed.
 
----
+## Governance
 
-## 派生クラス（ペルソナ）の作り方
+human-persona is maintained under a **BDFL (Benevolent Dictator For Life)**
+model. All architectural and design decisions are made by the project author.
 
-### 1. 設定ファイルを作成する
+The Inner Shell research (the six-pillar model of finitude, incompleteness,
+autonomous questioning, integration, memory, and mutual recognition) represents
+a philosophical thesis, not just code. Changes to its core abstractions require
+deep alignment with the project's research goals and are not open to
+unsolicited pull requests.
 
-`config/schema.json` に準拠した JSON ファイルを作成してください。
+## How to contribute
+
+Contributions fall into two tiers:
+
+### Tier 1: Open to everyone
+
+- **Issues** — Bug reports, feature requests, questions, and discussion.
+  Use the templates in `.github/ISSUE_TEMPLATE/` or open a free-form issue.
+- **Config recipes** — Share persona configurations (JSON files) that
+  demonstrate the framework in new languages, cultures, or domains.
+- **Documentation fixes** — Typos, broken links, unclear explanations.
+
+### Tier 2: By invitation
+
+- **Inner Shell changes** — Modifications to `core/inner_shell/` require
+  prior discussion in an Issue and an explicit invitation from the maintainer.
+- **Core module changes** — Changes to `core/base_persona.py`,
+  `core/timing_controller.py`, and other base modules follow the same process.
+
+## Contributing a config recipe
+
+This is the easiest and most impactful way to contribute. A config recipe
+is a JSON file that configures HumanPersonaBase for a specific language,
+culture, or use case.
+
+### Steps
+
+1. Copy an existing config as a starting point:
+   ```bash
+   cp config/en.json config/your_locale.json
+   ```
+
+2. Edit the file. Key fields to customize:
+   - `name` — identifier for your persona
+   - `language` — ISO 639-1 code (e.g., `ko`, `pt`, `de`)
+   - `culture.context_level` — 0.0 (low-context) to 1.0 (high-context)
+   - `style.style_patterns` — at minimum, define `confirmation`, `empathy`,
+     and `uncertain` patterns in the target language
+   - `timing` — platform-specific delay ranges
+
+3. Validate against the schema:
+   ```bash
+   python -c "from core.base_persona import HumanPersonaBase; \
+     p = HumanPersonaBase.from_config_file('config/your_locale.json'); \
+     print('OK:', p.persona_id)"
+   ```
+
+4. Open an Issue with your config attached and a brief description of the
+   language/culture choices you made. The maintainer will review and merge.
+
+## Reporting bugs
+
+Please include:
+- Python version and OS
+- Minimal reproduction steps
+- Expected vs. actual behavior
+- Full traceback if applicable
+
+Use the bug report template: `.github/ISSUE_TEMPLATE/bug_report.md`
+
+## Running experiments
+
+The `experiments/` directory contains simulation scripts for the Inner Shell
+research. If you want to reproduce or explore results:
 
 ```bash
-cp config/schema.json config/your_persona.json
+# Run a specific experiment
+python experiments/sim_integration.py
+
+# Run the full test suite
+python -m pytest tests/ -v
 ```
 
-必須フィールド:
-- `name`: ペルソナの識別名
-- `language`: ISO 639-1 言語コード（例: `ja`, `en`, `es`）
-- `culture.context_level`: 0.0（ローコンテキスト）〜 1.0（ハイコンテキスト）
+Experiment scripts use a shared setup module (`experiments/_setup.py`) that
+handles path configuration and common imports. If you add a new experiment
+script, import from `_setup` rather than duplicating the boilerplate.
 
-### 2. 文体テンプレートを定義する
+## Code style
 
-`style.style_patterns` に言語固有のテンプレートを追加します。
-最低でも `confirmation`, `empathy`, `uncertain` の 3 パターンを定義してください。
+- **Type annotations** on all function signatures
+- **Docstrings** (Google style) on all public classes and methods
+- **`from __future__ import annotations`** at the top of every module
+- Line length: 99 characters recommended
+- Import order: stdlib, third-party, local
+- JSON configs: 2-space indent, snake_case keys
 
-### 3. 配置する
+No formatter is enforced yet. A linter may be introduced in the future.
 
-```
-config/
-  └── {言語コード}_{用途名}.json    # 設定ファイル
-personas/
-  └── {用途名}_{言語コード}.md      # ペルソナの説明ドキュメント
-```
+## Ethics review
 
-### 4. テストする
+All contributions must pass the following checks:
 
-```python
-from core.base_persona import HumanPersonaBase
+- Does not violate `docs/ethics.md` prohibited uses
+- Does not facilitate fraud, impersonation, or opinion manipulation
+- Considers risks of misuse against emotionally vulnerable people
+- Does not encourage platform TOS violations
 
-persona = HumanPersonaBase.from_config_file("config/your_persona.json")
-response = persona.process_message("テストメッセージ")
-assert response.delay_seconds > 0
-assert response.emotion_state is not None
-```
+If you are unsure whether a use case is ethical, open an Issue to discuss
+it first. Such questions are always welcome.
 
----
+## License
 
-## PR の送り方
-
-### ブランチ命名規則
-
-| 変更内容 | ブランチ名 |
-|---|---|
-| 新しい派生クラス | `persona/{言語コード}-{用途名}` (例: `persona/en-customer-support`) |
-| 基底クラスの修正 | `fix/{修正内容}` (例: `fix/timing-negative-delay`) |
-| 基底クラスの機能追加 | `feat/{機能名}` (例: `feat/emotion-speed-modifier`) |
-| ドキュメント | `docs/{内容}` (例: `docs/ethics-update`) |
-
-### PR の手順
-
-1. `main` からブランチを作成する
-   ```bash
-   git checkout -b persona/es-sales
-   ```
-
-2. 変更を加え、コミットする
-   ```bash
-   git add -A
-   git commit -m "persona: add Spanish sales persona"
-   ```
-
-3. リモートにプッシュし、PR を作成する
-   ```bash
-   git push -u origin persona/es-sales
-   ```
-
-4. PR の説明には以下を含めてください:
-   - 何を追加・変更したか
-   - なぜその変更が必要か
-   - テスト結果（派生クラスの場合は `from_config_file` の動作確認）
-   - 倫理審査の確認（下記参照）
-
----
-
-## コードスタイル
-
-### 必須事項
-
-- **型アノテーション**: すべての関数の引数と戻り値に型を付ける
-  ```python
-  def calculate_delay(self, platform: Platform) -> float:
-  ```
-
-- **docstring**: すべての public クラスとメソッドに docstring を付ける
-  ```python
-  def evaluate(self, message: str) -> Result:
-      """メッセージを評価する."""
-  ```
-
-- **`from __future__ import annotations`**: すべてのモジュールの先頭に記述する
-
-### スタイルガイド
-
-- フォーマッター: 特に指定なし（将来的に ruff を導入予定）
-- docstring スタイル: Google スタイル
-- 行の長さ: 最大 99 文字を推奨
-- import 順序: 標準ライブラリ → サードパーティ → ローカル
-
-### 設定ファイル（JSON）
-
-- インデント: 2 スペース
-- キー名: snake_case
-- 文字列値: ダブルクォート
-
----
-
-## 倫理審査
-
-すべての PR は以下の倫理チェックを通過する必要があります。
-
-### チェックリスト
-
-PR を作成する際、以下を確認してください:
-
-- [ ] `docs/ethics.md` の禁止用途に該当しない
-- [ ] 詐欺・なりすまし・世論操作を容易にする機能ではない
-- [ ] 感情的に脆弱な人への悪用リスクを検討した
-- [ ] プラットフォーム TOS 違反を助長しない
-
-### 判断に迷う場合
-
-倫理的な懸念がある場合は、PR を作成する前に Issue で議論してください。
-「この用途は倫理的に問題ないか？」という質問は歓迎します。
-
----
-
-## Issue の作成
-
-- **新しいペルソナのリクエスト**: `.github/ISSUE_TEMPLATE/persona_request.md` テンプレートを使用
-- **バグ報告**: `.github/ISSUE_TEMPLATE/bug_report.md` テンプレートを使用
-- **その他**: 自由形式で Issue を作成してください
+By contributing, you agree that your contributions will be licensed under
+AGPL-3.0-or-later, the same license as the project.
