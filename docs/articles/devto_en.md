@@ -22,7 +22,7 @@ These are *paralinguistic features* — a separate layer from language understan
 
 ## The Solution: A Behavioral Base Class
 
-I built **[human-persona](https://github.com/RintaroMatsumoto/human-persona)**, an open-source Python framework that provides the behavioral layer for human-like AI communication. It doesn't generate text — it tells your LLM *when* to reply, *what tone* to use, and *what emotional state* to convey.
+I built **[human-persona](https://github.com/RintaroMatsumoto/human-persona)**, a Python framework (AGPL-3.0) that provides the behavioral layer for human-like AI communication. It doesn't generate text — it tells your LLM *when* to reply, *what tone* to use, and *what emotional state* to convey.
 
 The framework decomposes human-like behavior into 4 orthogonal components:
 

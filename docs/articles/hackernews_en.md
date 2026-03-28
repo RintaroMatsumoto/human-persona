@@ -31,6 +31,6 @@ Design choices that might interest HN:
 
 3. The framework is intentionally NOT an LLM wrapper. It's a behavioral middleware layer — compute the timing/tone/emotion parameters, inject them into whatever system prompt you're using.
 
-MIT licensed, ethics guidelines included (explicit prohibited uses list). Looking for contributors to build derived personas for other languages.
+AGPL-3.0 licensed, ethics guidelines included (explicit prohibited uses list). Looking for contributors to build derived personas for other languages.
 
 Feedback welcome, especially on evaluation methodology — how would you rigorously measure "human-likeness" beyond Turing test pass rates?

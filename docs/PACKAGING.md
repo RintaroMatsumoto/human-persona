@@ -56,7 +56,7 @@ The `pyproject.toml` is the modern Python packaging configuration file (PEP 517/
 - **version**: `0.2.0` - Bumped from 0.1.0 to reflect inner shell additions
 - **requires-python**: `>=3.10` - Minimum Python version
 - **authors**: Rintaro Matsumoto (matsumotoinla@gmail.com)
-- **license**: MIT
+- **license**: AGPL-3.0-or-later
 
 #### Package Discovery
 

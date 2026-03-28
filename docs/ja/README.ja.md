@@ -149,7 +149,7 @@ class JapaneseBusinessPersona(HumanPersonaBase):
 
 ## ライセンス
 
-MIT License
+AGPL-3.0 License
 
 ## 著者
 

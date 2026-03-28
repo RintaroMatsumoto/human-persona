@@ -6,7 +6,7 @@
 
 Hey r/MachineLearning,
 
-I've been working on an open-source Python framework called **human-persona** that tackles a problem I haven't seen addressed systematically: the *paralinguistic* side of human-like AI communication.
+I've been working on a Python framework (AGPL-3.0) called **human-persona** that tackles a problem I haven't seen addressed systematically: the *paralinguistic* side of human-like AI communication.
 
 ## The motivation
 

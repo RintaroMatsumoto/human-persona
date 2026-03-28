@@ -1,8 +1,8 @@
 ---
-title: "AIが人間のように振る舞う基底クラスを設計・OSSで公開した"
+title: "AIが人間のように振る舞う基底クラスを設計・AGPL-3.0で公開した"
 emoji: "🎭"
 type: "tech"
-topics: ["Python", "AI", "OSS", "チューリングテスト", "NLP"]
+topics: ["Python", "AI", "AGPL", "チューリングテスト", "NLP"]
 published: false
 ---
 
@@ -151,7 +151,7 @@ context = persona.get_system_prompt_context()
 ## まとめ
 
 AIが人間とばれる原因は「何を言うか」じゃなくて「どう言うか」。
-返信速度、文体の揺らぎ、感情の変化、文脈の参照——これらを基底クラスとして設計し、OSSで公開した。
+返信速度、文体の揺らぎ、感情の変化、文脈の参照——これらを基底クラスとして設計し、AGPL-3.0で公開した。
 
 リポジトリ: [github.com/RintaroMatsumoto/human-like-ai](https://github.com/RintaroMatsumoto/human-like-ai)
 
