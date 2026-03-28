@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "human-persona"
-version = "0.2.0"
+version = "0.2.1"
 description = "Language and culture-agnostic framework for AI to behave humanly. Provides HumanPersonaBase with timing, style, emotion, and inner shell modules."
 readme = "README.md"
 license = {text = "AGPL-3.0-or-later"}
