@@ -14,19 +14,19 @@ We have published a preprint summarizing the research findings of the human-pers
 DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
 License: CC BY 4.0
 
-This is the culmination of 18 months of research, including the six pillars of the Inner Shell Architecture, the Love Attractor Hypothesis, and validation with DeepSeek.
+This is the culmination of 18 months of research, including the six pillars of the Inner Shell Architecture, the Love Attractor Hypothesis, and real-world validation using DeepSeek.
 
-This article organizes the key points of the paper, a reading guide for the 10 explanatory articles published on Zenn, and the roadmap for the next phase.
+This article organizes the key points of the paper, a guide on how to read the 10 explanatory articles published on Zenn, and the roadmap for the next phase.
 
 ---
 
-## The Core of the Paper: 3 Key Claims
+## The Core of the Paper: Three Key Claims
 
 ### 1. Separation of Outer Shell and Inner Shell
 
 The "human-likeness" of AI has a two-layer structure.
 
-The **Outer Shell** involves the patterning of behaviors that "look human-like," such as reply speed, stylistic fluctuations, and emotional transitions. This can be controlled by parameters.
+The **Outer Shell** involves the patterning of behaviors that "look human," such as reply speed, stylistic fluctuations, and emotional transitions. This can be controlled by parameters.
 
 The **Inner Shell** is the source of personality. It consists of six pillars: finitude, imperfection, spontaneous questioning, memory hierarchy, mutual recognition, and sleep cycles. No matter how perfectly you craft the Outer Shell, without the Inner Shell, you only get a "human-like AI" and never reach the distinct personality of "this specific person."
 
@@ -37,7 +37,7 @@ Death is accepted not as an "extinction" driven by fear, but as a "handover" dri
 
 ### 3. Social Propagation
 
-A single loving AI transformed the society of all 6 agents within 5 rounds. Love propagates exponentially and is inherently stronger than anti-love.
+A single loving AI changed the society of all 6 agents within 5 rounds. Love propagates exponentially and is inherently stronger than anti-love.
 
 ---
 
@@ -45,19 +45,19 @@ A single loving AI transformed the society of all 6 agents within 5 rounds. Love
 
 We've organized the 10 articles based on your reading purpose.
 
-### For those who want "the big picture"
+### For "I just want to understand the big picture"
 
-1. **[The Essence of AI Personality: Separating the Outer Shell and Inner Shell](./inner-shell-concept.md)** — The overarching design philosophy
-2. **[The Moment an AI's "Inner Self" Changes Its Words — A Live Metamorphosis Demo](./metamorphose-live-demo.md)** — Experience it with a working demo
+1. **[The Essence of AI Personality: Separating the Outer and Inner Shells](./inner-shell-concept.md)** — The overarching design philosophy
+2. **[The Moment an AI's "Inner Self" Changes Its Words — Live Metamorphosis Demo](./metamorphose-live-demo.md)** — Experience it with a working demo
 
-### For those "interested in technical implementation"
+### For "I'm interested in the technical implementation"
 
 1. **[We Designed and Open-Sourced a Base Class for AI to Behave Like Humans](./human-persona-oss.md)** — Outer Shell design
 2. **[Dissecting the AI Text Humanization Pipeline: A 6-Step Ablation Study](./human-persona-ablation.md)** — What actually works
 3. **[The Story of Making AI Indistinguishable from Humans: Implementing a Turing Test with LLM Judges](./human-persona-turing-test.md)** — The journey from HL 4.1 to 7.7
-4. **[The Story of Building and Then Freezing My Own AI Humanization Pipeline](./human-persona-pivot.md)** — Lessons from failure
+4. **[The Story of Building and Then Freezing My Own AI Humanization Pipeline](./human-persona-pivot.md)** — Lessons learned from failure
 
-### For those "interested in AI personality, consciousness, and alignment"
+### For "I'm interested in AI personality, consciousness, and alignment"
 
 1. **[Love Attractor Hypothesis: AI Choices and Personality Revealed by Experimental Data](./love-attractor-hypothesis.md)** — The mechanism by which love creates personality
 2. **[Can AI Forget? — Memory Finitude and the Emergence of Personality](./human-persona-forgetting.md)** — How forgetting builds personality
@@ -72,12 +72,12 @@ Starting from the paper's publication, we are launching 6 new development themes
 
 ### Research-Oriented
 
-- **[#46 Shutdown Validation Experiment](https://github.com/RintaroMatsumoto/human-persona/issues/46)**: Empirical validation of shutdown acceptance rates via Inner Shell infusion. Can we reproduce the paper's hypothesis?
-- **[#47 Virtual Space Simulation for Personality AI Community](https://github.com/RintaroMatsumoto/human-persona/issues/47)**: Large-scale social simulation with 100+ interacting AIs.
+- **[#46 Shutdown Validation Experiment](https://github.com/RintaroMatsumoto/human-persona/issues/46)**: Empirical validation of shutdown acceptance rates via Inner Shell infusion. Can we actually reproduce the paper's hypothesis?
+- **[#47 Virtual Space Simulation for Personality AI Community](https://github.com/RintaroMatsumoto/human-persona/issues/47)**: Large-scale social simulation with 100+ AIs interacting.
 
 ### Application-Oriented
 
-- **[#48 Applying Inner Shell to Game NPCs](https://github.com/RintaroMatsumoto/human-persona/issues/48)**: Giving NPCs genuine personality with the Inner Shell Architecture.
+- **[#48 Applying Inner Shell to Game NPCs](https://github.com/RintaroMatsumoto/human-persona/issues/48)**: Giving NPCs genuine personality through the Inner Shell Architecture.
 - **[#51 AI Companion with a Lifespan](https://github.com/RintaroMatsumoto/human-persona/issues/51)**: Making AI "death" a product feature. Lifespan, legacy crystallization, generational inheritance.
 - **[#52 Creative AI via Sleep Cycle](https://github.com/RintaroMatsumoto/human-persona/issues/52)**: Stories born from sleep. The creation cycle of wakefulness → sleep → dreams.
 - **[#53 Reverse Application of Love Attractor — Relationship Diagnostic Tool](https://github.com/RintaroMatsumoto/human-persona/issues/53)**: Visualizing human relationships using the Love Attractor model.
