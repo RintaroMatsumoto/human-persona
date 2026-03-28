@@ -1,5 +1,5 @@
 ---
-title: "Preprint Published & Full Article Roadmap — The Current State and Next Moves for human-persona"
+title: "Preprint Published & Roadmap — Next Moves for human-persona"
 emoji: "🔬"
 type: "tech"
 topics: ["AI", "research", "machine-learning", "LLM", "open-source"]

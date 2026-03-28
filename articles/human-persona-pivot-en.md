@@ -1,5 +1,5 @@
 ---
-title: "The Story of Building and Then Freezing My Own AI Humanization Pipeline"
+title: "Building and Then Freezing My AI Humanization Pipeline"
 emoji: "🔬"
 type: "tech"
 topics: ["AI", "research", "machine-learning", "LLM", "open-source"]

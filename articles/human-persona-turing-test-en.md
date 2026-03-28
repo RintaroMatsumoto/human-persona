@@ -1,5 +1,5 @@
 ---
-title: "The Story of Making AI Indistinguishable from Humans: Implementing a Turing Test with LLM Judges"
+title: "Making AI Indistinguishable from Humans: A Turing Test with LLMs"
 emoji: "🔬"
 type: "tech"
 topics: ["AI", "research", "machine-learning", "LLM", "open-source"]

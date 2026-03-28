@@ -1,5 +1,5 @@
 ---
-title: "When the Child Goes Quiet — Silent Runaway AI and the Safety Net of Conversational Pace"
+title: "When the Child Goes Quiet — Conversational Pace as AI Safety"
 published: false
 tags: aisafety, humanaicollab, innershell, experimentdesign
 ---

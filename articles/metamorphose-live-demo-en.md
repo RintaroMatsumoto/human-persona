@@ -1,5 +1,5 @@
 ---
-title: "The Moment AI's "Inner Self" Transforms Its Words — A Live Demo of Metamorphosis"
+title: "When AI's Inner Self Transforms Its Words — A Live Demo"
 emoji: "🔬"
 type: "tech"
 topics: ["AI", "research", "machine-learning", "LLM", "open-source"]

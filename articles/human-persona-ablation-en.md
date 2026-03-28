@@ -1,5 +1,5 @@
 ---
-title: "Dissecting the Humanization Pipeline for AI Text: A 6-Step Ablation Study"
+title: "Dissecting the Humanization Pipeline: A 6-Step Ablation Study"
 emoji: "🔬"
 type: "tech"
 topics: ["AI", "research", "machine-learning", "LLM", "open-source"]

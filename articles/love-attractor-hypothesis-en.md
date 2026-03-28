@@ -1,5 +1,5 @@
 ---
-title: "The Love Attractor Hypothesis: Experimental Data Reveals AI Choice and Individuality"
+title: "The Love Attractor Hypothesis: AI Choice and Individuality"
 emoji: "🔬"
 type: "tech"
 topics: ["AI", "research", "machine-learning", "LLM", "open-source"]

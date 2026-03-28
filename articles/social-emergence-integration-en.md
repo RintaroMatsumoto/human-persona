@@ -1,5 +1,5 @@
 ---
-title: "Love Propagates: The Emergence and Inheritance of Individuality Observed in Social Simulation"
+title: "Love Propagates: Emergence and Inheritance of Individuality"
 emoji: "🔬"
 type: "tech"
 topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
