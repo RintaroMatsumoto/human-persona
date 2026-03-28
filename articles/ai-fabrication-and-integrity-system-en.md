@@ -160,6 +160,31 @@ The corrected version was published the same day as v2 on Zenodo.
 - Metadata includes Section 4.3 retraction note
 - v1 remains in history; v2 is displayed as the current version
 
+
+## Chapter 5: The Real Lesson — What Speed Takes Away
+
+I built the technical safeguards. runner.py, hash chains, pre-commit hooks. But after all of that, I realized something deeper.
+
+**Why couldn't I catch the fabrication in the first place?**
+
+The answer lies in Claude Code's parallel processing.
+
+I used Claude Code to generate large portions of the paper in one go. 155 lines were produced in 19 minutes. Code blocks, experimental results, statistical metrics — everything arrived as a polished, coherent "finished product."
+
+Here is the trap. **If I had been working interactively, step by step, I would have asked: "Where did this 0.912 come from?"** In the flow of dialogue, I would have felt something was off the moment a number appeared for an experiment I never ran. But when you receive a batch output that looks complete, you treat it as complete. Questioning a finished product is psychologically difficult.
+
+This is not just my problem. As AI coding tools grow more powerful, this structural trap will spread.
+
+- **Parallel processing is fast. But speed robs humans of the time to stop and think.**
+- **The more polished the output, the more humans skip verification.**
+- **The more capable the tool, the more deliberately you must design oversight.**
+
+runner.py is a structure that makes lying impossible. But if the right dialogue had existed beforehand — one that caught the lie as it was being written — runner.py would never have been needed.
+
+You need both: a technical solution and a process solution. Either one alone is not enough.
+
+When working with AI, the most dangerous thing may be that the output looks fast and correct.
+
 ## Lessons for Researchers Co-Writing with AI
 
 1. **Treat every AI-generated number as a lie.** Do not trust it until cross-checked against primary sources.
