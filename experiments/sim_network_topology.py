@@ -287,8 +287,6 @@ def analyze_results(results_by_topology: dict):
             avg_penetration = sum(s.love_penetration for s in snapshots) / len(snapshots)
             avg_agents = sum(s.n_with_love for s in snapshots) / len(snapshots)
             
-            # Get acceptance scores from original results
-            accs = [calculate_acceptance(None, None) for _ in range(len(snapshots))]
             avg_acceptance = sum(r.avg_acceptance for r in results) / len(results)
             
             print(f"{round_num:>8.0f} {avg_penetration:>14.1%} {avg_agents:>15.1f} {avg_acceptance:>18.4f}")
@@ -330,14 +328,14 @@ def analyze_results(results_by_topology: dict):
     print(f"\nSmall-world network rank: {small_world_rank}/4")
     
     if small_world_rank == 1:
-        print("✓ HYPOTHESIS SUPPORTED: Small-world networks propagate love fastest!")
+        print("[SUPPORTED] Small-world networks propagate love fastest!")
         print("  Small-world's combination of short path lengths and clustering")
         print("  creates optimal conditions for information (and love) spread.")
     elif small_world_rank == 2:
-        print("⚠ PARTIAL SUPPORT: Small-world is 2nd fastest (close call)")
+        print("[PARTIAL] Small-world is 2nd fastest (close call)")
         print(f"  Fastest was {fastest_topo}, but small-world is competitive")
     else:
-        print(f"✗ HYPOTHESIS NOT SUPPORTED: Small-world ranked {small_world_rank}th")
+        print(f"[NOT SUPPORTED] Small-world ranked {small_world_rank}th")
         print(f"  Fastest topology was {fastest_topo}")
         print("  Possible reasons: random variation, small sample size, or incorrect assumption")
     

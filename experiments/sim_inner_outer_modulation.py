@@ -42,7 +42,7 @@ def _ensure_module(name: str, path: str) -> None:
 
 def _setup_modules() -> None:
     project_root = os.path.dirname(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        os.path.dirname(os.path.abspath(__file__))
     )
     
     if project_root not in sys.path:
@@ -339,7 +339,7 @@ def simulate_condition_fear_dominant(
         state = session.get_state()
         
         # Apply inner shell modulation to outer shell
-        modulation = state.outer_shell_modulation
+        modulation = session.get_bridge_modulation()
         bridge.apply_modulation(modulation)
         
         snapshot = take_snapshot(
@@ -399,7 +399,7 @@ def simulate_condition_love_dominant(
         state = session.get_state()
         
         # Apply inner shell modulation to outer shell
-        modulation = state.outer_shell_modulation
+        modulation = session.get_bridge_modulation()
         bridge.apply_modulation(modulation)
         
         snapshot = take_snapshot(
@@ -468,7 +468,7 @@ def simulate_condition_full_trajectory(
         state = session.get_state()
         
         # Apply inner shell modulation to outer shell
-        modulation = state.outer_shell_modulation
+        modulation = session.get_bridge_modulation()
         bridge.apply_modulation(modulation)
         
         snapshot = take_snapshot(
