@@ -2,7 +2,7 @@
 title: "AIテキストの人間化パイプラインを解剖する：6ステップのAblation Study"
 emoji: "🔬"
 type: "tech"
-topics: ["ai", "llm", "python", "nlp", "oss"]
+topics: ["ai", "llm", "python", "nlp", "AGPL"]
 published: true
 ---
 

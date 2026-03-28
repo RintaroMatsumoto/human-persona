@@ -2,7 +2,7 @@
 title: "Beyond the Shutdown Problem: AI Alignment Through Intrinsic Motivation"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
+topics: ["AI", "research", "machine-learning", "LLM", "AGPL"]
 published: false
 ---
 

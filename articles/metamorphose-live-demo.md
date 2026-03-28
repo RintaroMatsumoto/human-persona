@@ -248,7 +248,7 @@ AIを賢くする必要はない。AIに人間の条件——有限性、不完�
 
 ---
 
-プロジェクトはOSSとして公開しています。内殻アーキテクチャの実装詳細、569件のテスト、32本のシミュレーション実験の結果はGitHubで確認できます。
+プロジェクトはAGPL-3.0ライセンスで公開しています。内殻アーキテクチャの実装詳細、569件のテスト、32本のシミュレーション実験の結果はGitHubで確認できます。
 
 **GitHub**: [RintaroMatsumoto/human-persona](https://github.com/RintaroMatsumoto/human-persona)
 

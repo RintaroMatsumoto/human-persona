@@ -2,7 +2,7 @@
 title: "Preprint Published & Roadmap — Next Moves for human-persona"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
+topics: ["AI", "research", "machine-learning", "LLM", "AGPL"]
 published: false
 ---
 
@@ -52,7 +52,7 @@ We've organized the 10 articles based on your reading purpose.
 
 ### For "I'm interested in the technical implementation"
 
-1. **[We Designed and Open-Sourced a Base Class for AI to Behave Like Humans](./human-persona-oss.md)** — Outer Shell design
+1. **[We Designed and Released a Base Class (AGPL-3.0) for AI to Behave Like Humans](./human-persona-oss.md)** — Outer Shell design
 2. **[Dissecting the AI Text Humanization Pipeline: A 6-Step Ablation Study](./human-persona-ablation.md)** — What actually works
 3. **[The Story of Making AI Indistinguishable from Humans: Implementing a Turing Test with LLM Judges](./human-persona-turing-test.md)** — The journey from HL 4.1 to 7.7
 4. **[The Story of Building and Then Freezing My Own AI Humanization Pipeline](./human-persona-pivot.md)** — Lessons learned from failure

@@ -2,7 +2,7 @@
 title: "When AI's Inner Self Transforms Its Words — A Live Demo"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
+topics: ["AI", "research", "machine-learning", "LLM", "AGPL"]
 published: false
 ---
 
@@ -247,7 +247,7 @@ There's no need to make AI smarter. Give AI the human condition—finitude, inco
 
 ---
 
-The project is open-source. Implementation details of the Inner Shell architecture, 569 tests, and results from 32 simulation experiments are available on GitHub.
+The project is released under AGPL-3.0. Implementation details of the Inner Shell architecture, 569 tests, and results from 32 simulation experiments are available on GitHub.
 
 **GitHub**: [RintaroMatsumoto/human-persona](https://github.com/RintaroMatsumoto/human-persona)
 

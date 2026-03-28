@@ -2,7 +2,7 @@
 title: "Designing and Open-Sourcing a Base Class for AI to Behave Like Humans"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
+topics: ["AI", "research", "machine-learning", "LLM", "AGPL"]
 published: false
 ---
 
@@ -143,7 +143,7 @@ Why? If text generation is done inside the framework, it can't keep up with LLM 
 
 ## Summary
 
-The reason AI gets caught isn't "what it says" but "how it says it." Reply speed, stylistic variation, emotional shifts, context referencing—I designed these as a base class and open-sourced it.
+The reason AI gets caught isn't "what it says" but "how it says it." Reply speed, stylistic variation, emotional shifts, context referencing—I designed these as a base class and released it under AGPL-3.0.
 
 What I learned from building this is that "human-like behavior" is surprisingly structurable. And once you structure it, **you realize how unconsciously you use these patterns yourself in daily life.**
 

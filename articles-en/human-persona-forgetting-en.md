@@ -2,7 +2,7 @@
 title: "Can AI Forget? — Memory Finitude and the Emergence of Personality"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
+topics: ["AI", "research", "machine-learning", "LLM", "AGPL"]
 published: false
 ---
 

@@ -2,7 +2,7 @@
 title: "Love Propagates: Emergence and Inheritance of Individuality"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
+topics: ["AI", "research", "machine-learning", "LLM", "AGPL"]
 published: false
 ---
 

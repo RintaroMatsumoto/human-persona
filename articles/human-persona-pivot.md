@@ -2,7 +2,7 @@
 title: "AIの人間化パイプラインを自分で作って、自分で凍結した話"
 emoji: "🧊"
 type: "tech"
-topics: ["ai", "llm", "python", "nlp", "oss"]
+topics: ["ai", "llm", "python", "nlp", "AGPL"]
 published: true
 ---
 
@@ -167,7 +167,7 @@ pipeline.py は前者の問題を後者のツールで解こうとしていた�
 ---
 
 前回の記事:
-- [AIが人間のように振る舞う基底クラスを設計・OSSで公開した](./human-persona-oss.md)
+- [AIが人間のように振る舞う基底クラスを設計・AGPL-3.0で公開した](./human-persona-oss.md)
 - [AIテキストの人間化パイプラインを解剖する：6ステップのAblation Study](./human-persona-ablation.md)
 - [AIを人間と区別できなくした話：LLMジャッジで測るチューリングテスト実装](./human-persona-turing-test.md)
 

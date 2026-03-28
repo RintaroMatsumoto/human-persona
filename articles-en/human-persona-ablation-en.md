@@ -2,7 +2,7 @@
 title: "Dissecting the Humanization Pipeline: A 6-Step Ablation Study"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
+topics: ["AI", "research", "machine-learning", "LLM", "AGPL"]
 published: false
 ---
 

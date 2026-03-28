@@ -2,7 +2,7 @@
 title: "Building and Then Freezing My AI Humanization Pipeline"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
+topics: ["AI", "research", "machine-learning", "LLM", "AGPL"]
 published: false
 ---
 
@@ -167,7 +167,7 @@ Repository: [github.com/RintaroMatsumoto/human-persona](https://github.com/Rinta
 ---
 
 Previous Articles:
-*   [I Designed and Open-Sourced a Base Class for AI to Behave Like Humans](./human-persona-oss.md)
+*   [I Designed and Released a Base Class (AGPL-3.0) for AI to Behave Like Humans](./human-persona-oss.md)
 *   [Dissecting an AI Text Humanization Pipeline: A 6-Step Ablation Study](./human-persona-ablation.md)
 *   [The Story of Making AI Indistinguishable from Humans: Implementing a Turing Test with LLM Judges](./human-persona-turing-test.md)
 

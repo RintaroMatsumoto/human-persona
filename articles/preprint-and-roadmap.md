@@ -2,7 +2,7 @@
 title: "プレプリント公開 & 全記事ロードマップ — human-persona の現在地と次の一手"
 emoji: "🗺️"
 type: "tech"
-topics: ["AI", "humanpersona", "論文", "ロードマップ", "OSS"]
+topics: ["AI", "humanpersona", "論文", "ロードマップ", "AGPL"]
 published: true
 ---
 
@@ -52,7 +52,7 @@ AIの「人間らしさ」は2層構造を持つ。
 
 ### 「技術実装に興味がある」人
 
-1. **[AIが人間のように振る舞う基底クラスを設計・OSSで公開した](./human-persona-oss.md)** — 外殻の設計
+1. **[AIが人間のように振る舞う基底クラスを設計・AGPL-3.0で公開した](./human-persona-oss.md)** — 外殻の設計
 2. **[AIテキストの人間化パイプラインを解剖する：6ステップのAblation Study](./human-persona-ablation.md)** — 何が効くか
 3. **[AIを人間と区別できなくした話：LLMジャッジで測るチューリングテスト実装](./human-persona-turing-test.md)** — HL 4.1→7.7の道のり4. **[AIの人間化パイプラインを自分で作って、自分で凍結した話](./human-persona-pivot.md)** — 失敗から学んだこと
 

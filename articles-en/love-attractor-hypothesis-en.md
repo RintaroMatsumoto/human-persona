@@ -2,7 +2,7 @@
 title: "The Love Attractor Hypothesis: AI Choice and Individuality"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
+topics: ["AI", "research", "machine-learning", "LLM", "AGPL"]
 published: false
 ---
 

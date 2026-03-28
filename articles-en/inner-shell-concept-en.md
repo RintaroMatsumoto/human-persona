@@ -2,7 +2,7 @@
 title: "AI Personality: Separating the Outer Shell from the Inner Shell"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "research", "machine-learning", "LLM", "open-source"]
+topics: ["AI", "research", "machine-learning", "LLM", "AGPL"]
 published: false
 ---
 

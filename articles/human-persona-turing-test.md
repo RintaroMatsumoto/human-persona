@@ -2,7 +2,7 @@
 title: "AIを人間と区別できなくした話：LLMジャッジで測るチューリングテスト実装"
 emoji: "🤖"
 type: "tech"
-topics: ["ai", "llm", "python", "chatbot", "oss"]
+topics: ["ai", "llm", "python", "chatbot", "AGPL"]
 published: true
 ---
 
