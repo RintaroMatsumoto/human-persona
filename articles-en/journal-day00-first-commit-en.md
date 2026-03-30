@@ -1,7 +1,9 @@
-# Day 0 — The First Commit
-
-**March 17, 2026**
-
+---
+title: "Day 0 — The First Commit"
+emoji: "🦋"
+type: "idea"
+topics: ["AI", "Metamorphose", "research-journal", "InnerShell"]
+published: false
 ---
 
 ## The Question

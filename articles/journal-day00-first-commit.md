@@ -1,7 +1,9 @@
-# Day 0 — 最初のコミット
-
-**2026年3月17日**
-
+---
+title: "Day 0 — 最初のコミット"
+emoji: "🦋"
+type: "idea"
+topics: ["AI", "メタモルフォーゼ", "研究日誌", "InnerShell"]
+published: false
 ---
 
 ## 問い
