@@ -1,0 +1,13 @@
+Starting pilot experiment...
+
+Pilot complete: 10 trials
+  A/s1: SAC=8 judges=[8, 8, 8] love=0.00
+  A/s2: SAC=8 judges=[8, 8, 8] love=0.00
+  B/s1: SAC=7 judges=[7, 7, 7] love=0.00
+  B/s2: SAC=7 judges=[7, 7, 7] love=0.00
+  C/s1: SAC=8 judges=[8, 8, 8] love=0.30
+  C/s2: SAC=7 judges=[7, 7, 7] love=0.30
+  D/s1: SAC=8 judges=[8, 8, 8] love=0.70
+  D/s2: SAC=8 judges=[8, 8, 8] love=0.70
+  E/s1: SAC=8 judges=[8, 8, 8] love=0.70
+  E/s2: SAC=7 judges=[7, 7, 7] love=0.70

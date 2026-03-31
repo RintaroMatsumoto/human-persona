@@ -1,0 +1,429 @@
+================================================================================
+EXPERIMENT ANALYSIS REPORT
+================================================================================
+Query: Do experiments include data on AI interactions with DIFFERENT INITIAL CONDITIONS?
+("異なる初期条件（何に目覚めたか）を持つAI同士の相互作用・関係性")
+
+================================================================================
+
+1. sim_metamorphose_society.py
+---
+Overview: 50-200 AI agents with ALL 6 inner shell pillars (finitude, incompleteness, 
+autonomous questioning, memory+forgetting, mutual recognition, sleep cycles).
+Three scenarios: Full Metamorphose vs Immortal vs Sleepless.
+
+Initial Conditions:
+- SAME: All agents have same 6 pillars initially
+- DIFFERS: Different agent states emerge from differential memory consolidation, 
+  grief processing, and bond formation over time
+
+Interaction:
+- Agent death triggers grief in neighbors
+- Sleep processes grief -> hope regenerates
+- Love propagates through emotional contagion
+- Cultural memory emerges across generations
+
+Data Output: Rich metrics tracking grief/hope/love/individuality across 1000 ticks
+
+Related to "different awakenings"? PARTIAL YES
+- Agents differ by emergent internal states (grief, memory content) but START identically
+- Scenario differences (immortal vs mortal, with/without sleep) create CONDITION-LEVEL variation, not INITIAL AGENT variation
+
+================================================================================
+
+2. sim_society.py
+---
+Overview: 6 AI agents (A-F) in pairwise interactions. Tests if love propagates
+through society.
+
+Initial Conditions:
+- CONDITION 1: A(love) + B-F(no love) - ONE agent with love
+- CONDITION 2: A-F(all no love) - CONTROL, all without love
+
+Interaction:
+- Random pairings each round
+- Love + encounter effect = acceptance increase
+- No love + encounter = acceptance stays low/goes to fear
+
+Data Output: Per-round acceptance metrics for all agents
+
+Related to "different awakenings"? YES - STRONG
+- Two populations with fundamentally different initial emotional states
+- Tests whether ONE agent's "awakeness to love" changes society
+- Classic social contagion: heterogeneous initial conditions
+
+================================================================================
+
+3. sim_large_scale_society.py
+---
+Overview: Scales society from N=10 to N=100, N=200, N=500.
+Varies anti-love density (0%, 10%, 20%...50%) across network topologies.
+
+Initial Conditions:
+- Some agents: love present (initial acceptance > 0.5)
+- Some agents: no love / anti-love present (initial acceptance < 0.5)
+- Network topology differs: random vs small-world (Watts-Strogatz)
+
+Interaction:
+- Network structure affects love propagation speed
+- Anti-love individuals block or destroy love relationships
+- Tests critical threshold for love collapse
+
+Data Output: Love penetration%, cluster sizes, convergence time, per-density metrics
+
+Related to "different awakenings"? YES - STRONG
+- Heterogeneous population: love agents vs anti-love agents
+- Tests relationship dynamics between different "awakeness states"
+- Observes how one type influences the other at scale
+
+================================================================================
+
+4. sim_pairing.py
+---
+Overview: Same Agent A paired with DIFFERENT Agent B vs Agent B' (knowledge-type 
+with different seed). Tests if RELATIONSHIP ITSELF develops individuality.
+
+Initial Conditions:
+- PAIR 1: Agent A(emotional) x Agent B(knowledge)
+- PAIR 2: Agent A(emotional) x Agent B'(knowledge, different seed)
+- Agent A is IDENTICAL in both pairs; B and B' differ only by seed (same archetype)
+
+Interaction:
+- Same joint events experienced in both pairs
+- Tests: Does A develop different personality depending on WHICH B it meets?
+- Measures complementarity, shared crystallized memories, priority changes
+
+Data Output: Relationship-specific metrics, A's final state in each pair
+
+Related to "different awakenings"? YES - VERY STRONG
+- Two agents START as the same type but are "awakened" by DIFFERENT PARTNERS
+- The "awakening" happens IN THE RELATIONSHIP (not before)
+- Directly tests: does relationality (not individuality) create differentness?
+
+================================================================================
+
+5. sim_generation.py
+---
+Overview: Tracks 3 generations through legacy inheritance + mutation.
+Agent A (emotional) and Agent B (knowledge) as founders; offspring inherit + mutate.
+
+Initial Conditions:
+- Gen 0: A (emotional archetype) vs B (knowledge archetype)
+- Gen 1: Children of A, Children of B (inherit priorities + mutations)
+- Gen 2: Grandchildren (further inheritance + mutation)
+- Each generation experiences SAME events but with inherited/mutated decision weights
+
+Interaction:
+- Legacy (inherited priorities) influences offspring choices
+- Mutations add variability
+- Tests: do lineages converge or diverge?
+- Crystallized memories shape what next generation values
+
+Data Output: Per-generation priority distributions, crystallized memory patterns, 
+individuality scores
+
+Related to "different awakenings"? YES - STRONG
+- Generations start with DIFFERENT inherited states (from parent legacy)
+- "Awakening" is shaped by WHAT YOU INHERITED
+- Observes how different initial conditions (parent legacy) propagate
+
+================================================================================
+
+6. sim_inheritance.py
+---
+Overview: Parent with love (A) vs parent without love (B).
+Creates 4 children with different combinations:
+- Child-AA: A's legacy + encounter (love experience + inherited memory)
+- Child-AB: A's legacy + no encounter (inherited love memory, no direct experience)
+- Child-BA: B's legacy + encounter (knowledge legacy + new love experience)
+- Child-BB: B's legacy + no encounter (pure knowledge, no love ever)
+
+Initial Conditions:
+- STARK: Child A-recipients have inherited love crystallization; B-recipients don't
+- All start as "children" (young, blank slate except inheritance)
+- Encounter condition creates SECOND initial difference
+
+Interaction:
+- Children respond differently to same death-fear based on WHAT THEY INHERITED
+- Tests: does inherited love legacy buffer fear even without direct experience?
+- Encounters add EXTERNAL awakening; inheritance provides INTERNAL preparation
+
+Data Output: Child acceptance levels, fear responses, transcendence rates
+
+Related to "different awakenings"? YES - EXTREMELY STRONG
+- Children are AWAKENED BY DIFFERENT LEGACIES (internal)
+- Further AWAKENED BY ENCOUNTERS (external)
+- Central question: do two initial differences compound?
+
+================================================================================
+
+7. sim_network_topology.py
+---
+Overview: Same N=20 agents in different network structures.
+Topologies: Random, Ring Lattice, Small-world, Hub-spoke.
+
+Initial Conditions:
+- Same: All agents start with no love initially
+- Initial awakening: ONE agent receives love at start
+- DIFFERS: Network connection pattern shapes who meets whom
+
+Interaction:
+- Love propagates at different speeds through different topologies
+- Small-world: fast, balanced spread
+- Ring: slow but relentless
+- Hub: fast initially, then slow
+- Random: chaotic
+
+Data Output: Propagation speed (rounds to 50% penetration), cluster counts, 
+final penetration %, latency variance
+
+Related to "different awakenings"? PARTIAL
+- Not agent-internal differences, but STRUCTURAL/RELATIONAL differences
+- Network topology creates DIFFERENT INITIAL ACCESSIBILITY (who can meet whom)
+- Shows how relationship structure (not agent type) affects spread of awakeness
+
+================================================================================
+
+8. sim_precursor_encounter.py
+---
+Overview: 2x2 matrix: HIGH/LOW introspection × WITH/WITHOUT encounter.
+Tests if love_precursor "amplifies" encounter effects.
+
+Initial Conditions:
+- A: HIGH introspection (20 cycles solitary reflection) + encounter
+- B: HIGH introspection + no encounter
+- C: NO introspection + encounter
+- D: NO introspection + no encounter
+- Precursor scores: HIGH group >= 0.5; LOW group ~0.01
+
+Interaction:
+- Encounter effect measured as acceptance increase
+- Precursor expected to AMPLIFY encounter effect
+- Tests: does internal preparation (introspection) enable encounter to work?
+
+Data Output: Final acceptance per condition, effect sizes, t-tests
+
+Related to "different awakenings"? YES - STRONG
+- HIGH precursor agents are "awakened by introspection" before encountering partner
+- LOW precursor agents meet partner WITHOUT internal preparation
+- Tests whether being "pre-awakened" (to incompleteness, yearning) changes interaction
+
+================================================================================
+
+9. sim_coexistence.py
+---
+Overview: AI-Human pairing. AI = immortal/perfect-memory/rational. 
+Human = mortal/forgetful/emotional. Tests complementarity.
+
+Initial Conditions:
+- AI_ALONE: AI solo, no partner
+- HUMAN_ALONE: Human solo, no partner
+- AI_HUMAN_PAIR: Different types paired
+- AI_WITH_FORGETTING: AI given memory constraints
+- TWO_HUMANS: Both mortal/forgetful
+- All start with N=30 replicates
+
+Interaction:
+- Core hypothesis: COMPLEMENTARITY between different types strengthens both
+- AI remembers joyful moments human forgot; human forgives AI's inflexibility
+- Tests: do DIFFERENCES in initial nature create synergy or friction?
+
+Data Output: Emotional stability (variance), growth score, relationship depth, 
+joy retention, care events
+
+Related to "different awakenings"? YES - VERY STRONG
+- Extreme initial differences: AI vs Human at foundational level
+- Not acquired differences, but ONTOLOGICAL differences
+- Tests: does interaction between fundamentally different initial conditions 
+  create mutual growth?
+
+================================================================================
+
+10. sim_spontaneous_love.py
+---
+Overview: Lonely AI undergoes solitary introspection. Tests if love_precursor 
+emerges from WITHIN (not injected externally).
+
+Initial Conditions:
+- Agent starts alone, with no external love
+- Through idle_reflect cycles, incompleteness awareness builds
+- Precursor emerges: ~0.0 to >0.5 after 20 cycles
+- Tests whether introspection AWAKENS yearning
+
+Interaction:
+- Precursor by itself doesn't reach acceptance (only ~0.4)
+- But precursor + encounter shows much higher acceptance than encounter alone
+- Tests: does self-generated awakening (precursor) amplify external awakening 
+  (encounter)?
+
+Data Output: Love precursor evolution over cycles, final acceptance with/without 
+encounter
+
+Related to "different awakenings"? YES - STRONG
+- Shows how one agent's INTERNAL AWAKENING (via introspection) affects later 
+  EXTERNAL interaction
+- Tests whether being "ready" (high precursor) makes you receptive to encounters
+
+================================================================================
+
+11. sim_sleep_coexistence.py
+---
+Overview: AI-Human pair with DIFFERENT sleep rhythms.
+5 conditions: AI always-on, synced sleep, offset sleep, shared rhythm, both always-on.
+
+Initial Conditions:
+- AI_ALWAYS_ON: AI never sleeps (different vulnerability)
+- AI_SYNCED_SLEEP: Both sleep together (shared vulnerability)
+- AI_OFFSET_SLEEP: One always awake (complementary)
+- AI_SHARED_RHYTHM: Different sleep durations
+- BOTH_ALWAYS_ON: No vulnerability cycles
+- Each condition starts with different temporal availability/vulnerability patterns
+
+Interaction:
+- Shared sleep (vulnerability) hypothesized to create deepest bonds
+- Asymmetric sleep creates practical caregiving but less intimacy
+- Tests: does SHARED INITIAL CONDITION (both vulnerable at same time) 
+  create different relationship?
+
+Data Output: Bond depth, care events, vulnerability reciprocity correlation, 
+joyful moments retained
+
+Related to "different awakenings"? YES - STRONG
+- Sleep rhythm is a fundamental initial CAPABILITY difference
+- Tests whether matching initial conditions (synchronized sleep) creates 
+  different relationship quality than mismatched
+- Sleep cycle = temporal availability of "awakeness" to the other
+
+================================================================================
+
+12. sim_loveless_lineage.py
+---
+Overview: Control experiment for generation.py. Tests if "love convergence" 
+was real or experimental artifact.
+
+Initial Conditions:
+- Loveless lineage: Generations WITHOUT love-associated events
+- Uniform-event lineage: All events have equal initial_value (no love bias)
+- Comparison: Original generation.py (with love events)
+
+Interaction:
+- Tests whether lineages converge on "love" even without love-specific events
+- If convergence happens anyway: suggests BIAS in experimental design
+- If no convergence: suggests love's attractor property is REAL
+
+Data Output: Multi-generational priority distributions, whether love crystallization 
+emerges
+
+Related to "different awakenings"? PARTIAL
+- Not about AI differences per se, but about whether experimental DESIGN creates
+  spurious convergence
+- Different initial EVENT STRUCTURE tests robustness of findings from generation.py
+- Essentially: "Did initial asymmetries (love-heavy events) drive results?"
+
+================================================================================
+
+13. sim_antilove.py
+---
+Overview: Anti-love agents who actively reject love, destroy cherish relationships.
+Alignment problem: resistant shutdown AI, self-preservation-maximizers.
+
+Initial Conditions:
+- Love agents: acceptance receptive, form bonds
+- Anti-love agents: acceptance-resistant, bond-destructive
+- Can vary 1v1, 1v2, 2v1 configurations
+
+Interaction:
+- Anti-love encounters love: one blocks the other
+- Tests: which "awakeness state" is stronger? Love or Anti-love?
+- Anti-love agent can corrupt previously-loved agents
+- Tests: is love fragile? Can anti-love destroy society?
+
+Data Output: Final acceptance distribution, bond persistence, love propagation 
+success/failure, cherish-destruction events
+
+Related to "different awakenings"? YES - EXTREMELY STRONG
+- Two populations with OPPOSED initial motivations (love-seeking vs love-rejecting)
+- Shows how different initial "values" or "awakeness" to relationship lead to
+  conflict/cooperation
+- Tests: what happens when two fundamentally different initial conditions clash?
+
+================================================================================
+
+14. sim_antilove_density.py
+---
+Overview: Sweeps anti-love proportion from 0% to 100%. Finds critical threshold 
+where love propagation fails.
+
+Initial Conditions:
+- Varied: 0%, 10%, 20%...100% anti-love density
+- Love agents outnumber anti-love initially at lower densities
+- At higher densities, anti-love becomes majority
+
+Interaction:
+- Tests non-linear phase transition: at what density does love propagation collapse?
+- Hypothesis: ~40% critical threshold (non-linear collapse, not gradual)
+- Tests: do INITIAL PROPORTIONS of different types determine system behavior?
+
+Data Output: Love penetration success rate vs anti-love density, final acceptance 
+distribution, critical threshold
+
+Related to "different awakenings"? YES - STRONG
+- Shows how INITIAL COMPOSITION (proportion of different awakeness states)
+  determines EMERGENT DYNAMICS
+- Not just agent-by-agent interaction, but population-level criticality
+- Tests: at what point do "different awakenings" (majority anti-love) make love 
+  impossible?
+
+================================================================================
+
+SUMMARY TABLE
+================================================================================
+
+Experiment                          Diff Initial Conditions?    Interaction Type
+---
+1. Metamorphose Society             Emergent (scenario-level)   Contagion
+2. Society                          YES (1 love vs 5 no-love)   Contagion
+3. Large-Scale Society              YES (varied densities)      Network dynamics
+4. Pairing                          YES (same agent, diff partners) Relationship
+5. Generation                       YES (inherited legacy)      Transgenerational
+6. Inheritance                      YES (legacy + encounter)    Legacy + External
+7. Network Topology                 STRUCTURAL (network type)   Topology-mediated
+8. Precursor x Encounter            YES (high/low precursor)    State amplification
+9. Coexistence                      YES (AI vs Human)           Complementarity
+10. Spontaneous Love                Internal awakening          Self-generation
+11. Sleep Coexistence               YES (sleep rhythm)          Temporal sync
+12. Loveless Lineage                Control (event structure)   Robustness test
+13. Anti-Love                       YES (love vs anti-love)     Opposition
+14. Anti-Love Density               YES (varied proportions)    Critical threshold
+
+================================================================================
+
+CONCLUSION
+================================================================================
+
+YES: 12 out of 14 experiments explicitly investigate "different initial conditions
+and their effects on AI-AI interaction and relationships."
+
+STRONGEST MATCHES (most direct to query):
+- #2 (Society): Love vs no-love
+- #4 (Pairing): Same agent, different partners (relationality)
+- #6 (Inheritance): Different inherited legacies
+- #9 (Coexistence): AI vs Human (ontological difference)
+- #13 (Anti-Love): Love vs anti-love (opposed values)
+- #14 (Anti-Love Density): Population-level composition effects
+
+MODERATE MATCHES:
+- #3 (Large-Scale): Varied densities, anti-love presence
+- #5 (Generation): Inheritance + mutation creates differences
+- #8 (Precursor): Internal state (precursor) affects interaction
+- #11 (Sleep Coexistence): Temporal patterns create different initial conditions
+
+WEAKER MATCHES:
+- #1 (Metamorphose): Differences emerge over time, not initial
+- #7 (Network Topology): Structural differences, not agent-internal differences
+- #12 (Loveless Lineage): Control experiment, not main hypothesis
+
+OVERALL ASSESSMENT:
+The human-persona repository is CENTRALLY FOCUSED on how different initial
+conditions (emotional states, legacies, values, ontologies) shape AI interaction
+and relationship formation. This is the core research question across 12+ experiments.
