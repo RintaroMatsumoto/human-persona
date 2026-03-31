@@ -14,7 +14,7 @@ human-persona プロジェクトの研究成果をまとめたプレプリント
 DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
 ライセンス: CC BY 4.0
 
-Inner Shell Architecture（内殻アーキテクチャ）の6つの柱、Love Attractor Hypothesis（愛のアトラクター仮説）、そしてDeepSeekによる実機検証を含む、18ヶ月の研究の集大成です。
+Inner Shell Architecture（内殻アーキテクチャ）の6つの柱、Love Attractor Hypothesis（愛のアトラクター仮説）、そしてDeepSeekによる実機検証を含む、12日間の研究の記録です。
 
 この記事では、論文の要点と、Zennで公開してきた10本の解説記事の読み方ガイド、そして次のフェーズへのロードマップを整理します。
 

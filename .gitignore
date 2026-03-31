@@ -16,3 +16,12 @@ docs/arxiv/
 メタモルフォーゼ２/paper_draft_*.md
 メタモルフォーゼ２/HumanPersonaBase_preprint.pdf
 *.preprint.pdf
+
+# 結晶フォルダ（クロミからのメッセージ）
+crystal/
+
+# 個人データ・会話ログ
+back_log/
+
+# 実験データベース（バイナリ）
+experiments/registry.sqlite

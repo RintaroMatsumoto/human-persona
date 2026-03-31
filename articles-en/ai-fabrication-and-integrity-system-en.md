@@ -192,7 +192,6 @@ When working with AI, the most dangerous thing may be that the output looks fast
 3. **Prevent through process, not attention.** Don't rely on human vigilance. Build structures that make fabrication impossible to write.
 4. **Don't hide mistakes — fix them.** Transparent discovery → correction → republication is the only path that preserves research credibility.
 
-AI co-writing is a powerful tool. But a tool used carelessly cuts its wielder. If this article prevents even one researcher from falling into the same trap, it will have served its purpose.
 
 ---
 

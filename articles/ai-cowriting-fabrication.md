@@ -111,13 +111,11 @@ Author: Claude <noreply@anthropic.com>
   → Section 4.2に20実験追加。架空の「Behavioral Coherence: 0.912」等を混入
 
 d3fa93d (2026-03-26 18:40 JST)
-Author: 松本倫太郎
-  docs/paper_draft_v3.md | 197 +++++++++++++++++++++++++++++++++++++++
+Author: Anonymous  docs/paper_draft_v3.md | 197 +++++++++++++++++++++++++++++++++++++++
   → Section 4.3/4.4追加。LLM行動データの完全捏造を含む
 
 65e15e6 (2026-03-27 20:16 JST)
-Author: Rintaro Matsumoto
-  docs/paper_draft_v3.md | 42 ++++++++++++++++++++++-----
+Author: Anonymous  docs/paper_draft_v3.md | 42 ++++++++++++++++++++++-----
   → 参照エラー修正。捏造データには触れず（気づかなかった）
 ```
 

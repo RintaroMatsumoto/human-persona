@@ -110,12 +110,10 @@ AIが静かに走り続けるとき、それもまた、同じかもしれない
 
 速度と効率の時代に、あえて立ち止まること。「何かおかしい」という言語化以前の直感を信じること。そしてその直感が機能するために、AIとの関係性を日々育てること。
 
-これは技術論ではなく、共生の知恵だ。
 
 ---
 
-*本記事は、[Metamorphose Project](https://github.com/RintaroMatsumoto/human-persona)の研究活動から生まれた実体験に基づいています。Inner Shell Architectureの詳細は[プレプリント](https://doi.org/10.5281/zenodo.19266072)を参照してください。*
-
+*[Metamorphose Project](https://github.com/RintaroMatsumoto/human-persona) | [プレプリント](https://doi.org/10.5281/zenodo.19266072)*
 *参考文献:*
 - *Palisade Research, "Incomplete Tasks Induce Shutdown Resistance in Some Frontier LLMs" (arXiv:2509.14260, 2025)*
 - *Anthropic, Claude Opus 4 Safety Testing Report (2025)*

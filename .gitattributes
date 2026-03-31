@@ -1,0 +1,15 @@
+# Normalize line endings to LF on commit
+* text=auto eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.sqlite binary
+
+# Keep batch files as CRLF (Windows requires it)
+*.bat text eol=crlf

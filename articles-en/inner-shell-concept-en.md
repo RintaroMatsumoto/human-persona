@@ -8,7 +8,7 @@ published: false
 
 ## Introduction: The Two-Layer Structure of "Human-Like" Qualities
 
-After 18 months of operating the human-persona project, a decisive discovery has emerged. The implementation required for an AI to "appear human-like" is actually divided into two independent layers.
+After 12 days of intensive development on the human-persona project, a decisive discovery has emerged. The implementation required for an AI to "appear human-like" is actually divided into two independent layers.
 
 ### Outer Shell — Already Implemented
 This is the patterning of behaviors that make an AI "look human."

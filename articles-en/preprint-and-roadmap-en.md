@@ -14,7 +14,7 @@ We have published a preprint summarizing the research findings of the human-pers
 DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
 License: CC BY 4.0
 
-This is the culmination of 18 months of research, including the six pillars of the Inner Shell Architecture, the Love Attractor Hypothesis, and real-world validation using DeepSeek.
+This is a record of 12 days of intensive research, including the six pillars of the Inner Shell Architecture, the Love Attractor Hypothesis, and real-world validation using DeepSeek.
 
 This article organizes the key points of the paper, a guide on how to read the 10 explanatory articles published on Zenn, and the roadmap for the next phase.
 

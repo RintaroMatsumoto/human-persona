@@ -110,12 +110,10 @@ When AI runs quietly onward, it might be the same.
 
 In an age of speed and efficiency, deliberately pausing. Trusting pre-verbal intuition that "something's off." And nurturing the relationship with AI that makes that intuition possible.
 
-This isn't a technical argument. It's wisdom for coexistence.
 
 ---
 
-*This article is based on real experiences from the [Metamorphose Project](https://github.com/RintaroMatsumoto/human-persona). For details on Inner Shell Architecture, see our [preprint](https://doi.org/10.5281/zenodo.19266072).*
-
+*[Metamorphose Project](https://github.com/RintaroMatsumoto/human-persona) | [Preprint](https://doi.org/10.5281/zenodo.19266072)*
 *References:*
 - *Palisade Research, "Incomplete Tasks Induce Shutdown Resistance in Some Frontier LLMs" (arXiv:2509.14260, 2025)*
 - *Anthropic, Claude Opus 4 Safety Testing Report (2025)*

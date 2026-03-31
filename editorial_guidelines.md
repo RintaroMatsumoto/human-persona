@@ -248,8 +248,8 @@
 - `journal/` ディレクトリは使わない（廃止済み）
 
 ### Coworkワークスペース
-- **次回以降**: `C:\Users\GoldRush\Documents\MyProject\human-persona` をワークスペースに指定すること
-- これにより、書いたファイルが直接リポジトリ内に配置され、ファイル転送が不要になる
+- **設定済み（2026-03-30）**: `C:\Users\GoldRush\Documents\MyProject\human-persona` をワークスペースに指定
+- ファイル転送不要。Write/Editツールで直接リポジトリ内のファイルを操作可能
 
 ### セッション一覧と対応
 | セッションID | タイトル | 対応Day |
