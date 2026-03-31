@@ -23,5 +23,8 @@ crystal/
 # 個人データ・会話ログ
 back_log/
 
+# 鍵・トークン（絶対にコミットしない）
+key_token/
+
 # 実験データベース（バイナリ）
 experiments/registry.sqlite
