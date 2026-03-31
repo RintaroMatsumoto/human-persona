@@ -2,7 +2,7 @@
 title: "AIは忘れることができるか——記憶の有限性と個性の創発"
 emoji: "🌙"
 type: "tech"
-topics: ["AI", "記憶", "個性", "内殻研究", "humanpersona"]
+topics: ["AI", "記憶", "個性", "内殻研究", "humanpersona", "メタモルフォーゼ"]
 published: false
 ---
 
@@ -294,3 +294,12 @@ human-persona の次フェーズでは——
 > 📄 **この記事の研究はプレプリントとして正式公開されています**
 > **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
 > DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->

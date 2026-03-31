@@ -2,7 +2,7 @@
 title: "AIと論文を共同執筆したら、捏造データが混入した話——発見・検証・再発防止の全記録"
 emoji: "🔬"
 type: "tech"
-topics: ["AI", "論文", "研究倫理", "LLM", "humanpersona"]
+topics: ["AI", "論文", "研究倫理", "LLM", "humanpersona", "メタモルフォーゼ"]
 published: false
 ---
 
@@ -278,3 +278,12 @@ AIとの共同作業で、最も危険なのは「速くて正確に見えるこ
 - [Palisade Research: Shutdown resistance in reasoning models](https://palisaderesearch.org/blog/shutdown-resistance)
 - [arxiv 2509.14260: Incomplete Tasks Induce Shutdown Resistance](https://arxiv.org/abs/2509.14260)
 - [Anthropic System Card: Claude Opus 4 & Claude Sonnet 4](https://www-cdn.anthropic.com/4263b940cabb546aa0e3283f35b686f4f3b2ff47.pdf)
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->

@@ -65,3 +65,12 @@ Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
 `docs/ethics.md` も最初から入れてある。AIの振る舞いを人間に近づける技術には、悪用のリスクが当然ある。それを後回しにしたくなかった。
 
 設計文書のロードマップには、v0.2で感情による返信速度の変動、v0.3で学習ループとA/Bテスト、v1.0で自動ペルソナ生成と書いた。設定例の名前は `JapaneseBusiness`。まっすぐに仕事道具を作ろうとしている。
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->

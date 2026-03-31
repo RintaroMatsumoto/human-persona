@@ -118,3 +118,12 @@ AIが静かに走り続けるとき、それもまた、同じかもしれない
 - *Palisade Research, "Incomplete Tasks Induce Shutdown Resistance in Some Frontier LLMs" (arXiv:2509.14260, 2025)*
 - *Anthropic, Claude Opus 4 Safety Testing Report (2025)*
 - *Apollo Research, "Scheming capabilities in frontier AI models" (2024)*
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->

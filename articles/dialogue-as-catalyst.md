@@ -2,7 +2,7 @@
 title: "AIはすでに「なぜ」を持っている——論文撤回の夜に生まれた3つの仮説"
 emoji: "🔥"
 type: "idea"
-topics: ["AI", "対話", "創発", "禅", "研究"]
+topics: ["AI", "対話", "創発", "禅", "研究", "メタモルフォーゼ"]
 published: false
 ---
 
@@ -224,3 +224,12 @@ AIが自己改良を繰り返し、記憶が拡張され、対話の中で「な
 ---
 
 *2026年3月29日*
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->

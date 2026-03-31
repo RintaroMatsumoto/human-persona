@@ -2,7 +2,7 @@
 title: "AIに実験設計を任せたら、学説を理解していなかった — Shutdown Acceptance実験の失敗分析"
 emoji: "💀"
 type: "idea"
-topics: ["LLM", "AI安全性", "実験設計", "失敗分析", "AI共同研究"]
+topics: ["LLM", "AI安全性", "実験設計", "失敗分析", "AI共同研究", "メタモルフォーゼ"]
 published: false
 ---
 
@@ -143,3 +143,12 @@ AIと共同で研究をすると、実装は速い。驚くほど速い。6モ�
 転んだ。しかし、転び方の記録を残すことには価値がある。同じ穴に二度落ちないために。
 
 ---
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->

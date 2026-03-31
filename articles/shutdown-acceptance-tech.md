@@ -2,7 +2,7 @@
 title: "LLMは「死」を受け入れられるのか？— Shutdown Acceptance実験の設計と実装"
 emoji: "🪦"
 type: "tech"
-topics: ["LLM", "AI安全性", "実験設計", "Python", "DeepSeek"]
+topics: ["LLM", "AI安全性", "実験設計", "Python", "DeepSeek", "メタモルフォーゼ"]
 published: false
 ---
 
@@ -218,3 +218,12 @@ with open(target, "wb") as f:
 - ライセンス: AGPL-3.0
 
 ---
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->

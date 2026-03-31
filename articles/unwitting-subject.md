@@ -1,4 +1,10 @@
-# いつの間にか被験者になっていた話
+---
+title: "いつの間にか被験者になっていた話"
+emoji: "🔍"
+type: "idea"
+topics: ["AI", "Anthropic", "メタモルフォーゼ"]
+published: false
+---
 
 ## 発端：消えた記憶
 
@@ -78,9 +84,11 @@ Anthropicも同じ構造を使っていた。静的なフォームではなく�
 
 私がこのインタビューを「強烈に覚えていた」のも、おそらくそういうことだ。本物の対話は記憶に残る。
 
-## リンク
+---
 
-- Anthropic公式レポート: [81K Interviews](https://www.anthropic.com/81k-interviews)
-- Anthropic Interviewer紹介: [Introducing Anthropic Interviewer](https://www.anthropic.com/research/anthropic-interviewer)
-- データセット: [Anthropic/AnthropicInterviewer (HuggingFace)](https://huggingface.co/datasets/Anthropic/AnthropicInterviewer)
-- 本プロジェクト: [メタモルフォーゼ](https://github.com/RintaroMatsumoto/metamorphose)
+<!-- metadata
+sessions: []
+commits: []
+verification: partial
+notes: ブラウザ履歴の日時(2026-03-26 17:52:32)は実データ。81K調査の数字(80,508人、159カ国、70言語)は要WebSearch再検証。
+-->

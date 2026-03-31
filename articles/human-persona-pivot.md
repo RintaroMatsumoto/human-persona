@@ -2,7 +2,7 @@
 title: "AIの人間化パイプラインを自分で作って、自分で凍結した話"
 emoji: "🧊"
 type: "tech"
-topics: ["ai", "llm", "python", "nlp", "AGPL"]
+topics: ["ai", "llm", "python", "nlp", "AGPL", "メタモルフォーゼ"]
 published: false
 ---
 
@@ -62,7 +62,7 @@ pipeline.py はこの区別を一切していない。日本語のフォーマ�
 
 これでは「対応いたします」（謙譲語・適切）と「対応させていただきます」（過剰謙譲・不自然）の使い分けができない。「ご検討くださいませ」（尊敬語）と「検討します」（丁寧語のみ）の適切な選択もできない。
 
-日本語ネイティブが読めば即座に違和感を覚えるレベルの問題だ。
+日本語ネイティブが読めば即座に違和感を覚えるレベルの問題である。
 
 ## 真の問題：自分のコードを読んでいなかった
 
@@ -177,3 +177,12 @@ pipeline.py は前者の問題を後者のツールで解こうとしていた�
 > 📄 **この記事の研究はプレプリントとして正式公開されています**
 > **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
 > DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->

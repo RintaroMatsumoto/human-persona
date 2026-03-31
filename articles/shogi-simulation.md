@@ -1,4 +1,10 @@
-# 将棋AIという先行シミュレーション
+---
+title: "将棋AIという先行シミュレーション"
+emoji: "♟️"
+type: "idea"
+topics: ["AI", "将棋", "メタモルフォーゼ"]
+published: false
+---
 
 ## 電王戦を覚えているか
 
@@ -52,6 +58,11 @@ AIと共に歩んだ人間は、かつての人間を超えた。藤井聡太の
 
 LLMの世界は今、この地図のどこかにいる。そして、人間はすでにアップデートされ始めている。
 
-## リンク
+---
 
-- 本プロジェクト: [メタモルフォーゼ](https://github.com/RintaroMatsumoto/metamorphose)
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 電王戦の歴史、AlphaGo→AlphaZero転換、Constitutional AIの詳細は要WebSearch検証
+-->

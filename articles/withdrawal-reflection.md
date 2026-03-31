@@ -2,7 +2,7 @@
 title: "論文を撤回した日——インナーシェルはシステムプロンプトを変更したに過ぎなかった"
 emoji: "🦋"
 type: "idea"
-topics: ["AI", "研究", "失敗", "誠実さ"]
+topics: ["AI", "研究", "失敗", "誠実さ", "メタモルフォーゼ"]
 published: false
 ---
 
@@ -101,3 +101,12 @@ Issue #70に、再出発のための条件を書いた。
 ---
 
 *2026年3月29日*
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->

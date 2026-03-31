@@ -248,7 +248,7 @@ AIを賢くする必要はない。AIに人間の条件——有限性、不完�
 
 ---
 
-プロジェクトはAGPL-3.0ライセンスで公開しています。内殻アーキテクチャの実装詳細、569件のテスト、32本のシミュレーション実験の結果はGitHubで確認できます。
+プロジェクトはAGPL-3.0ライセンスで公開されている。内殻アーキテクチャの実装詳細、569件のテスト、32本のシミュレーション実験の結果はGitHubで確認できる。
 
 **GitHub**: [RintaroMatsumoto/human-persona](https://github.com/RintaroMatsumoto/human-persona)
 
@@ -268,3 +268,12 @@ python demo_metamorphose.py
 > 📄 **この記事の研究はプレプリントとして正式公開されています**
 > **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
 > DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->

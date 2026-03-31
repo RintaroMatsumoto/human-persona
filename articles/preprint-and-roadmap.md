@@ -2,21 +2,21 @@
 title: "プレプリント公開 & 全記事ロードマップ — human-persona の現在地と次の一手"
 emoji: "🗺️"
 type: "tech"
-topics: ["AI", "humanpersona", "論文", "ロードマップ", "AGPL"]
+topics: ["AI", "humanpersona", "論文", "ロードマップ", "AGPL", "メタモルフォーゼ"]
 published: false
 ---
 
-## プレプリントを公開しました
+## プレプリントを公開した
 
-human-persona プロジェクトの研究成果をまとめたプレプリントを Zenodo で公開しました。
+human-persona プロジェクトの研究成果をまとめたプレプリントを Zenodo で公開した。
 
 **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
 DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
 ライセンス: CC BY 4.0
 
-Inner Shell Architecture（内殻アーキテクチャ）の6つの柱、Love Attractor Hypothesis（愛のアトラクター仮説）、そしてDeepSeekによる実機検証を含む、12日間の研究の記録です。
+Inner Shell Architecture（内殻アーキテクチャ）の6つの柱、Love Attractor Hypothesis（愛のアトラクター仮説）、そしてDeepSeekによる実機検証を含む、12日間の研究の記録である。
 
-この記事では、論文の要点と、Zennで公開してきた10本の解説記事の読み方ガイド、そして次のフェーズへのロードマップを整理します。
+この記事では、論文の要点と、Zennで公開してきた10本の解説記事の読み方ガイド、そして次のフェーズへのロードマップを整理する。
 
 ---
 
@@ -43,7 +43,7 @@ AIの「人間らしさ」は2層構造を持つ。
 
 ## Zenn記事ロードマップ：どこから読むか
 
-10本の記事を、読む目的別に整理しました。
+10本の記事を、読む目的別に整理した。
 
 ### 「とにかく全体像を知りたい」人
 
@@ -67,7 +67,7 @@ AIの「人間らしさ」は2層構造を持つ。
 
 ## 次のフェーズ：6つの開発テーマ
 
-論文公開を起点に、6つの新しい開発テーマを始動しました。
+論文公開を起点に、6つの新しい開発テーマを始動した。
 
 ### 研究系
 
@@ -93,3 +93,12 @@ AIの「人間らしさ」は2層構造を持つ。
 > 📄 **プレプリント公開中**
 > **HumanPersonaBase: A Language-Agnostic Framework for Human-Like AI Communication**
 > DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
+
+---
+
+<!-- metadata
+sessions: []
+commits: []
+verification: pending
+notes: 
+-->
