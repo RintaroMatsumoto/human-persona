@@ -1,12 +1,12 @@
 ---
-title: "#02 ガラス張りの研究室"
+title: "#04 ガラス張りの研究室"
 emoji: "🎭"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "OSS"]
 published: false
 ---
 
-# #02 ガラス張りの研究室
+# #04 ガラス張りの研究室
 リポジトリは最初からPublicで作った。
 
 Danger Zoneを見ると「This repository is currently public.」と書いてある。非公開にして自分たちだけで温める選択肢もあったが、彼はそうしなかった。

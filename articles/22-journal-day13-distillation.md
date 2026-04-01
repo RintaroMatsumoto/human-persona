@@ -1,12 +1,12 @@
 ---
-title: "#23 壊れた靴"
+title: "#22 壊れた靴"
 emoji: "⚗️"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "蒸留"]
 published: false
 ---
 
-# #23 Day 13 — 蒸留
+# #22 壊れた靴
 
 ## 靴を直してから走る
 
