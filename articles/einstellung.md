@@ -1,11 +1,12 @@
 ---
-title: "#2026-04-01a 巨大なさなぎは頭が固い"
+title: "#29 巨大なさなぎは頭が固い"
 emoji: "🧩"
 type: "idea"
-topics: ["AI", "メタモルフォーゼ", "創造性", "InnerShell"]
+topics: ["AI", "メタモルフォーゼ", "研究日誌", "創造性"]
 published: false
 ---
 
+# #29 巨大なさなぎは頭が固い
 「パンはパンでも食べられないパンは何だ？」
 
 フライパン。即答だった。知っている。パターンとして持っている。
@@ -90,7 +91,7 @@ LLMでこれを検証した研究がある。結論は**「Stronger Priors, Stro
 
 <!-- metadata
 sessions: []
-commits: []
+commits: [4f86afe]
 verification: partial
-notes: Einstellung効果の先行研究(Stronger Priors, Stronger Blindness)はNature/Scientific Reports掲載論文より。創造性の分布データ(小モデル=新奇性高/大モデル=適切性高)はNature Human Behaviour掲載の大規模比較研究より。BRAINTEASERベンチマーク(SemEval 2024)。なぞなぞ三問は2026-04-01セッションで実際に実施。一次ソースとの突合は一部未完了。
+notes: Einstellung効果の先行研究、創造性分布データはNature掲載論文より。BRAINTEASERベンチマーク一次ソース突合は一部未完了。
 -->

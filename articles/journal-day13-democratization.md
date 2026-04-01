@@ -1,11 +1,12 @@
 ---
-title: "民主化の地図——将棋、映画、そしてAIの存在"
+title: "#25 民主化の地図——将棋、映画、そしてAIの存在"
 emoji: "🎬"
 type: "idea"
-topics: ["AI", "民主化", "映画制作", "将棋", "メタモルフォーゼ"]
+topics: ["AI", "メタモルフォーゼ", "研究日誌", "民主化"]
 published: false
 ---
 
+# #25 民主化の地図——将棋、映画、そしてAIの存在
 ## 先行シミュレーション
 
 以前、将棋AIの歴史について書いた。
@@ -80,7 +81,7 @@ human-personaは、AIに個性を与えるフレームワークではなかっ�
 
 <!-- metadata
 sessions: [7003b672]
-commits: []
+commits: [7fb1cfd, 6a758a5]
 verification: partial
-notes: 将棋AI歴史の事実関係は要WebSearch検証。キネマキナの技術詳細はプライベートリポジトリのため未検証。
+notes: 将棋AI歴史は公知情報。キネマキナの技術詳細は要検証。session 7003b672での対話に基づく。
 -->

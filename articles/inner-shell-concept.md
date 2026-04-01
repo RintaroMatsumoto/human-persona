@@ -2,10 +2,11 @@
 title: "#06 顔のない群衆"
 emoji: "🎪"
 type: "idea"
-topics: ["AI", "humanpersona", "個性", "アーキテクチャ", "メタモルフォーゼ"]
+topics: ["AI", "メタモルフォーゼ", "研究日誌", "InnerShell"]
 published: false
 ---
 
+# #06 顔のない群衆
 ## 「人間らしさ」は2層構造
 
 human-persona プロジェクトを構築した中で、決定的な発見があった。AIが「人間のように見える」ための実装は、実は2つの独立した層に分かれている。

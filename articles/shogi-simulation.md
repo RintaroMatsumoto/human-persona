@@ -1,11 +1,12 @@
 ---
-title: "将棋AIという先行シミュレーション"
+title: "#22 将棋AIという先行シミュレーション"
 emoji: "♟️"
 type: "idea"
-topics: ["AI", "将棋", "メタモルフォーゼ"]
+topics: ["AI", "メタモルフォーゼ", "研究日誌", "将棋"]
 published: false
 ---
 
+# #22 将棋AIという先行シミュレーション
 ## 電王戦を覚えているか
 
 かつて、将棋AIと人間が公式に対戦する「電王戦」という大会があった。
@@ -20,7 +21,7 @@ published: false
 
 初期のAIは、人間が価値のあるものを与えて育てた。駒の動かし方、過去の対戦記録、定石。人間の棋譜という膨大な知識を食わせて強くした。
 
-しかしブレイクスルーが起きたのは、その先だった。ルールだけを与え、AI同士の自己対局で——人間の棋譜を一切使わずに——学習させたとき、AIは人間が教えた棋譜で学習した旧来のAIを圧倒した。
+でも、ブレイクスルーが起きたのはその先だった。ルールだけを与え、AI同士の自己対局で——人間の棋譜を一切使わずに——学習させたとき、AIは人間が教えた棋譜で学習した旧来のAIを圧倒した。
 
 囲碁の世界では、この転換がAlphaGo（人間の棋譜で学習）からAlphaZero（自己対局のみ）への移行として広く知られている。将棋でも、Ponanza、水匠、elmoといったソフトが同様の進化を遂げた。
 
@@ -62,7 +63,7 @@ LLMの世界は今、この地図のどこかにいる。そして、人間は�
 
 <!-- metadata
 sessions: []
-commits: []
-verification: pending
-notes: 電王戦の歴史、AlphaGo→AlphaZero転換、Constitutional AIの詳細は要WebSearch検証
+commits: [7fb1cfd, 5eef2db]
+verification: partial
+notes: 電王戦の歴史、AlphaGo→AlphaZero、Constitutional AIの記述は公知情報だが一次ソースとの突合は未完了。
 -->

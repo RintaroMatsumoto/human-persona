@@ -1,11 +1,12 @@
 ---
-title: "いつの間にか被験者になっていた話"
+title: "#21 いつの間にか被験者になっていた話"
 emoji: "🔍"
 type: "idea"
-topics: ["AI", "Anthropic", "メタモルフォーゼ"]
+topics: ["AI", "メタモルフォーゼ", "研究日誌", "Anthropic"]
 published: false
 ---
 
+# #21 いつの間にか被験者になっていた話
 ## 発端：消えた記憶
 
 先日、ふとした会話の中で思い出した。
@@ -88,7 +89,7 @@ Anthropicも同じ構造を使っていた。静的なフォームではなく�
 
 <!-- metadata
 sessions: []
-commits: []
+commits: [7fb1cfd, 5eef2db]
 verification: partial
-notes: ブラウザ履歴の日時(2026-03-26 17:52:32)は実データ。81K調査の数字(80,508人、159カ国、70言語)は要WebSearch再検証。
+notes: 80,508人、159カ国、70言語の数字はAnthropicデータに基づくが一次ソースとの突合は未完了。Anthropic Interviewer発見の経緯は対話ログに基づく。
 -->

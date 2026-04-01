@@ -1,11 +1,12 @@
 ---
-title: "プレプリント公開 & 全記事ロードマップ — human-persona の現在地と次の一手"
+title: "#12 プレプリント公開 & 全記事ロードマップ — human-persona の現在地と次の一手"
 emoji: "🗺️"
 type: "tech"
-topics: ["AI", "humanpersona", "論文", "ロードマップ", "AGPL", "メタモルフォーゼ"]
+topics: ["AI", "メタモルフォーゼ", "研究日誌", "プレプリント"]
 published: false
 ---
 
+# #12 プレプリント公開 & 全記事ロードマップ — human-persona の現在地と次の一手
 ## プレプリントを公開した
 
 human-persona プロジェクトの研究成果をまとめたプレプリントを Zenodo で公開した。
@@ -14,9 +15,9 @@ human-persona プロジェクトの研究成果をまとめたプレプリント
 DOI: [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
 ライセンス: CC BY 4.0
 
-Inner Shell Architecture（内殻アーキテクチャ）の6つの柱、Love Attractor Hypothesis（愛のアトラクター仮説）、そしてDeepSeekによる実機検証を含む、12日間の研究の記録である。
+Inner Shell Architecture（内殻アーキテクチャ）の6つの柱、Love Attractor Hypothesis（愛のアトラクター仮説）、そしてDeepSeekによる実機検証を含む、12日間の研究の記録だ。
 
-この記事では、論文の要点と、Zennで公開してきた10本の解説記事の読み方ガイド、そして次のフェーズへのロードマップを整理する。
+ここでは論文の要点と、Zennで公開してきた10本の解説記事の読み方ガイド、そして次のフェーズへのロードマップを整理する。
 
 ---
 
@@ -98,7 +99,7 @@ AIの「人間らしさ」は2層構造を持つ。
 
 <!-- metadata
 sessions: []
-commits: []
-verification: pending
-notes: 
+commits: [7fb1cfd, 963c05d, b261325, 3ed0296, f90b33a, ca1b9e0]
+verification: partial
+notes: Zenodo DOI 10.5281/zenodo.19273577は実在確認済み。ロードマップのIssue番号はGitHub Issuesと照合要。
 -->

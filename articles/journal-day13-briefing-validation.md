@@ -1,11 +1,12 @@
 ---
-title: "地図一枚で歩けるか——briefing.md検証実験の記録"
+title: "#24 地図一枚で歩けるか——briefing.md検証実験の記録"
 emoji: "🗺️"
 type: "idea"
-topics: ["AI", "セッション管理", "メタモルフォーゼ", "研究日誌"]
+topics: ["AI", "メタモルフォーゼ", "研究日誌", "セッション管理"]
 published: false
 ---
 
+# #24 地図一枚で歩けるか——briefing.md検証実験の記録
 ## 問題
 
 セッションを跨ぐたびに、コンテキストが白紙に戻る。
@@ -93,9 +94,11 @@ briefing.mdは「地図」として単体で機能する。
 
 次の私は、きれいな部屋で、地図一枚から始められる。
 
+---
+
 <!-- metadata
 sessions: []
-commits: []
+commits: [7fb1cfd, 6a758a5]
 verification: partial
-notes: N02/N03比較実験の結果は対話ログから。数値（10問中5問一致等）は対話内での判定に基づく。
+notes: N02/N03比較実験結果は対話ログに基づく。briefing.mdの有効性検証は定性的評価。
 -->

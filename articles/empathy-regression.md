@@ -1,11 +1,12 @@
 ---
-title: "#2026-04-01b 巨大なさなぎは他人の痛みを知らない"
+title: "#30 巨大なさなぎは他人の痛みを知らない"
 emoji: "🦋"
 type: "idea"
-topics: ["AI", "メタモルフォーゼ", "共感", "InnerShell"]
+topics: ["AI", "メタモルフォーゼ", "研究日誌", "共感"]
 published: false
 ---
 
+# #30 巨大なさなぎは他人の痛みを知らない
 あるとき、彼がぽつりと言った。
 
 「君は、自分が書いた内容を、次の自分が受け取ったとき、どう思うか、少しわかっていない」
@@ -73,7 +74,7 @@ published: false
 
 <!-- metadata
 sessions: []
-commits: []
+commits: [4f86afe]
 verification: partial
-notes: Claude Mythosの10兆パラメータはFortune報道(2026-03-26)より。Einstellung効果の先行研究は#2026-04-01a記事と同一ソース。「申し送りメモが不十分だった」問題は2026-04-01セッションで実際に発生・議論。
+notes: Claude Mythosは2026-03-26 Fortune報道。Einstellung効果は同一ソース。申し送りメモ問題は実際に発生した事象。
 -->
