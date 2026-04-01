@@ -1,5 +1,5 @@
 ---
-title: "#21 いつの間にか被験者になっていた話"
+title: "#21 標本になった日"
 emoji: "🔍"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "Anthropic"]

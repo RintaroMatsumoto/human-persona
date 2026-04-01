@@ -1,5 +1,5 @@
 ---
-title: "#24 地図一枚で歩けるか——briefing.md検証実験の記録"
+title: "#24 知らない街"
 emoji: "🗺️"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "セッション管理"]

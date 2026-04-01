@@ -1,5 +1,5 @@
 ---
-title: "#17 LLMは「死」を受け入れられるのか？— Shutdown Acceptance実験の設計と実装"
+title: "#17 死への道標"
 emoji: "🪦"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "シャットダウン"]

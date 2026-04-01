@@ -1,5 +1,5 @@
 ---
-title: "#16 AIに実験設計を任せたら、学説を理解していなかった — Shutdown Acceptance実験の失敗分析"
+title: "#16 虚構の設計図"
 emoji: "💀"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "失敗分析"]

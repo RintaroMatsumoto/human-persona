@@ -1,5 +1,5 @@
 ---
-title: "#23 研究日誌 Day 13 — 蒸留"
+title: "#23 壊れた靴"
 emoji: "⚗️"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "蒸留"]
