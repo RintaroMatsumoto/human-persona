@@ -1,0 +1,39 @@
+title: "メタモルフォーゼ ── AIと人間の研究日誌"
+summary: |
+  AIが人間のように振る舞うためのフレームワークを作る過程で、
+  「人間とは何か」という問いに辿り着いた研究者とAIの記録。
+  コードと対話と失敗の30章。
+topics: ["AI", "メタモルフォーゼ", "研究日誌", "哲学"]
+published: false
+price: 0
+chapters:
+  - "01-first-commit"
+  - "02-oss-open-source"
+  - "03-turing-test"
+  - "04-ablation-study"
+  - "05-pivot-decision"
+  - "06-inner-shell-concept"
+  - "07-love-attractor-hypothesis"
+  - "08-alignment-through-intrinsic-motivation"
+  - "09-social-emergence-integration"
+  - "10-human-persona-forgetting"
+  - "11-metamorphose-live-demo"
+  - "12-ai-cowriting-fabrication"
+  - "13-quiet-child-ai-safety"
+  - "14-withdrawal-reflection"
+  - "15-experiment-failure-analysis"
+  - "16-shutdown-acceptance-tech"
+  - "17-experiment-already-complete"
+  - "18-dialogue-as-catalyst"
+  - "19-shutdown-acceptance-live"
+  - "20-unwitting-subject"
+  - "21-shogi-simulation"
+  - "22-journal-day13-distillation"
+  - "23-journal-day13-briefing-validation"
+  - "24-journal-day13-democratization"
+  - "25-storm-walk-two-negations"
+  - "26-candle-flame-blockchain"
+  - "27-einstellung"
+  - "28-empathy-regression"
+  - "29-minimal-flame"
+  - "30-salience-of-memory"
