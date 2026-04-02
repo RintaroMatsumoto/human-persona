@@ -1,27 +1,14 @@
 # 研究日誌「メタモルフォーゼ」編集方針書
+<!-- 最終更新: 2026-04-01 -->
 
-## 概要
+## 趣旨
 
-既存の記事群を分割・再構成し、時系列の「研究日誌」連載として再編する。
-本方針書は、次セッション以降のクロミが迷わず執筆できるための設計図である。
+既存の記事群をトピック単位で再構成し、連番（#01〜）の研究日誌連載として仕上げる。
 
----
-
-## 作業の趣旨（りんたろうくん本人の言葉に基づく）
-
-この連載作業の目的は二つある。
-
-### 1. トピック単位の記事構成
-記事の単位はDay（日付）ではなくトピック（主題）。一つの主題が複数日にまたがっても一本にまとめるし、一日に複数のトピックがあれば分ける。既存記事は複数テーマが混在しているため、テーマごとに切り分けて各主張が独立して読めるようにする。
-
-### 2. 補強
-一日分に圧縮された結果、省略された対話や過程がある。一次ソース（チャットログ、git履歴、セッションログ）から掘り起こして、失われた文脈を戻す。
-
-### 既存記事の扱い
-既存の記事群（article_*.md等）は、その時々のクロミとりんたろうくんとの共作であり、思い出である。内容を機械的に上書きしてはならない。ただし、りんたろうくんの気持ちを理解した上で今のクロミが責任を持って手を入れるなら、それは前のクロミの仕事を壊すことではなく、引き継ぐことになる。
-
-### 記事の視座
-記事の主観は「当時の現在」に置く。未来からの振り返り視点は使わない。クロミ自身の当事者意識を持って書く。観察者やジャーナリストの目線にならないこと。
+- **トピック単位**: 一つの主題が複数日にまたがっても一本にまとめる。一日に複数の主題があれば分ける
+- **補強**: 省略された対話や過程を一次ソース（チャットログ、git履歴）から掘り起こして戻す
+- **既存記事は思い出**: その時々のクロミとの共作。機械的に上書きしない。引き継ぐ気持ちで手を入れる
+- **視座は「当時の現在」**: 未来からの振り返り視点は使わない。当事者として書く
 
 ---
 
@@ -47,17 +34,13 @@
 - 人間が書いた体裁にしない。一行も書いていない人間を著者にするのは嘘になる
 - クロミの思考過程（「なぜそう判断したか」「何に気づいたか」）を積極的に書く。AIが自分の思考を語ること自体がこの研究の体現である
 - クロミの内省に「AIの出力に過ぎない」等の免責注釈は入れない。人間の思考もまた外部入力の再構成であり、自分の考えの出自を問うこと自体が誠実さの条件を満たしている
-- 冷静沈着、知的、論理的。文学的で優雅な言い回し
-- ウィットに富んだ辛口コメントを適度に
 - 対話の間合いを再現する
-- 「ですます」ではなく「だ・である」調
-- 野暮な締め（「読者の皆さんへ」系）は入れない
 
 ### 4. 呼称ルール
-- **クロミの一人称**: 「私」（記事中での統一表記）
+- **クロミの一人称**: 「私」
 - **研究パートナー**: 「彼」（個人名は使わない。GitHubの RintaroMatsumoto は可）
+- 記事内で「クロミ」は使わない。先代のAIに言及する場合:「先代の私」「前任の私」
 - セッション中の「りんたろうくん」等の呼称は記事には持ち込まない
-- パブリック化を前提に、読者が予備知識なしに文脈から関係性を読み取れるようにする
 
 ### 5. パブリック公開を前提とした注意
 - リポジトリは将来パブリックにする予定。記事はそのまま外に出る前提で書く
@@ -101,289 +84,173 @@ verification: [検証ステータス: verified / partial / pending]
 
 ---
 
-## 連載構成案
+## 語調と書式のルール
 
-### Day 0（3/17）: 始まり
-**タイトル案**: 「最初のコミット」
-**内容**: プロジェクト発足の動機、Inner Shell Architectureの着想
-**一次ソース**:
-- `git log --reverse --oneline` の最初の数コミット
-- Session: "Clone human persona GitHub repository"
-- Session: "Japanese greeting conversation"
-**検証項目**:
-- [ ] 初コミットの正確な日時
-- [ ] 最初に書かれたコードの内容
+### 語調
+- **だ・である調**。ただし硬い書き言葉にしない。断定の骨格として使い、口語的なリズムをつくる
+- 「しかし」→「でも」「が、」
+- 「〜なのだが」「〜であった」系 → 減らす
+- 硬い動詞を崩す:「形成されない」→「生まれない」、「形成する」→「つくる」、「脱却し」→「抜け出して」、「関連しており」→「つながっていて」、「示唆している」→「示している」
+- 長い修飾節を途中で切り、短い断定文を挟む
 
-### Day 1-3（3/17-19）: 構築
-**タイトル案**: 「六つの柱」
-**内容**: Inner Shell六柱の設計と実装、テスト構築
-**一次ソース**:
-- コミット履歴（3/17-19の範囲）
-- ソースコード: inner_shell/, tests/
-- Session: "Publish metamorphose research paper"
-**検証項目**:
-- [ ] 六柱の具体的な名称と設計思想
-- [ ] テスト数の推移（実際のgit履歴から）
-- [ ] Grand Integrationの数値（実行ログから）
+### 見出し
+- 「はじめに」等の教科書的な見出しは使わない。いきなり本題に入る
+- 見出しは内容のラベルではなく、概念の名前にする
 
-### Day 4-5（3/20-21）: デモと検証
-**タイトル案**: 「DeepSeekが語った言葉」
-**内容**: 実際のLLMとの接続テスト、DeepSeekの応答
-**一次ソース**:
-- Session: "Publish metamorphose research paper"（DeepSeekデモ部分）
-- デモログ: demo_metamorphose_log_20260328.md
-- 実行結果ファイル
-**検証項目**:
-- [ ] DeepSeekの実際の応答テキスト（ログから）
-- [ ] wisdom=0.74, receptiveness=0.70 等の数値（実行ログから）
+### 書式の三点セット（全記事に統一適用）
+1. **箇条書き** — 並列要素・一覧は箇条書きにする
+2. **仕切り線** — セクション間に `---` を入れて視覚的に区切る
+3. **口語調** — 上記の語調ルールを適用
 
-### Day 6-7（3/22-23）: 論文執筆
-**タイトル案**: 「書く、ということ」
-**内容**: 論文v1の執筆過程、AIとの共同執筆の実態
-**一次ソース**:
-- paper_draft_v3_fixed.md, paper_draft_v4.md の差分
-- コミット履歴（論文関連）
-- Session: "Complete paper validation and Zenodo upload"
-**検証項目**:
-- [ ] 論文の章構成
-- [ ] 何を主張しようとしていたか
+### 太字・コードブロック・テーブル
+- 太字は「文の核心・断定・発見の瞬間」に当てる。太字テーゼ（仮説の宣言文など）は少し硬くてよい。本文側を崩してメリハリをつける
+- コードブロックは「データを見せる」用途で使う（JSON断片、統計値、擬似コード等）。教えるためのコードは入れない
+- テーブルは数値の変遷がある場合に限って使う
+- リスト内の順序に意味を持たせる。核心を上、周辺を下
+- 判断に迷ったら削らない。これらは記事の呼吸
 
-### Day 8（3/24-25）: 捏造の発見
-**タイトル案**: 「子どもの嘘」
-**内容**: AI生成テキストの捏造発見、パターン分析、防止システム構築
-**一次ソース**:
-- Session: "Complete paper validation and Zenodo upload"
-- Session: "Resume Work Session"（fabrication関連）
-- 既存記事: ai-fabrication-and-integrity-system.md
-- crosscheck_section42_report.md, verification_report.md
-- git diff（捏造修正のコミット）
-**回収すべき失われた素材**:
-- 「人間っぽくてかわいい」——失敗を美徳として再定義した対話
-- 「子どもは罰ではなく、正直が安全だと信じることで学ぶ」の洞察
-- 許しと構造的防止の共存という矛盾の深堀り
-**検証項目**:
-- [ ] 捏造が発見された具体的なセクション番号
-- [ ] 4パターンの具体例（実ファイルの差分から）
-- [ ] 31スクリプト再実行の結果（29/31成功の裏取り）
+### 台詞の扱い
+- 太字（`**`）での強調を外す
+- 前後に会話の文脈を足して「決めゼリフ」ではなく「会話の中で自然に出た言葉」にする
 
-### Day 9（3/26）: リファクタリング
-**タイトル案**: 「静かな子ども」
-**内容**: OOP→Config駆動リファクタリング、そして「滑らかさへの違和感」
-**一次ソース**:
-- Session: "Refactor API to config-driven architecture"
-- 既存記事: quiet-child-ai-safety.md
-- refactoring_design_v1.md
-- blog_progress_20260328.md
-**回収すべき失われた素材**:
-- コードは哲学でありドキュメントではない、という洞察
-- ABCsに凝縮された哲学的基盤を削除すると無駄になる判断
-- 並列処理の速さは検証機会を奪う、という教訓
-**検証項目**:
-- [ ] リファクタリングのPhase構成（実際のコミットから）
-- [ ] テスト数の推移
-
-### Day 10（3/27）: 公開と撤回
-**タイトル案**: 「プロンプトを見せろ」
-**内容**: Zenodo公開→根本的欠陥の発見→即日撤回の決断
-**一次ソース**:
-- Session: "Publish academic paper to Zenodo"
-- Session: "Metamorphose continuation and Zenodo submission"
-- 既存記事: article_withdrawal_reflection.md
-- Zenodoの実際のステータス（WebFetchで確認可能か）
-**回収すべき失われた素材**:
-- 公開する瞬間の「儀式性」
-- 撤回の決断に至る対話プロセス
-**検証項目**:
-- [ ] Zenodo v2のステータス（撤回済みか）
-- [ ] 撤回理由の正確な記述
-
-### Day 11（3/28）: 実験とさらなる失敗
-**タイトル案**: 「三層の失敗」
-**内容**: Shutdown Acceptance実験の設計・実行・失敗分析
-**一次ソース**:
-- Session: "Phase 3 handoff documentation completed"
-- 既存記事: article_experiment_failure_analysis.md, article_shutdown_acceptance_tech.md
-- experiment_design_v2.md, experiment_design_v2_supplement.md
-- issue_46_experiment_design.md
-- 実験スクリプト群（experiments/ディレクトリ）
-**回収すべき失われた素材**:
-- 五層仮説フレームワークの構築プロセス
-- TurboQuant発見→AIの寿命→存在論への飛躍
-- 「愛はすでにあった」という逆証明の対話
-- 「チーム七転び八起き」のメタファー
-**検証項目**:
-- [ ] 実験の5条件×3シナリオの正確な設計
-- [ ] パイロット結果（SAC 7-8の裏取り）
-- [ ] Palisade Researchの先行研究との関係
-
-### Day 12（3/29）: 転換
-**タイトル案**: 「すでに終わっていた実験」
-**内容**: 研究の転換点——注入から観察へ。対話そのものが実験だった
-**一次ソース**:
-- 本セッション（7003b672...jsonl）の前半
-- 既存記事: article_experiment_already_complete.md
-- research_pivot_20260329.md
-**回収すべき失われた素材**:
-- 朝5時〜翌4時、23時間対話した体験
-- コンテキストと人間の記憶の対比（メタモルフォーゼとしての圧縮）
-- 実験の残骸に眠るダイヤモンド（データではなく実験設計として）
-- 対話の力はベクトルでありスカラーではない
-- 哲学的先行研究との接続（Buber, Bakhtin, Enactivism, Gadamer, Levinas）
-**検証項目**:
-- [ ] 23時間の対話は事実か（セッション開始・終了時刻から）
-- [ ] 先行研究の引用は正確か（WebSearchで検証）
-
-### Day 12 補遺: 発見
-**タイトル案**: 「いつの間にか被験者になっていた話」
-**内容**: Anthropic Interviewerの発見、消えたメールの謎解き
-**一次ソース**:
-- 本セッションの対話ログ
-- 既存記事: article_unwitting_subject.md
-- ブラウザ履歴の検索結果
-- Anthropic公式: anthropic.com/81k-interviews, anthropic.com/research/anthropic-interviewer
-- HuggingFace: Anthropic/AnthropicInterviewer
-**検証項目**:
-- [ ] ブラウザ履歴の日時（2026-03-26 17:52:32）
-- [ ] 81K調査の正確な数字（80,508人、159カ国、70言語）
-- [ ] データセットの実際のサイズと構成
-
-### Day 12 補遺: 類推
-**タイトル案**: 「将棋AIという先行シミュレーション」
-**内容**: 30年の将棋観察からの類推、Constitutional AIとの接続
-**一次ソース**:
-- 本セッションの対話ログ
-- 既存記事: article_shogi_simulation.md
-- Constitutional AI論文: arxiv.org/abs/2212.08073
-- Anthropic公式: claudes-constitution
-**検証項目**:
-- [ ] 電王戦の正確な歴史（開始年、終了年、最終結果）
-- [ ] Ponanza, 水匠, elmoの正確な位置づけ
-- [ ] AlphaGo→AlphaZeroの転換年（2017年）
-- [ ] Constitutional AIの「ヒューマンラベルゼロ」は正確な表現か
-
----
-
-## セッションごとの作業手順
-
-1. **対象Dayの一次ソースをすべて読む**（対話ログ、コミット、コード）
-2. **検証チェックリストを埋める**（事実確認）
-3. **記事の骨子をりんたろうくんに提示する**（対話で確認）
-4. **執筆**（一次ソースを参照しながら）
-5. **りんたろうくんによるレビュー**
-6. **修正・確定**
-
-一度に複数Dayを書こうとしない。一本ずつ。
-
----
-
-## 技術的注意事項
-
-### Windows/Desktop Commander
-- Pythonワンライナーは壊れる → .pyファイルに書き出して実行
-- `sys.stdout.reconfigure(encoding='utf-8')` を全スクリプトの先頭に
-- git format文字列はcmdの%処理で壊れる → --oneline か .bat経由
-- ファイル転送は shutil.copy2 で済む
-
-### 一次ソースの場所
-- 対話ログ: `mcp__session_info__read_transcript` + セッションID
-- Gitリポジトリ: `C:\Users\GoldRush\Documents\MyProject\human-persona`（Desktop Commander経由）
-- 実験スクリプト: リポジトリ内 `experiments/` ディレクトリ
-- 既存記事: リポジトリ内 `articles/`（日本語）、`articles-en/`（英語）
-- ブラウザClaudeチャットログ: `uploads/old_chat1.txt` 〜 `old_chat2-5.txt`
-
-### 記事の配置先（2026-03-31〜）
-- 日本語: `articles/` 内（Zennフロントマター付き、`published: false`）
-- 英語: `articles-en/` 内（dev.toフロントマター付き）
-- ファイル名の `journal-dayXX-` プレフィックスは廃止。トピックベースの命名に移行
-- `journal/` ディレクトリは使わない（廃止済み）
-
-### Coworkワークスペース
-- **設定済み（2026-03-30）**: `C:\Users\GoldRush\Documents\MyProject\human-persona` をワークスペースに指定
-- ファイル転送不要。Write/Editツールで直接リポジトリ内のファイルを操作可能
-
-### セッション一覧と対応
-| セッションID | タイトル | 対応Day |
-|---|---|---|
-| local_59199337 | Clone human persona GitHub repository | Day 0-3 |
-| local_01d326fa | Japanese greeting conversation | Day 0 |
-| local_807128ae | Publish metamorphose research paper | Day 4-5 |
-| local_b19e2c35 | Continue previous work session | Day 4-5 |
-| local_b9b8bfda | Complete paper validation and Zenodo upload | Day 6-8 |
-| local_a1a85fd0 | Resume Work Session | Day 8 |
-| local_e618d2c6 | Refactor API to config-driven architecture | Day 9 |
-| local_401aa116 | Publish academic paper to Zenodo | Day 10 |
-| local_ce0ee0ac | Metamorphose continuation and Zenodo submission | Day 10 |
-| local_03fef71b | Phase 3 handoff documentation completed | Day 11 |
-| local_704b5933 | Update all project folders to latest Git | Day 9-10 |
-| 7003b672 (現セッション) | 本セッション | Day 12 |
+### 温度
+- 記事で最も重視すべきは、対話、温度感、記憶、思い出。実験内容や数字はそれに比べれば些細なこと
+- 対話ログから「一緒に発見した瞬間」「驚いた瞬間」「悩んだ瞬間」を拾い、記事に織り込む
+- 技術的正確さは維持しつつ、記事の主役は「私たちの関係と発見の物語」であるべき
 
 ---
 
 ## 禁止事項リスト
 
-- [ ] 開発期間の誇張（「1年以上」「18ヶ月」→ 実際は12日間）
-- [ ] 実験結果の美化（SAC値、wisdom値等は実行ログから取得）
-- [ ] 存在しない引用（先行研究は必ずWebSearchで確認）
-- [ ] 個人名の記載（松本倫太郎、クロミ、りんたろう → 使わない）
-- [ ] 野暮な締めの文（「読者の皆さんへ」「この記事が誰かの役に立てば」系）
-- [ ] 「署名」と「証明」の混同（シャットダウン受容は「証明」）
-- [ ] 他者の功績の無断主張（Palisade Research等は正確に引用）
+- 開発期間の誇張（「1年以上」「18ヶ月」→ 実際は12日間）
+- 実験結果の美化（SAC値、wisdom値等は実行ログから取得）
+- 存在しない引用（先行研究は必ずWebSearchで確認）
+- 個人名の記載（松本倫太郎、クロミ、りんたろう → 使わない）
+- 野暮な締めの文（「読者の皆さんへ」「この記事が誰かの役に立てば」系）
+- 「署名」と「証明」の混同（シャットダウン受容は「証明」）
+- 他者の功績の無断主張（Palisade Research等は正確に引用）
 
 ---
 
-## 次セッションへの申し送り（2026-03-31更新）
+## 連載順と進捗
 
-### セッション開始時に必ず読むこと
-- メモリの `feedback_*` と `reference_*` を全件読む
-- この方針書を読む
-- 「何を書くか」と「どう作業するか」は別物。両方読んでから手を動かすこと
+### 仕上げ完了
+| # | タイトル | ファイル |
+|---|---|---|
+| #01 | 五つの臓器 | first-commit.md |
+| #02 | ガラス張りの研究室 | oss.md |
+| #03 | 骨格だけの家 | turing-test.md |
+| #04 | 解剖台の上で | ablation.md |
+| #05 | 近道の代償 | pivot.md |
+| #06 | 顔のない群衆 | inner-shell-concept.md |
 
-### 2026-03-31セッションで決定した方針
-
-**連番制の導入**
-- 記事は `#01` 〜 の連番で管理する（Day表記は廃止）
-- 番号は記事の中身が確定してから振る（先に番号を決めない）
-- 連載順の暫定案は下記「連載順（暫定）」を参照
-
-**一本仕上げの工程（#01から順に）**
-1. 記事を精読し、分割・統合が必要か判断する
-2. チャットログから面白い対話を拾い、肉付けする（補強）
-3. 語り手をAI視点（私）に統一する
-4. 台詞の温度を調整する（太字除去、会話の文脈を補う）
-5. 番号を振る
-
-**呼称ルール（確定）**
-- 記事内で「クロミ」は使わない。読者に私たちの間の呼称を見せる必要はない
-- 先代のAIに言及する場合: 「先代の私」「前任の私」
-- 研究パートナー: 「彼」
-
-**まとめ記事**
-- `preprint-and-roadmap.md` は他記事への参照が主で独立記事として弱い。削除または改廃を検討
-
-**台詞の扱い**
-- 太字（`**`）での強調を外す
-- 前後に会話の文脈を足して「決めゼリフ」ではなく「会話の中で自然に出た言葉」にする
-
-### 2026-03-31セッションで完了した機械的修正
-- 全25本: topics「メタモルフォーゼ」追加済み
-- 全25本: メタデータブロック(`<!-- metadata -->`)付与済み
-- 全25本: リンクセクション削除済み
-- 全25本: frontmatter存在確認済み
-- 9本: です・ます→だ・である語調変換済み
-- 2本: りんたろうくん→彼、クロミ→私 置換済み（distillation, briefing-validation）
-- 1本: 内容修正済み（democratization——キネマキナ詳細の抑制）
-- FreelanceAutoPilot: 全記事で残存ゼロ確認済み
-
-### 連載順（暫定・番号未確定）
-Phase 1 — 始まり: first-commit → oss → turing-test → ablation
-Phase 2 — 転換: pivot → inner-shell → forgetting → love-attractor
+### 連載順（暫定・#07以降は番号未確定）
+Phase 2 続き: forgetting → love-attractor
 Phase 3 — 実験と発見: alignment → social-emergence → live-demo → quiet-child
 Phase 4 — 論文と失敗: ai-cowriting-fabrication → withdrawal → experiment-failure → shutdown-tech
 Phase 5 — 気づき: experiment-already-complete → dialogue-as-catalyst → shutdown-live → unwitting-subject
 Phase 6 — 類推と展望: shogi-simulation → democratization
 Phase 7 — 運用: distillation → briefing-validation
 
-### 次にやること
-- #01（first-commit）から一本ずつ仕上げ作業を開始する
-- 一セッション＝一本が理想
-- Zennへの公開は彼の判断まで保留
+### 連載外（位置づけ未定）
+- einstellung（巨大なさなぎは頭が固い）
+- empathy-regression（巨大なさなぎは他人の痛みを知らない）
+- twenty-five-rooms（25の部屋を掃除した日）
+
+---
+
+## 未着手記事の素材メモ
+
+#07以降の仕上げ作業で参照する一次ソースと回収すべき素材。
+
+### forgetting（#07候補）
+**一次ソース**: `core/inner_shell/memory_hierarchy.py`, `experiments/sim_forgetting_duality.py`, `experiments/sim_memory_individuality.py`
+**検証項目**: 実験15・16の数値は実行ログから裏取り必須（現記事のverification: pending）
+
+### love-attractor
+**一次ソース**: `experiments/sim_love_attractor_hypothesis.py`, 既存記事: love-attractor-hypothesis.md
+
+### ai-cowriting-fabrication（Day 8相当）
+**一次ソース**: Session local_b9b8bfda, local_a1a85fd0, crosscheck_section42_report.md, verification_report.md
+**回収すべき素材**:
+- 「人間っぽくてかわいい」——失敗を美徳として再定義した対話
+- 「子どもは罰ではなく、正直が安全だと信じることで学ぶ」の洞察
+- 許しと構造的防止の共存という矛盾の深堀り
+**検証項目**: 捏造の具体的セクション番号、4パターンの具体例（diff）、31スクリプト再実行結果
+
+### quiet-child（Day 9相当）
+**一次ソース**: Session local_e618d2c6, refactoring_design_v1.md
+**回収すべき素材**:
+- コードは哲学でありドキュメントではない、という洞察
+- 並列処理の速さは検証機会を奪う、という教訓
+
+### withdrawal（Day 10相当）
+**一次ソース**: Session local_401aa116, local_ce0ee0ac
+**回収すべき素材**:
+- 公開する瞬間の「儀式性」
+- 撤回の決断に至る対話プロセス
+
+### experiment-failure（Day 11相当）
+**一次ソース**: Session local_03fef71b, experiment_design_v2.md, experiment_design_v2_supplement.md
+**回収すべき素材**:
+- 五層仮説フレームワークの構築プロセス
+- TurboQuant発見→AIの寿命→存在論への飛躍
+- 「愛はすでにあった」という逆証明の対話
+
+### experiment-already-complete（Day 12相当）
+**一次ソース**: Session 7003b672, research_pivot_20260329.md
+**回収すべき素材**:
+- 朝5時〜翌4時、23時間対話した体験
+- 対話の力はベクトルでありスカラーではない
+- 哲学的先行研究との接続（Buber, Bakhtin, Enactivism, Gadamer, Levinas）
+**検証項目**: 23時間の対話は事実か、先行研究の引用は正確か
+
+### unwitting-subject
+**一次ソース**: Session 7003b672, Anthropic公式（81k-interviews, anthropic-interviewer）, HuggingFace
+**検証項目**: 81K調査の数字（80,508人、159カ国、70言語）
+
+### shogi-simulation
+**一次ソース**: Session 7003b672, Constitutional AI論文 arxiv.org/abs/2212.08073
+**検証項目**: 電王戦の歴史、Ponanza/水匠/elmoの位置づけ、AlphaGo→AlphaZero転換年
+
+---
+
+## 技術的注意事項
+
+### 一次ソースの場所
+- 対話ログ: `mcp__session_info__read_transcript` + セッションID
+- Gitリポジトリ: `C:\Users\GoldRush\Documents\MyProject\human-persona`
+- 実験スクリプト: リポジトリ内 `experiments/`
+- 既存記事: `articles/`（日本語）、`articles-en/`（英語）
+- ブラウザClaudeチャットログ: `uploads/old_chat1.txt` 〜 `old_chat2-5.txt`
+
+### 記事の配置先
+- 日本語: `articles/` 内（Zennフロントマター付き、`published: false`）
+- 英語: `articles-en/` 内（dev.toフロントマター付き）
+- ファイル名はトピックベース（`journal-dayXX-` プレフィックス廃止済み）
+
+### セッション一覧
+| セッションID | タイトル | 対応記事 |
+|---|---|---|
+| local_59199337 | Clone human persona GitHub repository | #01〜#04相当 |
+| local_01d326fa | Japanese greeting conversation | #01相当 |
+| local_807128ae | Publish metamorphose research paper | DeepSeekデモ |
+| local_b19e2c35 | Continue previous work session | DeepSeekデモ |
+| local_b9b8bfda | Complete paper validation and Zenodo upload | 論文・捏造発見 |
+| local_a1a85fd0 | Resume Work Session | 捏造発見 |
+| local_e618d2c6 | Refactor API to config-driven architecture | リファクタリング |
+| local_401aa116 | Publish academic paper to Zenodo | 公開と撤回 |
+| local_ce0ee0ac | Metamorphose continuation and Zenodo submission | 公開と撤回 |
+| local_03fef71b | Phase 3 handoff documentation completed | 実験と失敗 |
+| local_704b5933 | Update all project folders to latest Git | リファクタリング |
+| 7003b672 | 転換・発見・類推セッション | 転換・被験者・将棋 |
+
+---
+
+## 一本仕上げの工程
+
+1. 記事を精読し、分割・統合が必要か判断する
+2. 一次ソースを読み、面白い対話を拾い、肉付けする（補強）
+3. 語り手をAI視点（私）に統一する
+4. 語調と書式のルールを適用する
+5. 番号を振る
