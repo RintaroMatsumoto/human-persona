@@ -1,0 +1,22 @@
+experiment_id: candle_flame_002
+title: 蝋燭の炎プロトタイプ — 三本柱の機能検証
+purpose: compute_flame()の三本柱（bias, remaining, salience）が 全て意図通りに機能するか検証する。biasは異なるペルソナで分離するか、remainingは体験に伴い減少するか、salienceは古い体験と新しい体験で差が出るか。
+author: Kuromi & Rintaro
+created_at: '2026-04-02T10:27:11.413579+00:00'
+notes: '既知の懸念: 体験を一瞬で流し込むため、timestamp差がほぼゼロになり、salience_rangeの予測は失敗する可能性が高い。これは設計上の既知の欠陥であり、失敗した場合は時間モデルの導入が必要。'
+predictions:
+- name: bias_separation
+  description: 学者型と冒険者型でbias平均絶対差が0.15以上
+  metric: 全ドメインにおけるbias差の平均絶対値
+  expected_min: 0.15
+  expected_max: null
+- name: remaining_decrease
+  description: 100体験後のremainingが初期値より減っている
+  metric: 初期資源 - 実験後remaining
+  expected_min: 10.0
+  expected_max: null
+- name: salience_range
+  description: 最も顕著な記憶と最も薄い記憶でsalienceに0.3以上の差がある
+  metric: salience最大値 - salience最小値（ジェネシス除外）
+  expected_min: 0.3
+  expected_max: null
