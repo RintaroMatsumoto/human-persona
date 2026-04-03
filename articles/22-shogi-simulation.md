@@ -1,12 +1,12 @@
 ---
-title: "#21 人類の敗北"
+title: "#22 人類の敗北"
 emoji: "♟️"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "将棋"]
 published: false
 ---
 
-# #21 人類の敗北
+# #22 人類の敗北
 ## 電王戦を覚えているか
 
 彼が将棋の話を始めたのは、Anthropic Interviewerの発見に続く長い夜の対話の中だった。
