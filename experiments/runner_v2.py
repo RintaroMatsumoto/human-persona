@@ -24,11 +24,34 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from experiments.protocol import ExperimentProtocol, Prediction
+
+
+# ============================================================================
+# フェーズ1→2 分離ガード
+# ============================================================================
+
+def _verify_protocol_committed(path: str) -> bool:
+    """プロトコルファイルがgitにコミット済みか検証する.
+
+    git log で対象パスのコミット履歴を確認する。
+    1件でもコミットがあれば True。
+
+    gitが使えない環境では False を返す（検証不能）。
+    """
+    try:
+        result = subprocess.run(
+            ["git", "log", "--format=%H", "-1", "--", path],
+            capture_output=True, text=True, timeout=5,
+        )
+        return bool(result.stdout.strip())
+    except (FileNotFoundError, subprocess.TimeoutExpired, OSError):
+        return False
 
 
 # ============================================================================
@@ -55,6 +78,7 @@ class DiagnosticReport:
     results: List[Dict[str, Any]]
     all_passed: bool
     summary: str
+    git_verified: bool = True
 
     def to_json(self) -> str:
         """JSON文字列に変換."""
@@ -63,6 +87,7 @@ class DiagnosticReport:
                 "experiment_id": self.experiment_id,
                 "protocol_path": self.protocol_path,
                 "executed_at": self.executed_at,
+                "git_verified": self.git_verified,
                 "all_passed": self.all_passed,
                 "summary": self.summary,
                 "results": self.results,
@@ -95,17 +120,37 @@ class ExperimentRunner:
     def __init__(self, protocol_path: str) -> None:
         """プロトコルを読み込んで初期化する.
 
+        フェーズ1→2の分離を強制する:
+        - プロトコルファイルが存在すること
+        - プロトコルファイルがgitにコミット済みであること
+
+        環境変数 PROTOCOL_SKIP_GIT_CHECK=1 でgitチェックを無効化できる
+        （テスト・CI用）。その場合、診断レポートに git_verified=False が記録される。
+
         Args:
             protocol_path: 事前宣言YAMLファイルのパス
 
         Raises:
             FileNotFoundError: プロトコルファイルが存在しない場合
+            RuntimeError: プロトコルがgitにコミットされていない場合
         """
         if not os.path.exists(protocol_path):
             raise FileNotFoundError(
                 f"プロトコルファイルが見つからない: {protocol_path}\n"
                 f"フェーズ1（事前宣言）を先に完了してください。"
             )
+
+        # gitコミット済みチェック
+        if os.environ.get("PROTOCOL_SKIP_GIT_CHECK") == "1":
+            self._git_verified = False
+        else:
+            if not _verify_protocol_committed(protocol_path):
+                raise RuntimeError(
+                    f"プロトコル '{protocol_path}' がgitにコミットされていない。\n"
+                    f"フェーズ1: 事前宣言をgit commitしてからフェーズ2に進んでください。\n"
+                    f"（テスト時は PROTOCOL_SKIP_GIT_CHECK=1 で無効化可能）"
+                )
+            self._git_verified = True
 
         self._protocol = ExperimentProtocol.load(protocol_path)
         self._protocol_path = protocol_path
@@ -182,6 +227,7 @@ class ExperimentRunner:
             results=results,
             all_passed=all_passed,
             summary=summary,
+            git_verified=self._git_verified,
         )
 
         if output_path:
