@@ -1,0 +1,168 @@
+experiment_id: candle_flame_003
+title: 蝋燭の炎 — #31設計（半減期可変＋共鳴）の機能テスト
+author: Kuromi & Rintaro
+created_at: '2026-04-04T19:00:00+09:00'
+
+# Q1+Q9: 事前実行の有無
+prior_execution: >
+  candle_flame_002で三本柱（bias, remaining, salience）の検証を実施。
+  biasとremainingは機能したが、salienceは固定decay(0.05) + 秒単位 +
+  一瞬で流し込みにより、全て1.0に張り付いて死んでいた。
+  本実験は _compute_salience() を #31設計（半減期可変モデル＋共鳴）に
+  更新した上での機能テスト。
+
+# Q2: 目的・仮説
+purpose: >
+  #31で設計した compute_salience() が設計通りに動くか機能テストする。
+  (1) 半減期可変モデル (h = base + intensity × bonus) による減衰
+  (2) 共鳴メカニズム (resonance_keys) による記憶の再活性化
+  の両方が実装通りに機能し、人間の一生（80年）のタイムスケールで
+  意味のある記憶の風景を生み出すことを確認する。
+
+# Q4: 実験条件
+conditions:
+  # CandleFlameパラメータ（デフォルト値）
+  base_half_life: 1.0       # 日。Ebbinghaus実測
+  bonus_half_life: 365.0    # 日。未検証
+  salience_threshold: 0.01
+  salience_top_k: 7
+  total_resource: 120.0
+
+  # 時間設計
+  time_model: logical
+  lifespan_years: 80
+  n_experiences: 100
+  experience_interval_days: 292  # 29200日 / 100 = 292日間隔
+
+  # 乱数
+  seed: 42
+
+  # 共鳴の設計
+  resonance_rule: >
+    各体験のtimestamp（論理時刻）から季節を算出する。
+    年内の日数 (timestamp_days % 365) が 60〜120（3月〜4月）の体験に
+    resonance_keys: ["桜"] を付与する。
+    タグの付与は暦が機械的に決める。実験者は選ばない。
+
+  # ペルソナ定義（002と同一）
+  scholar:
+    knowledge: {valence: 0.6, intensity: 0.9}
+    love:      {valence: 0.3, intensity: 0.5}
+    adventure: {valence: -0.1, intensity: 0.3}
+    creation:  {valence: 0.5, intensity: 0.7}
+    loss:      {valence: -0.6, intensity: 0.8}
+  adventurer:
+    knowledge: {valence: 0.2, intensity: 0.4}
+    love:      {valence: 0.4, intensity: 0.6}
+    adventure: {valence: 0.8, intensity: 0.9}
+    creation:  {valence: 0.3, intensity: 0.5}
+    loss:      {valence: -0.4, intensity: 0.6}
+
+# Q3+Q5: 予測（成功基準）
+predictions:
+  - name: bias_separation
+    description: 学者型と冒険者型でbias平均絶対差が0.15以上（002再現）
+    metric: 全ドメインにおけるbias差の平均絶対値
+    expected_min: 0.15
+    expected_max: null
+    formula: >
+      bias_diff = mean(|scholar.bias[d] - adventurer.bias[d]| for d in domains)。
+      002実測値は0.321。ノイズで揺れるが0.15は安全な下限。
+
+  - name: remaining_decrease
+    description: 100体験後のremainingが初期値より10.0以上減少（002再現）
+    metric: 初期資源(120.0) - 実験後remaining
+    expected_min: 10.0
+    expected_max: null
+    formula: >
+      decrease = 120.0 - remaining。
+      cost ~ N(1.0, 0.3) × 100体験 ≈ 100.0 期待値。
+      最低でも cost > 0.1 なので 100体験で10.0は確実に超える。
+
+  - name: sakura_survival
+    description: >
+      top-7顕著記憶に桜タグつき記憶が1件以上存在する。
+      共鳴メカニズムが設計通りに機能していれば、
+      桜記憶は再活性化により生存する。
+    metric: >
+      学者型で compute_flame(now=29200*86400) を実行。
+      salient_memories (top-7) のうち、
+      context に resonance_keys を含むブロックの件数。
+    expected_min: 1
+    expected_max: null
+    formula: >
+      共鳴のメカニズム:
+        桜タグ体験は約20体験（全100体験の約20%）。
+        最後の桜体験（~day 28908）が全ての過去の桜体験を再活性化。
+        → 全桜記憶の effective dt = 29200 - 28908 = 292日。
+
+      桜記憶のsalience（dt=292日）:
+        h = base + intensity × bonus
+        salience = intensity × exp(-ln2 / h × 292)
+
+        intensity=0.3: h=110.5日, salience = 0.3 × exp(-0.693/110.5 × 292) = 0.3 × 0.160 = 0.048
+        intensity=0.5: h=183.5日, salience = 0.5 × exp(-0.693/183.5 × 292) = 0.5 × 0.332 = 0.166
+        intensity=0.7: h=256.5日, salience = 0.7 × exp(-0.693/256.5 × 292) = 0.7 × 0.454 = 0.318
+        intensity=0.9: h=329.5日, salience = 0.9 × exp(-0.693/329.5 × 292) = 0.9 × 0.541 = 0.487
+        → 全intensity帯で salience > threshold(0.01)。桜記憶は全員生存。
+
+      非桜記憶の生存限界:
+        共鳴なしの純粋減衰。
+        intensity=0.9 (h=329.5日) の場合:
+          dt=292日:  salience = 0.487 → 生存
+          dt=584日:  salience = 0.264 → 生存
+          dt=1460日: salience = 0.042 → 生存
+          dt=5000日: salience ≈ 0.000 → 消滅
+        → 非桜は直近約14年分（~5体験）のみ生存。
+
+      top-7の構成見込み:
+        桜(dt=292日)の高intensity群が上位を占める。
+        非桜の直近高intensity体験も混在する。
+        桜が1件以上入ることは確実。
+
+  - name: salience_not_flat
+    description: >
+      top-7のsalience値に散らばりがある（range ≥ 0.1）。
+      002ではsalienceが全て1.0に張り付いていた。
+      半減期可変モデルではintensityと時間経過によりsalienceが異なるはず。
+    metric: >
+      学者型の salient_memories (top-7) から salience値を取得。
+      max(salience) - min(salience)。
+    expected_min: 0.1
+    expected_max: null
+    formula: >
+      top-7に入る候補のsalience値:
+        桜(dt=292日): intensity 0.3→0.048, 0.5→0.166, 0.7→0.318, 0.9→0.487
+        非桜(最近): dt=292日 intensity 0.9→0.487, dt=584日 intensity 0.9→0.264
+
+      top-7に入りうるsalienceの範囲: 0.048〜0.487
+      range = 0.487 - 0.048 = 0.439（ただしtop-7の切り方による）
+      最小でも高intensity(0.487)と中intensity(0.166)が共存するため
+      range ≥ 0.1 は確実。
+
+# Q6: データ除外ルール
+exclusion_criteria: >
+  炎がis_extinguished=Trueで途中消火した場合はそのデータを除外。
+  NaN/Infが出た場合も除外。
+
+# Q7: 試行回数の根拠
+sample_size_rationale: >
+  100体験 × 2ペルソナ。002と同条件数。
+  体験間隔292日 × 100体験 = 29200日 = 80年の一生。
+
+# Q8: 既知の限界
+known_limitations: >
+  - 論理時間を使用。experience()のtimestamp引数とcompute_flame()の
+    now引数で時刻を外部から注入。本番のtime.time()コードパスは
+    この実験ではテストされない。
+  - 共鳴が last_activated を一括更新するため、同一resonance_keyを持つ
+    全記憶の effective dt が最新の共鳴体験に揃う。年齢差が消える。
+    これは#31設計の構造的特性であり、本実験では検証対象外。
+  - bonus_half_life=365.0日の値自体は未検証。
+    本実験ではデフォルト値をそのまま使い、値の妥当性は問わない。
+  - resonance_keys は暦に基づく機械的付与（春=桜）。
+    ドメイン固有の共鳴や複数キーの相互作用は別途検証が必要。
+  - ガウスノイズ（valence±0.15, intensity±0.1, cost±0.3）により
+    実際のintensity値は確率的に変動する。
+  - biasの計算(_compute_bias)は時間による重み付けを行わない。
+    全体験を等しく扱う。salienceとbiasの関係は本実験の対象外。

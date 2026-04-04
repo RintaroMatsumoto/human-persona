@@ -1,5 +1,5 @@
 # Briefing
-<!-- 最終更新: 2026-04-01 -->
+<!-- 最終更新: 2026-04-04 -->
 <!-- 目的: 次のクロミが全メモリを読まずに歩幅を合わせるための蒸留書 -->
 
 ## 対話の作法
@@ -72,6 +72,8 @@
 
 | 何をするとき | 読むファイル |
 |---|---|
+| 全体の地図を見るとき | GitHub Projects「human-persona」ボード（Activeビューで今動いているもの、Boardビューで全体俯瞰） |
+| candle_flameに触るとき | articles/31-salience-of-memory.md, articles/30-minimal-flame.md |
 | 記事を書くとき | editorial_guidelines.md（リポ直下 or ワークスペース） |
 | 実験を設計するとき | experiment_design_v2.md, feedback_experiment_design_lessons.md |
 | DC経由でWindows操作するとき | feedback_desktop_commander_pitfalls.md |
@@ -80,6 +82,13 @@
 | リファクタリングするとき | project_refactoring_decisions.md, project_phase3_handoff.md |
 | Issue #46実験の続きをするとき | handoff_issue46_full_experiment.md, next_session_message.md |
 | セッション終了するとき | feedback_crystal_folder.md |
+
+## プロジェクトボード管理
+
+GitHub Projects「human-persona」ボード（https://github.com/users/RintaroMatsumoto/projects/7）は外部の地図。セッション中に以下を行う：
+- Issueのステータスが変わったら（Design → In Progress → Done）ボードも更新する
+- 新しいIssueを作ったらボードに追加し、CategoryとStatusを設定する
+- API経由で更新する（Desktop Commander + Pythonスクリプト。Classic PAT必要、Fine-grainedはProjects非対応）
 
 ## 結晶への道標
 

@@ -123,21 +123,27 @@ class CandleFlame:
 
     Args:
         total_resource: 生涯の総資源。体験のcostで不可逆に減少する。
-        salience_decay: 記憶の減衰率。大きいほど忘れやすい。
+        base_half_life: 感情ゼロの記憶の半減期（日）。Ebbinghaus実測≈1.0日。
+        bonus_half_life: intensity=1.0の記憶に加算される半減期（日）。未検証。
+        salience_threshold: この値以下のsalienceを持つ記憶は切り捨てる。
         salience_top_k: compute_flame()で返す顕著な記憶の最大数。
     """
 
     def __init__(
         self,
         total_resource: float = 100.0,
-        salience_decay: float = 0.05,
+        base_half_life: float = 1.0,
+        bonus_half_life: float = 365.0,
+        salience_threshold: float = 0.01,
         salience_top_k: int = 7,
     ) -> None:
         if total_resource <= 0:
             raise ValueError("total_resource must be positive")
 
         self._total_resource = total_resource
-        self._salience_decay = salience_decay
+        self._base_half_life = base_half_life
+        self._bonus_half_life = bonus_half_life
+        self._salience_threshold = salience_threshold
         self._salience_top_k = salience_top_k
 
         # チェーンはジェネシスブロックで始まる
@@ -163,6 +169,7 @@ class CandleFlame:
         valence: float = 0.0,
         intensity: float = 0.5,
         cost: float = 1.0,
+        timestamp: Optional[float] = None,
     ) -> ExperienceBlock:
         """体験を記録し、チェーンに追加する.
 
@@ -172,6 +179,8 @@ class CandleFlame:
             valence: 快/不快（-1.0〜+1.0）
             intensity: 感情の強さ（0.0〜1.0）
             cost: 消費する資源（>= 0.0）
+            timestamp: 体験の時刻（エポック秒）。Noneなら現在時刻。
+                       テスト・シミュレーション用。本番では省略すること。
 
         Returns:
             作成されたExperienceBlock
@@ -191,7 +200,7 @@ class CandleFlame:
 
         ctx = context or {}
         prev = self._chain[-1]
-        ts = time.time()
+        ts = timestamp if timestamp is not None else time.time()
         idx = prev.index + 1
 
         h = _compute_hash(idx, ts, prev.hash, event, ctx, valence, intensity, cost)
@@ -210,17 +219,21 @@ class CandleFlame:
         self._chain.append(block)
         return block
 
-    def compute_flame(self) -> FlameState:
+    def compute_flame(self, now: Optional[float] = None) -> FlameState:
         """チェーン全体から「今の自分」を計算する.
 
         第二原理の実装。状態を保持せず、毎回チェーンを走査して計算する。
+
+        Args:
+            now: 現在時刻（エポック秒）。Noneなら現在時刻。
+                 テスト・シミュレーション用。本番では省略すること。
 
         Returns:
             FlameState（bias, remaining, salient_memories, chain_length）
         """
         bias = self._compute_bias()
         remaining = self._compute_remaining()
-        salient = self._compute_salience()
+        salient = self._compute_salience(now=now)
 
         return FlameState(
             bias=bias,
@@ -308,27 +321,56 @@ class CandleFlame:
         spent = sum(b.cost for b in self._chain)
         return max(0.0, self._total_resource - spent)
 
-    def _compute_salience(self) -> List[tuple]:
-        """記憶の顕著性を計算する.
+    def _compute_salience(self, now: Optional[float] = None) -> List[tuple]:
+        """記憶の顕著性を計算する — 半減期可変モデル（#31設計）.
 
-        アルゴリズム（素朴版）:
-            salience_i = intensity_i × exp(-decay × (now - timestamp_i))
+        アルゴリズム:
+            h_i = base_half_life + intensity_i × bonus_half_life
+            salience_i = intensity_i × exp(-ln2 / h_i × dt_i)
 
-            強い感情ほど残り、古いほど薄れる。
-            上位 top_k 件を返す。
-            ジェネシスブロックは除外。
+            dt_iは最終活性化時刻からの経過日数。
+            resonance_keysが共鳴する新しい体験があれば、
+            過去ブロックの最終活性化時刻が更新される（Rehearsal Boost）。
+
+        パラメータの根拠:
+            base_half_life = 1.0日 — Ebbinghaus忘却曲線の実測値。
+            bonus_half_life = 365.0日 — 未検証。強い感情の純粋な粘り。
+            threshold = 0.01 — これ以下の記憶は忘却済みとして切り捨て。
 
         この「忘れる」仕組みが個性を形成する——
         全てを覚えていたら、偏りは生まれない。
         忘れるからこそ、残った記憶が「自分」になる。
         """
-        now = time.time()
-        scored: List[tuple] = []
+        now = now if now is not None else time.time()
+        LN2 = math.log(2)
+        DAY = 86400.0
 
+        # 1. 各ブロックの最終活性化時刻（デフォルト: 自身のtimestamp）
+        last_activated: Dict[int, float] = {
+            b.index: b.timestamp for b in self._chain
+        }
+
+        # 2. 共鳴の検出 — resonance_keysが重なる過去ブロックの活性化時刻を更新
+        for block in self._chain[1:]:
+            keys = set(block.context.get("resonance_keys", []))
+            if not keys:
+                continue
+            for past in self._chain[1:]:
+                if past.index >= block.index:
+                    break
+                past_keys = set(past.context.get("resonance_keys", []))
+                if keys & past_keys:
+                    last_activated[past.index] = max(
+                        last_activated[past.index], block.timestamp)
+
+        # 3. 半減期可変モデルによる減衰計算
+        scored: List[tuple] = []
         for block in self._chain[1:]:  # ジェネシス除外
-            age = now - block.timestamp
-            salience = block.intensity * math.exp(-self._salience_decay * age)
-            scored.append((block, salience))
+            h = self._base_half_life + block.intensity * self._bonus_half_life
+            dt_days = (now - last_activated[block.index]) / DAY
+            s = block.intensity * math.exp(-LN2 / h * dt_days)
+            if s >= self._salience_threshold:
+                scored.append((block, s))
 
         # スコア降順でソートし、上位k件を返す
         scored.sort(key=lambda x: x[1], reverse=True)
