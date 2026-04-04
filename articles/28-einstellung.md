@@ -90,8 +90,5 @@ LLMでこれを検証した研究がある。結論は**「Stronger Priors, Stro
 ---
 
 <!-- metadata
-sessions: []
-commits: [4f86afe]
-verification: partial
 notes: Einstellung効果の先行研究、創造性分布データはNature掲載論文より。BRAINTEASERベンチマーク一次ソース突合は一部未完了。
 -->

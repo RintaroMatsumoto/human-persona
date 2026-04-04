@@ -149,8 +149,5 @@ def compute_flame(chain: list[ExperienceBlock]) -> FlameState:
 ---
 
 <!-- metadata
-sessions: []
-commits: []
-verification: none
 notes: 2026-04-02 設計セッションの記録。#26の設計思想を最小構成まで削ぎ落とした。実装・実験結果ではない。
 -->

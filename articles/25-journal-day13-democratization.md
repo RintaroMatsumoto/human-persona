@@ -80,8 +80,5 @@ human-personaは、AIに個性を与えるフレームワークではなかっ�
 ---
 
 <!-- metadata
-sessions: [7003b672]
-commits: [7fb1cfd, 6a758a5]
-verification: partial
 notes: 将棋AI歴史は公知情報。キネマキナの技術詳細は要検証。session 7003b672での対話に基づく。
 -->

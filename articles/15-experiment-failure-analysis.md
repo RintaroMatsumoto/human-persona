@@ -147,8 +147,5 @@ AIと共同で研究をすると、実装は速い。驚くほど速い。6モ�
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 5eef2db, 4cb7ebb]
-verification: partial
 notes: 31試行消化、6モジュール構成はexperiments/ディレクトリとgit履歴で確認可能。学説不理解の具体的内容は対話ログに基づく。
 -->

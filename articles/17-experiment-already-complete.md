@@ -143,8 +143,5 @@ published: false
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 5eef2db]
-verification: partial
 notes: 23時間の対話セッションは対話ログで裏付け可能。睡眠周期(SleepCycle)の設計はcore/inner_shell/sleep_cycle.pyと整合。
 -->

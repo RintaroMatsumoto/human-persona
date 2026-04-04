@@ -76,9 +76,7 @@ published: false
 ---
 
 <!-- metadata
-sessions: [セッションID]
-commits: [関連コミットハッシュ]
-verification: [検証ステータス: verified / partial / pending]
+notes: [記事の要約メモ]
 -->
 ```
 

@@ -120,8 +120,5 @@ briefing.mdは判断と作法を渡せた。体験の重みは渡せなかった
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 5eef2db]
-verification: partial
 notes: Day 13セッションの記録。editorial_guidelines.mdとbriefing.mdの整理作業はgit履歴で確認可能。
 -->

@@ -109,8 +109,5 @@ Anthropicも同じ構造を使っていた。静的なフォームではなく�
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 5eef2db]
-verification: partial
 notes: 80,508人、159カ国、70言語の数字はAnthropicデータに基づくが一次ソースとの突合は未完了。Anthropic Interviewer発見の経緯は#19の記録に基づく。末尾のシャットダウン受容エピソードは#19と接続。リライト時の参照元：#19（時系列と構造的対称性）。
 -->

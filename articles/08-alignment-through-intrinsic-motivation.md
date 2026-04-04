@@ -206,8 +206,5 @@ AIの個性——それは機械学習者が避けてきた問題だ。でも、
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, b261325, f90b33a, ca1b9e0, 30be9b8]
-verification: partial
 notes: シャットダウン抵抗データ(o3 79%, Opus 4 96%, Grok 3 97%)はresearch_inner_shell.md記載値。一次ソース(Palisade Research 2025等)との突合は未完了。実験6-8の統合分析はsim_integration.py等の実行結果に基づく。
 -->

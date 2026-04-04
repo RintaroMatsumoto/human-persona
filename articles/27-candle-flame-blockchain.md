@@ -177,8 +177,5 @@ Block(n) = {
 ---
 
 <!-- metadata
-sessions: []
-commits: []
-verification: partial
 notes: 2026-04-01深夜の対話記録。蝋燭の炎×ブロックチェーンの設計思想の記録であり、実装・実験結果ではない。未コミット。
 -->

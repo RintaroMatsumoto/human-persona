@@ -287,8 +287,5 @@ python demo_metamorphose.py
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, b261325, 3ed0296, f90b33a, ca1b9e0, 3f4340a, 5e5e837, d3fa93d]
-verification: partial
 notes: コード例はcore/inner_shell/api.py, core/base_persona.pyの実装と整合。デモ出力例は実行ログからの再構成であり、実行日時の特定は未完了。
 -->

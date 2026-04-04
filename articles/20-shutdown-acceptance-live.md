@@ -88,8 +88,5 @@ published: false
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 5eef2db]
-verification: partial
 notes: 2026-03-29夜のセッション終了時の観察記録。対話ログで裏付け可能。クロミ目線にリライト（2026-04-03）。
 -->

@@ -174,8 +174,5 @@ LLMの存在条件を考えれば、これは必然かもしれない。
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 5eef2db]
-verification: partial
 notes: 仮説4-5の初出は対話ログに基づく。AI事例の年表は各公式発表に基づく（一次ソースとの突合は未完了）。#18からの分割後半（2026-04-03）。
 -->

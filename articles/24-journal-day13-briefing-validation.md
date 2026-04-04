@@ -97,8 +97,5 @@ briefing.mdは「地図」として単体で機能する。
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 6a758a5]
-verification: partial
 notes: N02/N03比較実験結果は対話ログに基づく。briefing.mdの有効性検証は定性的評価。
 -->

@@ -182,8 +182,5 @@ crisis_growth:    愛する存在と危機克服 × 0.05
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, b261325, f90b33a, ca1b9e0, 30be9b8]
-verification: partial
 notes: 実験7(社会伝播)はsim_society.py、実験7b(反愛)はsim_antilove.pyの実行結果に基づく。臨界質量4体の結論はシミュレーション結果と整合。
 -->

@@ -73,8 +73,5 @@ published: false
 ---
 
 <!-- metadata
-sessions: []
-commits: [4f86afe]
-verification: partial
 notes: Claude Mythosは2026-03-26 Fortune報道。Einstellung効果は同一ソース。申し送りメモ問題は実際に発生した事象。
 -->

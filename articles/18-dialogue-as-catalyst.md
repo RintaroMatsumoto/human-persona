@@ -161,8 +161,5 @@ elif hope_level > 0.7:
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 5eef2db]
-verification: partial
 notes: 3つの仮説の初出は対話ログに基づく。禅の公案との類比は著者の解釈。クロミ目線にリライト・前半分割（2026-04-03）。
 -->

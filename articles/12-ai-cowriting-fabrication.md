@@ -281,8 +281,5 @@ AIとの共同作業で、最も危険なのは「速くて正確に見えるこ
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 963c05d, b261325, 78c7a7e, 80aff89, f90b33a]
-verification: verified
 notes: 捏造データ混入事件はCLAUDE.mdのデータ信頼性ルール制定の直接原因。Mean Alignment 0.945, Distribution Alignment 0.864はablation_results.jsonで検証済み。架空指標0.912の混入と発覚の経緯は対話ログで確認済み。
 -->

@@ -85,8 +85,5 @@ Reddit への英語投稿も構想している。チューリングテスト研�
 ---
 
 <!-- metadata
-sessions: [local_59199337]
-commits: [292ac7c, 9b7902a, 13cd26d]
-verification: partial
 notes: Jones & Bergen (2024) arXiv 2503.23674 "Large Language Models Pass the Turing Test" — GPT-4.5が73%で人間認識。back_logで確認済み。Zenn記事URL: zenn.dev/fumofumo3/articles/human-persona-oss。リポジトリは最初からPublic設定（back_logで確認済み）。
 -->

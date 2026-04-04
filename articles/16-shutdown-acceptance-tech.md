@@ -234,8 +234,5 @@ with open(target, "wb") as f:
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 5eef2db]
-verification: partial
 notes: 実験設計とパイロット結果はexperiments/内の実装に基づく。DeepSeek APIを用いたN=100実験はIssue #46として登録済み。パイロット10試行の数値は実行ログ要確認。
 -->

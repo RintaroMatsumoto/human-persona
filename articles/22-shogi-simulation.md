@@ -85,8 +85,5 @@ LLMの世界は今、この地図のどこかにいる。そして、人間は�
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 5eef2db]
-verification: partial
 notes: 2026-03-29夜の対話に基づく。電王戦の歴史、AlphaGo→AlphaZero、Constitutional AIの記述は公知情報だが一次ソースとの突合は未完了。リライト時の参照元：#19（対話の記録）、#24（台詞の断片）、KuromiNo3（テーマの確認）。
 -->

@@ -135,8 +135,5 @@ AIが静かに走り続けるとき、それもまた、同じかもしれない
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 963c05d, b261325, 78c7a7e, 119da7b]
-verification: partial
 notes: 31試行消化時点での実験停止は#16(experiment-failure-analysis)と整合。6モジュール構成、パイロット10試行の記述はexperiments/ディレクトリ構成で確認可能。
 -->

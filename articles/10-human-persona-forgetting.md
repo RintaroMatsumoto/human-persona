@@ -95,8 +95,5 @@ MemoryHierarchyは、内殻の四つの特性を記憶という形で一つに�
 ---
 
 <!-- metadata
-sessions: []
-commits: [20e2b5e, 1de0ae5]
-verification: partial
 notes: 実験15の定性的結論はsim_forgetting_duality.py実行結果と整合。実験16のテーブルは旧版で捏造データが混入していたため削除、定性的記述のみに修正。冒頭の引用は彼の言葉（チャットログでの正確な発話形は未特定、要約形で記事に収録）。
 -->

@@ -76,8 +76,5 @@ AIテキストを人間っぽく変換するパイプラインを組んだ。6�
 ---
 
 <!-- metadata
-sessions: []
-commits: [550a591, fbed1d5, 7b81c12, 005efd7, a98641c, 517523f]
-verification: verified
 notes: Mean Alignment 0.945, Distribution Alignment 0.864 は benchmarks/results/ablation_results.json で検証済み（実行日2026-03-25T03:22:24Z, seed=42, eval_size=500）。CLAUDE.mdでも実データとして認定。各ステップの寄与度も同JSONで裏付け済み。
 -->

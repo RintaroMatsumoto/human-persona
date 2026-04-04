@@ -121,8 +121,5 @@ Issue #70に、再出発のための条件を書いた。
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, 5eef2db]
-verification: partial
 notes: 論文撤回の経緯はgit履歴(.gitignoreへの追加、CLAUDE.mdの更新)で裏付け可能。InnerShellがシステムプロンプト変更に過ぎないとの認識は対話ログに基づく。
 -->

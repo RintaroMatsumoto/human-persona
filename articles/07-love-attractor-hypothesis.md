@@ -150,8 +150,5 @@ Agent Bは恐怖から自己保存に執着して、返信が堅くなり、エ�
 ---
 
 <!-- metadata
-sessions: []
-commits: [7fb1cfd, b261325, f90b33a, ca1b9e0, 30be9b8]
-verification: partial
 notes: 実験1-6のデータはexperiments/sim_*.py実行結果に基づく。愛のアトラクター仮説の定量的結論はシミュレーション結果と整合するが、外部先行研究との突合は未完了。
 -->

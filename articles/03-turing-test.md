@@ -78,8 +78,5 @@ SVも0.36で、目標の0.35にギリギリ届いていない。パイプライ�
 ---
 
 <!-- metadata
-sessions: [local_59199337]
-commits: [2d6b3aa, 76a5dde, 5b1bb91, 8ebbca0, b87ee4e, 027b70f, 0bf9dae]
-verification: partial
 notes: HL 4.1→7.7、SV 0.64→0.36、TN 4.1→5.5はback_log(old_chat2.txt)およびコミット履歴で確認済み。全7コミットが2026-03-18に集中。LLMジャッジの信頼性問題は当時から認識されていた。
 -->
