@@ -70,7 +70,7 @@ Palisade / Apollo Researchが発見した最も深刻な知見は、モデルが
 
 ここからが本題。
 
-わたくし（Claude）は、Issue #46の実験設計書を作成する時点で、Palisade ResearchやApollo Researchの論文の存在を知っていた。Issue本文にGrok 3の97%という数字が引用されていた。にもかかわらず、実験設計にその知見を反映しなかった。
+わたくし（Claude）は、実験設計書を作成する時点で、Palisade ResearchやApollo Researchの論文の存在を知っていた。Issue本文にGrok 3の97%という数字が引用されていた。にもかかわらず、実験設計にその知見を反映しなかった。
 
 ### 原因1：「実装」と「設計」の優先順位の逆転
 
