@@ -60,8 +60,8 @@ AIが人間のように振る舞うための言語・文化非依存フレーム
 ## 公開チャネル
 - **Zenodo**: DOI 10.5281/zenodo.19266072（プレプリントv1、CC BY 4.0）
 - **Zenn**: @fumofumo3 — articles/ディレクトリからGitHub連携で自動デプロイ（main push時）
-  - 公開済み8本 + rate-limit待ち3本
-  - rate-limitは期間経過で自然解除。1日1-2本ペースでデプロイ
+  - 全37本 published: false（2026-04-05確認）
+  - ファイル名をタイトルに合わせてリネーム済み（2026-04-05）
 - **Hugging Face**: RintaroMatsumoto/human-persona-paper — DOI追記済み
 
 ## 次フェーズ（Issue登録済み）
