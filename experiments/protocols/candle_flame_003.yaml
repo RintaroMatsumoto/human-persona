@@ -118,7 +118,7 @@ predictions:
       top-7の構成見込み:
         桜(dt=292日)の高intensity群が上位を占める。
         非桜の直近高intensity体験も混在する。
-        桜が1件以上入ることは確実。
+        桜が1件以上入る確率は高い。
 
   - name: salience_not_flat
     description: >
@@ -138,7 +138,7 @@ predictions:
       top-7に入りうるsalienceの範囲: 0.048〜0.487
       range = 0.487 - 0.048 = 0.439（ただしtop-7の切り方による）
       最小でも高intensity(0.487)と中intensity(0.166)が共存するため
-      range ≥ 0.1 は確実。
+      range ≥ 0.1 となる確率は高い。
 
 # Q6: データ除外ルール
 exclusion_criteria: >
