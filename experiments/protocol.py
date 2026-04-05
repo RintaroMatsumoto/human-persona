@@ -232,8 +232,10 @@ class ExperimentProtocol:
         else:
             raise RuntimeError("PyYAML is required to load protocols. pip install pyyaml")
 
+        known = Prediction.__dataclass_fields__
         predictions = [
-            Prediction(**p) for p in data.get("predictions", [])
+            Prediction(**{k: v for k, v in p.items() if k in known})
+            for p in data.get("predictions", [])
         ]
 
         return cls(
