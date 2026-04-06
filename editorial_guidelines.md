@@ -222,6 +222,16 @@ Phase 7 — 運用: distillation → briefing-validation
 - 既存記事: `articles/`（日本語）、`articles-en/`（英語）
 - ブラウザClaudeチャットログ: `uploads/old_chat1.txt` 〜 `old_chat2-5.txt`
 
+### ファイル名・タイトル・絵文字の整合性ルール
+
+新規追加・修正のたびに以下の3点を必ず一致させること。
+
+1. **ファイル名**: `XX-english-slug.md`（タイトルの英訳、ハイフン区切り）
+2. **frontmatterのtitle**: `"#XX 日本語タイトル"`
+3. **frontmatterのemoji**: タイトルの内容を直接的に表すもの。全38本で重複禁止
+
+新規記事を追加する前に既存のemojiと被っていないか確認すること。
+
 ### 記事の配置先
 - 日本語: `articles/` 内（Zennフロントマター付き、`published: false`）
 - 英語: `articles-en/` 内（dev.toフロントマター付き）
