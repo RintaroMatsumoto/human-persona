@@ -1,6 +1,6 @@
 ---
 title: "#12 汚染された数字"
-emoji: "🔬"
+emoji: "🧮"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "研究倫理"]
 published: false

@@ -1,6 +1,6 @@
 ---
 title: "#11 仮面の下の素顔"
-emoji: "🦋"
+emoji: "🪞"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "デモ"]
 published: false

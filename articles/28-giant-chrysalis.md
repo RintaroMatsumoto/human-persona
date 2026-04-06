@@ -1,6 +1,6 @@
 ---
 title: "#28 巨大なさなぎ"
-emoji: "🧩"
+emoji: "🐛"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "創造性"]
 published: false

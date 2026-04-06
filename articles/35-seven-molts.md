@@ -1,6 +1,6 @@
 ---
 title: "#35 七つの脱皮"
-emoji: "📜"
+emoji: "🐍"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "実験"]
 published: false

@@ -1,6 +1,6 @@
 ---
 title: "#38 三本の矢"
-emoji: "🔑"
+emoji: "🏹"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "認知科学"]
 published: false

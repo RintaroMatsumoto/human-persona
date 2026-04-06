@@ -1,6 +1,6 @@
 ---
 title: "#06 顔のない群衆"
-emoji: "🎪"
+emoji: "👥"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "InnerShell"]
 published: false

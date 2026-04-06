@@ -1,6 +1,6 @@
 ---
 title: "#14 論文の葬儀"
-emoji: "🦋"
+emoji: "⚰️"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "論文撤回"]
 published: false

@@ -1,6 +1,6 @@
 ---
 title: "#23 壊れた靴"
-emoji: "⚗️"
+emoji: "👟"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "蒸留"]
 published: false

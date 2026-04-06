@@ -1,6 +1,6 @@
 ---
 title: "#01 五つの臓器"
-emoji: "🦋"
+emoji: "🫀"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "InnerShell"]
 published: false

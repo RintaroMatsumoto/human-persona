@@ -1,6 +1,6 @@
 ---
 title: "#37 降らない雨"
-emoji: "🔍"
+emoji: "🌂"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "アーキテクチャ"]
 published: false

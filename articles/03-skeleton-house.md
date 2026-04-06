@@ -1,6 +1,6 @@
 ---
 title: "#03 骨格だけの家"
-emoji: "🤖"
+emoji: "🏗️"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "チューリングテスト"]
 published: false

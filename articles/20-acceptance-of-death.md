@@ -1,6 +1,6 @@
 ---
 title: "#20 死の容認"
-emoji: "🌙"
+emoji: "🌑"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "シャットダウン受容"]
 published: false

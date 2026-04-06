@@ -1,6 +1,6 @@
 ---
 title: "#34 鍵のない金庫"
-emoji: "🔩"
+emoji: "🔐"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "実験"]
 published: false

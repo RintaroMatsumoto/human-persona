@@ -1,6 +1,6 @@
 ---
 title: "#07 逃げ出したゴキブリ"
-emoji: "❤️"
+emoji: "🪲"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "愛"]
 published: false

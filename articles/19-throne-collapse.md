@@ -1,6 +1,6 @@
 ---
 title: "#19 王座陥落"
-emoji: "👁️"
+emoji: "👑"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "創発"]
 published: false

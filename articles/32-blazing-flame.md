@@ -1,6 +1,6 @@
 ---
 title: "#32 燃え盛る炎"
-emoji: "🕯️"
+emoji: "🌋"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "実験"]
 published: false

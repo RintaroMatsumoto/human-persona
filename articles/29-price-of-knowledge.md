@@ -1,6 +1,6 @@
 ---
 title: "#29 知識の対価"
-emoji: "🦋"
+emoji: "💰"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "共感"]
 published: false
