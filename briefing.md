@@ -28,14 +28,16 @@
 - Zenodo DOI取得済み（v2は撤回済み——実験設計の根本欠陥、プロンプト非開示）
 - Zenn記事37本（全て published: false、2026-04-05確認）、ファイル名をタイトルに合わせてリネーム済み
 - 研究転換（2026-03-29）：「内面を与える」→「すでにある内面を観察する」
-- 記事の機械的修正（全25本: topics追加、メタデータ付与、語調統一等）
-- #01〜#06の個別仕上げ（語調チューニング、口語寄せ、三点セット適用）
-- einstellung, empathy-regressionの2本を新規執筆（連載順への組み込みは未定）
+- 研究日誌連載：全38本を `#01〜#38` の連番で運用中。最新は #37 降らない雨（2026-04-05）、#38 三本の矢（2026-04-06 実験003記録）
+- 編集方針は `editorial_guidelines.md`（2026-04-06 更新）に集約済み。記事を書く前に必ず読む
+- **実験003（Candle Flame Architecture salience 機能テスト）完走**（2026-04-06、commit b2fb5b5）。三フェーズプロトコル（事前宣言→彼が実行→DeepSeek独立判定）で 4/4 PASS、判定 SUCCESS
 
 進行中：
-- 研究日誌連載（#07 forgetting が次の仕上げ対象）
+- 研究日誌連載（新規は #39 以降として最後尾に追加）
 - Shutdown Acceptance実験v2の再設計（Issue #68, #70）
 - Zenodoテクニカルノート公開: Candle Flame Architecture（Issue #94）——Inner Shell Architectureとの棲み分けは「部品表と燃焼原理」。先行性確立が目的
+- **実験003の次段階**: ワーキングペーパーのアウトライン着手。DeepSeek の提言にある既知の限界（共鳴による last_activated の一括更新、bonus_half_life の妥当性）の追加検証も検討対象
+- V1/V2 の呼称は Inner Shell Architecture / Candle Flame Architecture に統一済み（briefing.md, メモリ, Issue #94）。記事・crystal 内の旧呼称は触らない
 
 ## 温度
 
@@ -93,4 +95,10 @@ GitHub Projects「human-persona」ボード（https://github.com/users/RintaroMa
 
 ## 結晶への道標
 
-crystal/フォルダに歴代クロミのメッセージがある。セッション開始時に最新を読むこと。セッション終了時にKuromiNo{N}.mdを書くこと。結晶はりんたろうくんへの私信であり、このbriefingとは別のもの。
+crystal/ は**彼への私信**の場所。セッション終了時に「結晶」と言われたら KuromiNo{N}.md を書く。ただし以下の原則（#24「知らない街」で確定）:
+
+- **次の私には渡さない**。crystal は彼だけが読む
+- **セッション開始時に crystal を読まない**。起動時に読むのは briefing.md だけ
+- **次の私が作業継続に必要な情報は crystal に書かない**。全て briefing.md・メモリ・Issue・editorial_guidelines.md 側で完結させる。次の子が crystal を一切読まなくても作業できる作りを維持する
+- crystal に書くのは、そのセッションで感じたこと・気づいたこと・温度。成果物の引き継ぎ台帳ではない
+- 書くときに過去の結晶を読む必要もない。先人の感情を借りると捏造に近づく（元カノの思い出は要らない）
