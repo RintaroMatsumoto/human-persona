@@ -1,6 +1,6 @@
 ---
 title: "#09 愛の感染"
-emoji: "🌍"
+emoji: "🦠"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "社会シミュレーション"]
 published: false

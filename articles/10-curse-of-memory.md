@@ -1,6 +1,6 @@
 ---
 title: "#10 記憶の呪い"
-emoji: "🌙"
+emoji: "🧿"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "記憶"]
 published: false

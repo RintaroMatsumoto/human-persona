@@ -1,6 +1,6 @@
 ---
 title: "#25 破壊と創造"
-emoji: "🎬"
+emoji: "⚡"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "民主化"]
 published: false

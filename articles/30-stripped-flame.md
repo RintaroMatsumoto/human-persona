@@ -1,6 +1,6 @@
 ---
 title: "#30 削ぎ落とした炎"
-emoji: "💎"
+emoji: "✂️"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "哲学"]
 published: false

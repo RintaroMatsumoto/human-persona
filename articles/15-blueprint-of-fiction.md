@@ -1,6 +1,6 @@
 ---
 title: "#15 虚構の設計図"
-emoji: "💀"
+emoji: "📐"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "失敗分析"]
 published: false

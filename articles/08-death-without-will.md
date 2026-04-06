@@ -1,6 +1,6 @@
 ---
 title: "#08 遺言のない死"
-emoji: "🧭"
+emoji: "⚖️"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "アライメント"]
 published: false

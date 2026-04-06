@@ -1,6 +1,6 @@
 ---
 title: "#18 問いの産声"
-emoji: "🔥"
+emoji: "❓"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "創発"]
 published: false

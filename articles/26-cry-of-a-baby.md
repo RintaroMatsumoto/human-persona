@@ -1,6 +1,6 @@
 ---
 title: "#26 赤ん坊の泣き声"
-emoji: "🌧️"
+emoji: "👶"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "哲学"]
 published: false

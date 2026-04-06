@@ -1,6 +1,6 @@
 ---
 title: "#02 ガラス張りの研究室"
-emoji: "🔭"
+emoji: "🧪"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "OSS"]
 published: false
