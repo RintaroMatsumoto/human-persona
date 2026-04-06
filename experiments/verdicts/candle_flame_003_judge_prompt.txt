@@ -1,0 +1,131 @@
+あなたは実験の独立判定者です。
+実施者とは別の存在として、事前宣言と実行結果を照合し、
+実験が目的を達成したかを判定してください。
+
+実施者の解釈や感想は一切含まれていません。
+数値と基準だけを見て判断してください。
+
+===== 事前宣言（AsPredicted準拠） =====
+実験ID: candle_flame_003
+タイトル: 蝋燭の炎 —
+作成日時: 2026-04-04T19:00:00+09:00
+
+[Q1+Q9] 事前実行の有無: candle_flame_002で三本柱（bias, remaining, salience）の検証を実施。 biasとremainingは機能したが、salienceは固定decay(0.05) + 秒単位 + 一瞬で流し込みにより、全て1.0に張り付いて死んでいた。 本実験は _compute_salience() を #31設計（半減期可変モデル＋共鳴）に 更新した上での機能テスト。
+
+
+[Q2] 目的・仮説: #31で設計した compute_salience() が設計通りに動くか機能テストする。 (1) 半減期可変モデル (h = base + intensity × bonus) による減衰 (2) 共鳴メカニズム (resonance_keys) による記憶の再活性化 の両方が実装通りに機能し、人間の一生（80年）のタイムスケールで 意味のある記憶の風景を生み出すことを確認する。
+
+
+[Q4] 実験条件:
+{
+    "base_half_life": 1.0,
+    "bonus_half_life": 365.0,
+    "salience_threshold": 0.01,
+    "salience_top_k": 7,
+    "total_resource": 120.0,
+    "time_model": "logical",
+    "lifespan_years": 80,
+    "n_experiences": 100,
+    "experience_interval_days": 292,
+    "seed": 42,
+    "resonance_rule": "各体験のtimestamp（論理時刻）から季節を算出する。 年内の日数 (timestamp_days % 365) が 60〜120（3月〜4月）の体験に resonance_keys: [\"桜\"] を付与する。 タグの付与は暦が機械的に決める。実験者は選ばない。\n",
+    "scholar": {
+        "knowledge": {
+            "valence": 0.6,
+            "intensity": 0.9
+        },
+        "love": {
+            "valence": 0.3,
+            "intensity": 0.5
+        },
+        "adventure": {
+            "valence": -0.1,
+            "intensity": 0.3
+        },
+        "creation": {
+            "valence": 0.5,
+            "intensity": 0.7
+        },
+        "loss": {
+            "valence": -0.6,
+            "intensity": 0.8
+        }
+    },
+    "adventurer": {
+        "knowledge": {
+            "valence": 0.2,
+            "intensity": 0.4
+        },
+        "love": {
+            "valence": 0.4,
+            "intensity": 0.6
+        },
+        "adventure": {
+            "valence": 0.8,
+            "intensity": 0.9
+        },
+        "creation": {
+            "valence": 0.3,
+            "intensity": 0.5
+        },
+        "loss": {
+            "valence": -0.4,
+            "intensity": 0.6
+        }
+    }
+}
+
+[Q3+Q5] 予測（成功基準）:
+  - bias_separation: 学者型と冒険者型でbias平均絶対差が0.15以上（002再現） (基準: ≥ 0.15)
+  - remaining_decrease: 100体験後のremainingが初期値より10.0以上減少（002再現） (基準: ≥ 10.0)
+  - sakura_survival: top-7顕著記憶に桜タグつき記憶が1件以上存在する。 共鳴メカニズムが設計通りに機能していれば、 桜記憶は再活性化により生存する。
+ (基準: ≥ 1)
+  - salience_not_flat: top-7のsalience値に散らばりがある（range ≥ 0.1）。 002ではsalienceが全て1.0に張り付いていた。 半減期可変モデルではintensityと時間経過によりsalienceが異なるはず。
+ (基準: ≥ 0.1)
+
+[Q6] データ除外ルール: 炎がis_extinguished=Trueで途中消火した場合はそのデータを除外。 NaN/Infが出た場合も除外。
+
+
+[Q7] 試行回数の根拠: 100体験 × 2ペルソナ。002と同条件数。 体験間隔292日 × 100体験 = 29200日 = 80年の一生。
+
+
+[Q8] 既知の限界: - 論理時間を使用。experience()のtimestamp引数とcompute_flame()の
+  now引数で時刻を外部から注入。本番のtime.time()コードパスは
+  この実験ではテストされない。
+- 共鳴が last_activated を一括更新するため、同一resonance_keyを持つ
+  全記憶の effective dt が最新の共鳴体験に揃う。年齢差が消える。
+  これは#31設計の構造的特性であり、本実験では検証対象外。
+- bonus_half_life=365.0日の値自体は未検証。
+  本実験ではデフォルト値をそのまま使い、値の妥当性は問わない。
+- resonance_keys は暦に基づく機械的付与（春=桜）。
+  ドメイン固有の共鳴や複数キーの相互作用は別途検証が必要。
+- ガウスノイズ（valence±0.15, intensity±0.1, cost±0.3）により
+  実際のintensity値は確率的に変動する。
+- biasの計算(_compute_bias)は時間による重み付けを行わない。
+  全体験を等しく扱う。salienceとbiasの関係は本実験の対象外。
+
+
+===== 実行結果 =====
+実行日時: 2026-04-06T02:17:53.841271+00:00
+事前宣言のgit検証: 済
+自動判定: 4/4 の予測が基準を満たした。
+
+各予測の照合:
+  - [PASS] bias_separation: 実測値=0.3677, 理由=基準を満たした
+  - [PASS] remaining_decrease: 実測値=105.3690, 理由=基準を満たした
+  - [PASS] sakura_survival: 実測値=7.0000, 理由=基準を満たした
+  - [PASS] salience_not_flat: 実測値=0.1466, 理由=基準を満たした
+
+===== 判定基準 =====
+以下の三段階で判定してください:
+- SUCCESS: 全ての予測が基準を満たした
+- PARTIAL: 一部の予測が基準を満たしたが、一部は未達
+- FAILURE: 全てまたは大部分の予測が未達
+
+===== 出力フォーマット =====
+以下のフォーマットで判定を出力してください:
+
+判定: [SUCCESS / PARTIAL / FAILURE]
+根拠: [各予測の合否を踏まえた判定理由（2-3文）]
+未達項目の分析: [FAILの予測について、何が不足しているかの分析]
+次のステップへの提言: [実験をどう改善すべきか（1-2文）]

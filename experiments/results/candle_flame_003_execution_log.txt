@@ -1,0 +1,71 @@
+============================================================
+candle_flame_003 実行ログ
+実行者: りんたろうくん (PowerShell)
+日時: 2026-04-06
+============================================================
+
+--- PyYAML インストール ---
+
+PS C:\Users\GoldRush\Documents\MyProject\human-persona> pip install pyyaml
+
+--- 実験実行 ---
+
+PS C:\Users\GoldRush\Documents\MyProject\human-persona> python -m experiments.candle_flame_003_run
+============================================================
+  フェーズ2: 実行＋自動診断
+============================================================
+  [学者型] 80年の人生を走行中...
+  [冒険者型] 80年の人生を走行中...
+  測定: bias_separation = 0.3677
+  測定: remaining_decrease = 105.3690
+  測定: sakura_survival = 7
+  測定: salience_not_flat = 0.1466
+  --- 学者型の詳細 ---
+  bias: {'knowledge': 0.5759869023454263, 'adventure': -0.10441047052776035, 'love': 0.27995860683732554, 'loss': -0.5954938353662015, 'creation': 0.5460689343936563}
+  remaining: 14.63
+  chain_length: 101
+  salient_memories (7件):
+    # 60 sal=0.5027 int=0.92 dom=knowledge [桜]
+    # 90 sal=0.4643 int=0.87 dom=knowledge [桜]
+    # 65 sal=0.4355 int=0.84 dom=creation [桜]
+    # 50 sal=0.4309 int=0.84 dom=loss [桜]
+    # 95 sal=0.4228 int=0.83 dom=creation [桜]
+    # 20 sal=0.4106 int=0.81 dom=loss [桜]
+    # 75 sal=0.3560 int=0.75 dom=loss [桜]
+  --- 冒険者型の詳細 ---
+  bias: {'knowledge': 0.1778533922805403, 'adventure': 0.7243465116087893, 'loss': -0.4062274807777571, 'creation': 0.31035494728945506, 'love': 0.46681344584913137}
+  remaining: 28.22
+============================================================
+  自動診断レポート
+============================================================
+  実験ID:     candle_flame_003
+  プロトコル: experiments/protocols/candle_flame_003.yaml
+  実行日時:   2026-04-06T02:17:53.841271+00:00
+  総合判定:   全基準クリア ✓
+  要約:       4/4 の予測が基準を満たした。
+  [✓ PASS] bias_separation
+           実測値: 0.3677  (基準: ≥ 0.15)
+           理由:   基準を満たした
+  [✓ PASS] remaining_decrease
+           実測値: 105.3690  (基準: ≥ 10.0)
+           理由:   基準を満たした
+  [✓ PASS] sakura_survival
+           実測値: 7.0000  (基準: ≥ 1)
+           理由:   基準を満たした
+  [✓ PASS] salience_not_flat
+           実測値: 0.1466  (基準: ≥ 0.1)
+           理由:   基準を満たした
+============================================================
+  フェーズ3: 判定プロンプト生成
+============================================================
+  判定プロンプトを保存: experiments/verdicts/candle_flame_003_judge_prompt.txt
+  → このファイルをDeepSeekに渡して、独立判定を受けてください。
+
+--- フェーズ3: DeepSeek独立判定 ---
+
+DeepSeek API (model: deepseek-chat, temperature: 0.0)
+入力: experiments/verdicts/candle_flame_003_judge_prompt.txt をそのまま送信
+system prompt: なし
+加工・追加・省略: なし
+
+判定結果: experiments/verdicts/candle_flame_003_verdict.txt に保存

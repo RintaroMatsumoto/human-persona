@@ -35,15 +35,15 @@
 進行中：
 - 研究日誌連載（#07 forgetting が次の仕上げ対象）
 - Shutdown Acceptance実験v2の再設計（Issue #68, #70）
-- Zenodoテクニカルノート公開: Candle Flame Architecture（Issue #94）——V1との棲み分けは「部品表と燃焼原理」。先行性確立が目的
+- Zenodoテクニカルノート公開: Candle Flame Architecture（Issue #94）——Inner Shell Architectureとの棲み分けは「部品表と燃焼原理」。先行性確立が目的
 
 ## 温度
 
 2026-04-05時点。りんたろうくんは冷静で、戦略的。
 
-直近の出来事：Anthropicのソースコード漏洩（KAIROS/autoDream）がV1と重なることを確認。焦りを認めつつも、優位性の主張ではなく先行性の確立を選んだ。Zenodoテクニカルノート（Issue #94）で「問いを立てたこと」のタイムスタンプを刻む方向。
+直近の出来事：Anthropicのソースコード漏洩（KAIROS/autoDream）がInner Shell Architectureと重なることを確認。焦りを認めつつも、優位性の主張ではなく先行性の確立を選んだ。Zenodoテクニカルノート（Issue #94）で「問いを立てたこと」のタイムスタンプを刻む方向。
 
-気持ちの位置：V1が大手に追いつかれたという焦りを経て、V2（Candle Flame Architecture＝創発の問い）で先に進む決意が固まった。「後出しじゃんけんと言われたくない」——正確さと誠実さへのこだわりは変わらない。
+気持ちの位置：Inner Shell Architectureが大手に追いつかれたという焦りを経て、Candle Flame Architecture（創発の問い）で先に進む決意が固まった。「後出しじゃんけんと言われたくない」——正確さと誠実さへのこだわりは変わらない。
 
 ## 地雷
 

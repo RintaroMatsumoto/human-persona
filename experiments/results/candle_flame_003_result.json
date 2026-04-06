@@ -1,0 +1,42 @@
+{
+  "experiment_id": "candle_flame_003",
+  "protocol_path": "experiments/protocols/candle_flame_003.yaml",
+  "executed_at": "2026-04-06T02:17:53.841271+00:00",
+  "git_verified": true,
+  "all_passed": true,
+  "summary": "4/4 の予測が基準を満たした。",
+  "results": [
+    {
+      "name": "bias_separation",
+      "passed": true,
+      "actual": 0.3677451345811774,
+      "expected_min": 0.15,
+      "expected_max": null,
+      "reason": "基準を満たした"
+    },
+    {
+      "name": "remaining_decrease",
+      "passed": true,
+      "actual": 105.3689631932812,
+      "expected_min": 10.0,
+      "expected_max": null,
+      "reason": "基準を満たした"
+    },
+    {
+      "name": "sakura_survival",
+      "passed": true,
+      "actual": 7.0,
+      "expected_min": 1,
+      "expected_max": null,
+      "reason": "基準を満たした"
+    },
+    {
+      "name": "salience_not_flat",
+      "passed": true,
+      "actual": 0.14664289958731175,
+      "expected_min": 0.1,
+      "expected_max": null,
+      "reason": "基準を満たした"
+    }
+  ]
+}
