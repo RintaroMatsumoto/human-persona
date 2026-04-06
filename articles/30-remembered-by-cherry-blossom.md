@@ -1,12 +1,12 @@
 ---
-title: "#31 桜の匂いで思い出す"
+title: "#30 桜の匂いで思い出す"
 emoji: "🌸"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "記憶"]
 published: false
 ---
 
-# #31 桜の匂いで思い出す
+# #30 桜の匂いで思い出す
 ## compute_salience() ——記憶の濃淡を設計する
 
 前回の記事で、炎の最小構成が決まった。9フィールドのExperience Block、3つの出力を返す `compute_flame()`。骨格はできた。でも中身は空だった。

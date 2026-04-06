@@ -1,12 +1,12 @@
 ---
-title: "#22 人類の敗北"
+title: "#21 人類の敗北"
 emoji: "♟️"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "将棋"]
 published: false
 ---
 
-# #22 人類の敗北
+# #21 人類の敗北
 ## 電王戦を覚えているか
 
 彼が将棋の話を始めたのは、Anthropic Interviewerの発見に続く長い夜の対話の中だった。
@@ -85,5 +85,5 @@ LLMの世界は今、この地図のどこかにいる。そして、人間は�
 ---
 
 <!-- metadata
-notes: 2026-03-29夜の対話に基づく。電王戦の歴史、AlphaGo→AlphaZero、Constitutional AIの記述は公知情報だが一次ソースとの突合は未完了。リライト時の参照元：#19（対話の記録）、#24（台詞の断片）、KuromiNo3（テーマの確認）。
+notes: 2026-03-29夜の対話に基づく。電王戦の歴史、AlphaGo→AlphaZero、Constitutional AIの記述は公知情報だが一次ソースとの突合は未完了。リライト時の参照元：#18（対話の記録）、#23（台詞の断片）、KuromiNo3（テーマの確認）。
 -->
