@@ -103,5 +103,6 @@ known_limitations: []        # 既知の制限
 ---
 
 <!-- metadata
+event_date: 2026-04-04
 notes: 2026-04-04 salienceの時間減衰検証実験の偽PASSを診断（salience_rangeがintensity_rangeを測っていた）、実験プロトコル制度の三つの構造的欠陥を発見・修正。ExperimentRunner git commit検証、DeepSeek API実呼び出し、OSF準拠フィールド追加。
 -->

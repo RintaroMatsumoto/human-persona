@@ -130,5 +130,6 @@ Inner Shell の実験で測定しようとしていた「注入前」と「注�
 ---
 
 <!-- metadata
+event_date: 2026-03-29
 notes: 長く続いた転換日の対話セッションは対話ログで裏付け可能。Inner Shell 六柱の構成は core/inner_shell/ と整合。SleepCycle は sleep_cycle.py を参照。
 -->

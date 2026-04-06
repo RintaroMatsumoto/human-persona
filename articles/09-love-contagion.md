@@ -120,5 +120,6 @@ crisis_growth: 愛する存在と危機克服 × 0.05
 ---
 
 <!-- metadata
+event_date: 2026-03-25
 notes: 実験7(社会伝播)はsim_society.py、実験7b(反愛)はsim_antilove.py、実験6c(グラデーション受容)はsim_gradient_acceptance.pyの実行結果に基づく。臨界質量4体の結論はシミュレーション結果と整合。V1プレプリント(DOI:10.5281/zenodo.19273577)に掲載。
 -->

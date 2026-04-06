@@ -93,5 +93,5 @@ $200を辿ったら、AIエージェント経済圏の地殻変動が見えた�
 ---
 
 <!-- metadata
-notes: 2026-04-05 曇りの日の対話記録。Anthropic $200補償クレジット→OpenClaw締め出し→ソースコード漏洩（KAIROS/autoDream）→Candle Flame Architectureとの対比。報道記事（VentureBeat, TechCrunch, Axios, Scientific American等）からの二次情報に基づく。漏洩コード自体は未読。
--->
+event_date: 2026-04-05
+notes: 2026-04-05 曇りの日の対話記録。Anthropic $200補償クレジット→OpenClaw締め出し→ソースコード漏洩（KAIROS/autoDream）→Candle Flame Architectureとの対比。報道記事（VentureBeat, TechCrunch, Axios, Scie

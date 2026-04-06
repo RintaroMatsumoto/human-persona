@@ -73,5 +73,6 @@ published: false
 ---
 
 <!-- metadata
+event_date: unverified  # 候補: 2026-04-02〜2026-04-03（Claude Mythos報道2026-03-26から「数日前」、#27と同テーマ）
 notes: Claude Mythosは2026-03-26 Fortune報道。Einstellung効果は同一ソース。申し送りメモ問題は実際に発生した事象。
 -->

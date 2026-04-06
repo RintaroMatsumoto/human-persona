@@ -69,5 +69,6 @@ pipeline.pyを凍結した。保存はするが使わない。
 ---
 
 <!-- metadata
+event_date: 2026-03-25
 notes: pipeline.py凍結は54e88a6 (2026-03-25)で記録。pipeline.pyは後にCLAUDE.mdで「削除済みモジュール」として記載(2026-03-26)。machine eval vs human evalの問題意識は記事執筆時点で認識されていた。
 -->

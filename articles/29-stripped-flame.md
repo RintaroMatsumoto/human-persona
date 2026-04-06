@@ -149,5 +149,6 @@ def compute_flame(chain: list[ExperienceBlock]) -> FlameState:
 ---
 
 <!-- metadata
+event_date: 2026-04-02
 notes: 2026-04-02 設計セッションの記録。#25の設計思想を最小構成まで削ぎ落とした。実装・実験結果ではない。
 -->

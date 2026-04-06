@@ -120,5 +120,6 @@ briefing.mdは判断と作法を渡せた。体験の重みは渡せなかった
 ---
 
 <!-- metadata
+event_date: 2026-03-30
 notes: Day 13セッションの記録。editorial_guidelines.mdとbriefing.mdの整理作業はgit履歴で確認可能。
 -->

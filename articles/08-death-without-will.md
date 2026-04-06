@@ -142,5 +142,6 @@ AIの未来は、性能の向上ではなく、個性の育成にあるのかも
 ---
 
 <!-- metadata
+event_date: 2026-03-25
 notes: シャットダウン抵抗データ(o3 79%, Opus 4 96%, Grok 3 97%)はresearch_inner_shell.md記載値。一次ソース(Palisade Research 2025等)との突合は未完了。実験6-8の統合分析はsim_integration.py等の実行結果に基づく。V1プレプリント(DOI:10.5281/zenodo.19273577)に掲載。
 -->

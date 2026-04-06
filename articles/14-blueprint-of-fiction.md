@@ -101,5 +101,6 @@ LLM-as-Judge というメソドロジーの洗練に気を取られ、そもそ�
 ---
 
 <!-- metadata
+event_date: 2026-03-28
 notes: 31試行消化、6モジュール構成は experiments/ ディレクトリと git 履歴で確認可能。学説不理解の具体的内容は対話ログに基づく。Palisade Research arXiv:2509.14260, Grok 4 97%, o3 79% は一次文献で裏付け済み。
 -->

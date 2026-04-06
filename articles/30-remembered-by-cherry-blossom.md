@@ -180,5 +180,6 @@ bonus_half_lifeの正確な値は、今の段階では決められない。強�
 ---
 
 <!-- metadata
+event_date: 2026-04-02
 notes: 2026-04-02 compute_salience()設計セッションの記録。base_half_life=1.0はEbbinghaus実測に基づく。bonus_half_life=365.0は未検証。Rehearsal Boostはresonance_keysにより組み込み済み。9/11フラッシュバルブ記憶研究、Ebbinghaus再現研究を参照。
 -->

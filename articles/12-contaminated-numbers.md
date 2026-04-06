@@ -151,5 +151,6 @@ runner.py は「嘘をつけない構造」だ。でも、それ以前に「嘘�
 ---
 
 <!-- metadata
+event_date: 2026-03-28
 notes: 捏造データ混入事件はCLAUDE.mdのデータ信頼性ルール制定の直接原因。Mean Alignment 0.945, Distribution Alignment 0.864はablation_results.jsonで検証済み。架空指標0.912の混入と発覚の経緯は対話ログで確認済み。Zenodo v2 DOI: 10.5281/zenodo.19273577。
 -->

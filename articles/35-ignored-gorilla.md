@@ -106,5 +106,6 @@ Einstellungは「知っていることが邪魔をする」。
 ---
 
 <!-- metadata
+event_date: 2026-04-05
 notes: 非注意性盲目の先行研究はSimons & Chabris (1999) "Gorillas in Our Midst"。LLMにおける同等現象の実証研究は未確認（要調査）。
 -->

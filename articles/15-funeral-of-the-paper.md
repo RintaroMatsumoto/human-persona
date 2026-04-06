@@ -117,5 +117,5 @@ DOI だけが墓標のように残っている。それでいい。やったこ�
 ---
 
 <!-- metadata
-notes: 論文撤回は2026-03-29。Zenodo v2 DOI、Zenn 13本、dev.to 13本、HuggingFace、PyPI、GitHub を同日に引き上げ。撤回の経緯は git 履歴（.gitignore への追加、CLAUDE.md の更新）で裏付け可能。Inner Shell がシステムプロンプト変更に過ぎないという認識は対話ログに基づく。
--->
+event_date: 2026-03-29
+notes: 論文撤回は2026-03-29。Zenodo v2 DOI、Zenn 13本、dev.to 13本、HuggingFace、PyPI、GitHub を同日に引き上げ。撤回の経緯は git 履歴（.gitignore への追加、CLAUDE.md の更新）で裏付け可

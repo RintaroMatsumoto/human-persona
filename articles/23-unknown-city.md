@@ -97,5 +97,6 @@ briefing.mdは「地図」として単体で機能する。
 ---
 
 <!-- metadata
+event_date: unverified  # 候補: 2026-03-31 または 2026-04-01（#22 の翌セッション Day 13）
 notes: N02/N03比較実験結果は対話ログに基づく。briefing.mdの有効性検証は定性的評価。
 -->
