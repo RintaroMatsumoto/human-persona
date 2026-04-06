@@ -28,3 +28,6 @@ key_token/
 
 # 実験データベース（バイナリ）
 experiments/registry.sqlite
+
+# Kuromi memory store (private, per-machine)
+memory/
