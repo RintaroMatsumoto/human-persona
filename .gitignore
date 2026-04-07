@@ -26,8 +26,15 @@ back_log/
 # 鍵・トークン（絶対にコミットしない）
 key_token/
 
-# 実験データベース（バイナリ）
+# 実験データベース（バイナリ＋SQLite付随ファイル）
 experiments/registry.sqlite
+experiments/registry.sqlite-wal
+experiments/registry.sqlite-shm
+experiments/registry.sqlite-journal
+
+# FUSEマウント由来の隠しファイル（Cowork経由でアクセスした際に生成される）
+.fuse_hidden*
+**/.fuse_hidden*
 
 # Kuromi memory store (private, per-machine)
 memory/
