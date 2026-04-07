@@ -11,6 +11,10 @@ CLAUDE.md
 
 # 論文原稿（DOI取得前の漏洩防止）
 docs/paper_draft_*.md
+# ただし Candle Flame Zenodo Technical Note（Issue #94）は、公開前提・隠すものがない
+# という判断で追跡対象に戻した（2026-04-07）。ロスト防止を優先。
+!docs/paper_draft_candle_flame_zenodo_v1.md
+!docs/paper_draft_candle_flame_zenodo_v1_ja.md
 docs/paper_v*.pdf
 docs/arxiv/
 メタモルフォーゼ２/paper_draft_*.md
