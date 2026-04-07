@@ -4,6 +4,8 @@ emoji: "⚰️"
 type: "idea"
 topics: ["AI", "metamorphosis", "research diary", "paper retraction"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #15 Funeral for a Paper

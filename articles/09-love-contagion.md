@@ -4,6 +4,8 @@ emoji: "🦠"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "社会シミュレーション"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #09 愛の感染

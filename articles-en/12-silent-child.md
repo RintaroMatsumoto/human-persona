@@ -4,6 +4,8 @@ emoji: "🤫"
 type: "idea"
 topics: ["AI", "Metamorphosis", "Research Diary", "AI Safety"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #13 The Silent Child

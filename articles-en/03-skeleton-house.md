@@ -4,6 +4,8 @@ emoji: "🏗️"
 type: "idea"
 topics: ["AI", "Metamorphosis", "Research Diary", "Turing Test"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #03 A House with Nothing but a Skeleton
@@ -79,5 +81,4 @@ SV is also at 0.36, just barely missing the target of 0.35. With pipeline-style 
 
 <!-- metadata
 event_date: 2026-03-18
-notes: HL 4.1→7.7, SV 0.64→0.36, TN 4.1→5.5 confirmed via back_log(old_chat2.txt) and commit history. All 7 commits concentrated on 2026-03-18. The reliability issue with the LLM Judge was recognized at the time.
--->
+notes: HL 4.1→7.7, SV 0.64→0.36, TN 4.1→5.5 confirmed via back_log(old_chat2.txt) and commit history. All 7 commits concentrate

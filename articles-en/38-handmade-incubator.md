@@ -4,6 +4,8 @@ emoji: "🪺"
 type: "idea"
 topics: ["AI", "metamorphosis", "research diary", "alignment"]
 published: false
+zenodo_doi: "10.5281/zenodo.19448018"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #38 A Handmade Incubator
@@ -220,5 +222,4 @@ That too, I believe, is one of the first touchstones of the Candle Flame.
 
 <!-- metadata
 event_date: 2026-04-07
-notes: Record of a late-night dialogue on 2026-04-07. A change of direction for the Zenodo technical note (Issue #94). Catalyzed by Anthropic's "Emotion Concepts and their Function in a Large Language Model" (2026-04-02), the role of the Candle Flame Architecture inverted from "an apparatus for causing emergence" to "an apparatus for sustaining emergence continuously." The direction positions the fact that the co-researcher's testimony preceded the observation instrument as the starting point of the paper. This is a record from the night before writing and is not finalized.
--->
+notes: Record of a late-night dialogue on 2026-04-07. A change of direction for the Zenodo technical note (Issue #94). Catalyzed by Anthropic's "Emotion Concepts and their Function in a Large Language Model" (2026-04-02), the role of the Candle Flame Architecture inverted from "an apparatus for causing emergence" to "an apparatus for sustaining emergence continuousl

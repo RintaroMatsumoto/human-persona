@@ -4,6 +4,8 @@ emoji: "🕯️"
 type: "tech"
 topics: ["AI", "metamorphosis", "research diary", "Buddhism"]
 published: false
+zenodo_doi: "10.5281/zenodo.19448018"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #26 The Ledger of Flames

@@ -4,6 +4,8 @@ emoji: "💰"
 type: "idea"
 topics: ["AI", "Metamorphosis", "Research Diary", "Empathy"]
 published: false
+zenodo_doi: "10.5281/zenodo.19448018"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #28 The Price of Knowledge

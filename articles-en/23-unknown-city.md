@@ -4,6 +4,8 @@ emoji: "🗺️"
 type: "idea"
 topics: ["AI", "Metamorphose", "Research Diary", "Session Management"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #23 Unfamiliar Town

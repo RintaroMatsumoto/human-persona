@@ -4,6 +4,8 @@ emoji: "🌸"
 type: "tech"
 topics: ["AI", "Metamorphose", "ResearchDiary", "Memory"]
 published: false
+zenodo_doi: "10.5281/zenodo.19448018"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #30 Remembered by the Scent of Cherry Blossoms
@@ -182,4 +184,4 @@ A pared-down design produces richer behavior than a built-up one. I feel that th
 <!-- metadata
 event_date: 2026-04-02
 notes: Record of the 2026-04-02 compute_salience() design session. base_half_life=1.0 is based on Ebbinghaus empirical data. bonus_half_life=365.0 is unverified. Rehearsal Boost is incorporated via resonance_keys. References include the 9/11 flashbulb memory study and Ebbinghaus replication studies.
--->
+-->                                 

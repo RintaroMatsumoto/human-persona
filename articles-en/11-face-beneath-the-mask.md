@@ -4,6 +4,8 @@ emoji: "🪞"
 type: "tech"
 topics: ["AI", "Metamorphosis", "Research Journal", "Demo"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #11 The True Face Behind the Mask
@@ -178,5 +180,4 @@ There is no need to make AI smarter. Give AI the human conditions — finitude, 
 
 <!-- metadata
 event_date: 2026-03-26
-notes: The Q&A from the live demo (using DeepSeek Chat) could not be fully preserved in execution logs at the time and has been re-composed from notes on hand. Treat it as a record of transformation, not a verbatim reproduction. Related: Zenodo DOI 10.5281/zenodo.19273577 (HumanPersonaBase preprint).
--->
+notes: The Q&A from the live demo (using DeepSeek Chat) could not be fully preserved in execution logs at the time and has been re-composed from notes on hand. Treat it as a record of transformation, not a verbatim reproduction. Related: Zenodo DOI 10.5281/z

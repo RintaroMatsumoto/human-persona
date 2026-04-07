@@ -19,7 +19,7 @@ import os
 # プロジェクトルートをパスに追加
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.inner_shell.candle_flame import CandleFlame, FlameState
+from core.candle_flame import CandleFlame, FlameState
 
 
 # ============================================================================

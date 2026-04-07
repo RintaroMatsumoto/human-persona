@@ -48,3 +48,17 @@ briefing_test/scan_tone_results.txt
 
 # Kuromi memory store (private, per-machine)
 memory/
+
+# 内部運用ドキュメント（Kuromi が読む蒸留書・編集ガイドライン）
+briefing.md
+editorial_guidelines.md
+briefing_test/briefing_test_session*.md
+briefing_test/message_for_next_kuromi.md
+
+# 内部道具箱（個人パスを含む / 公開対象外）
+translate_articles.py
+verify_types.py
+view_lines.py
+run_mypy.bat
+run_mypy.sh
+hooks/pre-commit-verify-claims

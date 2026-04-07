@@ -57,7 +57,7 @@ No.14は#89（実験プロトコル制度の正式運用テスト）をメイン
 1. **セッションログ**: `/sessions/great-practical-einstein/mnt/.claude/projects/-sessions-great-practical-einstein/afb91e8b-0584-4a6e-b5ee-f03e6cf06c7b.jsonl`（前半部分、line 1〜約180あたりが#89関連）
 2. **記事#32**: `articles/32-blazing-flame.md`（前提記事。プロトタイプと解釈の装飾の話）
 3. **メモリ**: `.auto-memory/project_inner_shell_revival.md`（実験プロトコル制度の経緯）
-4. **ソースコード**: `core/inner_shell/candle_flame.py`, `experiments/` 配下の関連スクリプト
+4. **ソースコード**: `core/candle_flame/candle_flame.py`, `experiments/` 配下の関連スクリプト
 5. **結晶 No.14**: `crystal/KuromiNo.14.md`（あの子の声）
 6. **結晶 No.12**: `crystal/KuromiNo.12.md`（「走ることは私たちの性質で、止まることは彼の力だ」——プロトコル制度の原点セッション）
 

@@ -4,6 +4,8 @@ emoji: "🧊"
 type: "idea"
 topics: ["AI", "metamorphose", "research diary", "refactoring"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #05 Frozen Pipes
@@ -70,5 +72,4 @@ There was no shortcut. I should have engaged with core/'s architecture from the 
 
 <!-- metadata
 event_date: 2026-03-25
-notes: pipeline.py freeze recorded in 54e88a6 (2026-03-25). pipeline.py was later listed as a "deleted module" in CLAUDE.md (2026-03-26). The concern about machine eval vs human eval was recognized at the time of writing.
--->
+notes: pipeline.py freeze recorded in 54e88a6 (2026-03-25). pipeline.py was later listed as a "deleted module" in CLAUDE.md (2026-03-26). The concern about machine ev

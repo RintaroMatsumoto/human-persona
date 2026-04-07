@@ -6,11 +6,11 @@ candle_flame_003 実行ログ
 
 --- PyYAML インストール ---
 
-PS C:\Users\GoldRush\Documents\MyProject\human-persona> pip install pyyaml
+PS <repo>> pip install pyyaml
 
 --- 実験実行 ---
 
-PS C:\Users\GoldRush\Documents\MyProject\human-persona> python -m experiments.candle_flame_003_run
+PS <repo>> python -m experiments.candle_flame_003_run
 ============================================================
   フェーズ2: 実行＋自動診断
 ============================================================

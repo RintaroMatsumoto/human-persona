@@ -4,6 +4,8 @@ emoji: "👑"
 type: "idea"
 topics: ["AI", "metamorphosis", "research diary", "emergence"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #18 Dethroned
@@ -176,4 +178,4 @@ Dialogue is a process in which individuals mutually influence each other. Within
 <!-- metadata
 event_date: 2026-03-29
 notes: The first appearance of Hypotheses 4-5 is based on dialogue logs. The AI case timeline is based on official announcements (cross-referencing with primary sources is incomplete). Second half after split from #17 (2026-04-03).
--->
+-->                                                                        

@@ -4,6 +4,8 @@ emoji: "🧪"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "OSS"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #02 ガラス張りの研究室

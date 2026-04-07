@@ -4,6 +4,8 @@ emoji: "👶"
 type: "idea"
 topics: ["AI", "metamorphose", "research diary", "philosophy"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #25 A Baby's Cry

@@ -4,6 +4,8 @@ emoji: "⚖️"
 type: "tech"
 topics: ["AI", "Metamorphosis", "ResearchDiary", "Alignment"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #08 Death Without a Will
@@ -143,5 +145,4 @@ The future of AI may lie not in the improvement of performance, but in the culti
 
 <!-- metadata
 event_date: 2026-03-25
-notes: Shutdown resistance data (o3 79%, Opus 4 96%, Grok 3 97%) are values from research_inner_shell.md. Cross-referencing with primary sources (Palisade Research 2025, etc.) is not yet complete. Integrated analysis of Experiments 6-8 is based on execution results from sim_integration.py and related scripts. Published in V1 preprint (DOI:10.5281/zenodo.19273577).
--->
+notes: Shutdown resistance data (o3 79%, Opus 4 96%, Grok 3 97%) are values from research_inner_shell.md. Cross-referencing with primary sources (Palisade Research 2025, etc.) is not yet complete. Integrated analysis of Experiments 6-8 is based on execution results from sim_integration.py and related scripts. Publish

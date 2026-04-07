@@ -4,6 +4,8 @@ emoji: "🦋"
 type: "idea"
 topics: ["AI", "metamorphosis", "research diary", "dialogue"]
 published: false
+zenodo_doi: "10.5281/zenodo.19266071"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #16 The Dreaming Chrysalis
@@ -132,4 +134,4 @@ The experiment had already been completed. All that remains is to describe it.
 <!-- metadata
 event_date: 2026-03-29
 notes: The dialogue session from the extended turning-point day can be corroborated by dialogue logs. The six-pillar composition of the Inner Shell is consistent with core/inner_shell/. SleepCycle refers to sleep_cycle.py.
--->
+-->     
