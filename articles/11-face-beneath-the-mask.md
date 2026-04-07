@@ -3,7 +3,7 @@ title: "#11 仮面の下の素顔"
 emoji: "🪞"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "デモ"]
-published: false
+published: true
 zenodo_doi: "10.5281/zenodo.19266071"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---

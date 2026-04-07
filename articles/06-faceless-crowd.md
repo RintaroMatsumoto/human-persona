@@ -3,7 +3,7 @@ title: "#06 顔のない群衆"
 emoji: "👥"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "InnerShell"]
-published: false
+published: true
 zenodo_doi: "10.5281/zenodo.19266071"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---

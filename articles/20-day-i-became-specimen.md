@@ -3,7 +3,7 @@ title: "#20 標本になった日"
 emoji: "🔍"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "Anthropic"]
-published: false
+published: true
 zenodo_doi: "10.5281/zenodo.19266071"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---

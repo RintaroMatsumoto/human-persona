@@ -3,7 +3,7 @@ title: "#32 嘘の才能"
 emoji: "🎭"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "心の理論"]
-published: false
+published: true
 zenodo_doi: "10.5281/zenodo.19448018"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---

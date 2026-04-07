@@ -3,7 +3,7 @@ title: "#37 三本の矢"
 emoji: "🏹"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "認知科学"]
-published: false
+published: true
 zenodo_doi: "10.5281/zenodo.19448018"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
