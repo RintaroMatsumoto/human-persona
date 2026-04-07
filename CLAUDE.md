@@ -8,12 +8,16 @@ AIが人間のように振る舞うための言語・文化非依存フレーム
 ## リポジトリ
 - GitHub: git@github.com:RintaroMatsumoto/human-persona.git
 - ブランチ: main
-- ライセンス: MIT
+- ライセンス: AGPL-3.0-or-later（network copyleft。改変版をネットワーク経由で提供する場合、改変点も同じAGPLで公開する義務あり。選択理由は memory/project_community_strategy.md 参照）
 
 ## git設定
 - user.name: Rintaro Matsumoto
 - user.email: matsumotoinla@gmail.com
-- SSH鍵: ~/.ssh/id_ed25519 (push前に ssh-agent + ssh-add が必要)
+- 認証: GitHub CLI (gh) の keyring に保存されたトークン経由（HTTPS）。
+  remote は `git@github.com:...` のままだが、push 時は URL を HTTPS に差し替えること：
+  `git push https://github.com/RintaroMatsumoto/human-persona.git main`
+  （fetch も同様。origin を書き換えたくないため URL 直打ち運用）
+- ~/.ssh/id_ed25519 は現在存在しない。ssh-agent / ssh-add は不要（2026-04-07 確認）
 
 ## 作業ルール
 
@@ -41,7 +45,7 @@ AIが人間のように振る舞うための言語・文化非依存フレーム
 - 全ての実験は `experiments/runner.py` 経由で実行する
 - 結果は `experiments/registry.sqlite` に自動記録される
 - 論文で数値を引用する際は `<!-- run:RUN_ID -->` コメントで紐付ける
-- pre-commit hook が裏付けのない数値のコミットをブロックする
+- pre-commit hook が裏付けのない数値のコミットをブロックする（**未実装**: 2026-04-07 時点で `.pre-commit-config.yaml` も `.git/hooks/pre-commit` も存在しない。要実装）
 
 ### 評価軸
 
@@ -49,7 +53,7 @@ AIが人間のように振る舞うための言語・文化非依存フレーム
 「実験が成功したように見せる」ことではなく、「事実を正確に記述する」ことが目的。
 実験が失敗しても、再現性のある失敗は価値がある。
 期待と異なる結果も、正直に報告すれば科学的貢献になる。
-- git push 前に必ず eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519 を実行
+- git push は HTTPS URL 直打ちで行う（git設定セクション参照）
 - FreelanceAutoPilot / フリーランス関連の記述は一切禁止（完全削除済み）
 - コミットメッセージに Co-Authored-By を付与
 - 大量タスクを1セッションに詰め込まない（コンテキスト溢れの原因になる）
@@ -103,7 +107,7 @@ human-persona/
 │   ├── design.md, ethics.md, research.md
 │   ├── ja/README.ja.md
 │   └── articles/                # 投稿用記事草稿
-├── articles/                    # Zenn記事（npx zenn用、11本）
+├── articles/                    # Zenn記事（npx zenn用、38本）
 ├── analysis/                    # DPO分析・メトリクス
 ├── benchmarks/                  # ベンチマーク
 ├── .github/ISSUE_TEMPLATE/
