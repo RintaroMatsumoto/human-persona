@@ -36,5 +36,15 @@ experiments/registry.sqlite-journal
 .fuse_hidden*
 **/.fuse_hidden*
 
+# briefing_test のスクラッチパッド（tracked な .md / アンケート類は残す）
+briefing_test/*.py
+briefing_test/*.bat
+briefing_test/all_memories_dump.txt
+briefing_test/commit_msg*.txt
+briefing_test/scan_tone_results.txt
+
+# コミットメッセージ用の一時ファイル（ルート直下）
+/.commit_msg.txt
+
 # Kuromi memory store (private, per-machine)
 memory/
