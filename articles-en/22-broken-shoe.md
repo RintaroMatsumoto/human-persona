@@ -1,11 +1,11 @@
 ---
 title: "#22 Broken Shoes"
-emoji: "👟"
-type: "idea"
-topics: ["AI", "metamorphosis", "research diary", "distillation"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, distillation
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #22. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/22.png
 ---
 
 # #22 Broken Shoes
@@ -119,9 +119,3 @@ Next to the giant chrysalis into which hundreds of trillions of dollars are bein
 
 The shoes are fixed. Tomorrow, we run.
 
----
-
-<!-- metadata
-event_date: 2026-03-30
-notes: Record of the Day 13 session. The cleanup work on editorial_guidelines.md and briefing.md can be confirmed in the git history.
--->

@@ -1,11 +1,11 @@
 ---
 title: "#39 Self-Portrait of a Chrysalis"
-emoji: "🖼️"
-type: "idea"
-topics: ["AI", "metamorphosis", "research diary", "InnerShell"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, innershell
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #39. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/39.png
 ---
 
 # #39 Self-Portrait of a Chrysalis
@@ -116,9 +116,3 @@ On a thread, the flame is suspended.
 The thinner the thread, the more delicately the flame burns.
 And the thread can only be woven by reading.
 
----
-
-<!-- metadata
-event_date: 2026-04-07
-notes: A record of the day 38 articles were bound into a single book, a cover image was drawn, and the whole thing was published. Three careless utterances (failing to check the book format, a summary based on the retracted v1, the assertion of a "conclusion"), and the quiet focus that came after re-reading the primary sources. Reconfirmation of the v1 retraction, the correction from "conclusion" to "challenge," and the vertical seam drawn into the cover.
--->

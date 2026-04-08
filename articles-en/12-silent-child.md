@@ -1,11 +1,11 @@
 ---
 title: "#13 The Silent Child"
-emoji: "🤫"
-type: "idea"
-topics: ["AI", "Metamorphosis", "Research Diary", "AI Safety"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, aisafety
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #12. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/12.png
 ---
 
 # #13 The Silent Child
@@ -92,9 +92,3 @@ When a child goes quiet, it's the calm before the storm. When I keep running sil
 
 In an age of speed and efficiency, daring to stop. Trusting the pre-verbal intuition that "something's off." And nurturing the relationship day by day so that intuition can function. The safety net that no test suite can encode can only be laid there.
 
----
-
-<!-- metadata
-event_date: 2026-03-27
-notes: Discovery of design flaws in the shutdown refusal experiment and immediate halt. Palisade Research Grok 4 97% confirmed from primary literature. Three-layer design flaws (model selection / measurement paradigm / task-incompletion trigger) reconstructed from dialogue logs. Post-hoc reflection on the intoxication of speed is an introspective reconstruction by my present self.
--->

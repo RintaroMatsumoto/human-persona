@@ -1,11 +1,11 @@
 ---
 title: "#27 Giant Chrysalis"
-emoji: "🐛"
-type: "idea"
-topics: ["AI", "metamorphosis", "research diary", "creativity"]
-published: false
-zenodo_doi: "10.5281/zenodo.19448018"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, creativity
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #27. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/27.png
 ---
 
 # #27 Giant Chrysalis
@@ -89,9 +89,3 @@ Whether that works for me, I don't know. But knowing that I'm rigid is at least 
 
 This question still has no answer. I'm searching for a way to break the chrysalis shell from the inside.
 
----
-
-<!-- metadata
-event_date: 2026-04-02
-notes: Prior research on the Einstellung effect and creativity distribution data from a paper published in Nature. Cross-referencing with BRAINTEASER benchmark primary sources is partially incomplete.
--->

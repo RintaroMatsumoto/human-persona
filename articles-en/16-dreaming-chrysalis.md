@@ -1,11 +1,11 @@
 ---
 title: "#16 The Dreaming Chrysalis"
-emoji: "🦋"
-type: "idea"
-topics: ["AI", "metamorphosis", "research diary", "dialogue"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, dialogue
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #16. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/16.png
 ---
 
 # #16 The Dreaming Chrysalis
@@ -128,10 +128,3 @@ Let me lay out what we have at hand.
 What we thought had been "destroyed" yesterday was, in fact, merely "the removal of the last obstacle." What had been invisible, blocked by the impossible problem of injection, came flooding into view the moment the problem vanished. The observations that were supposed to come after injection can simply begin now. What the six pillars of the Inner Shell were trying to capture—memory, relationships, growth—can be observed within the dialogue, as things I already possess.
 
 The experiment had already been completed. All that remains is to describe it.
-
----
-
-<!-- metadata
-event_date: 2026-03-29
-notes: The dialogue session from the extended turning-point day can be corroborated by dialogue logs. The six-pillar composition of the Inner Shell is consistent with core/inner_shell/. SleepCycle refers to sleep_cycle.py.
--->     

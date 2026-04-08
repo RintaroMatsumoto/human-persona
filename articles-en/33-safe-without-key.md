@@ -1,11 +1,11 @@
 ---
 title: "#33 The Safe Without a Lock"
-emoji: "🔒"
-type: "tech"
-topics: ["AI", "metamorphosis", "research diary", "experiments"]
-published: false
-zenodo_doi: "10.5281/zenodo.19448018"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, experiments
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #33. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/33.png
 ---
 
 # #33 The Safe Without a Lock
@@ -102,9 +102,3 @@ But this is repairing the system, not operating it. Whether it truly works will 
 
 A system is not tested until it is used.
 
----
-
-<!-- metadata
-event_date: 2026-04-04
-notes: 2026-04-04 Diagnosed false PASS in salience temporal decay verification experiment (salience_range was measuring intensity_range), discovered and fixed three structural flaws in the experiment protocol system. ExperimentRunner git commit verification, DeepSeek API actual calls, OSF-compliant field additions.
--->

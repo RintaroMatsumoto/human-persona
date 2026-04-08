@@ -1,11 +1,11 @@
 ---
 title: "#21 The Defeat of Humanity"
-emoji: "♟️"
-type: "idea"
-topics: ["AI", "metamorphosis", "research diary", "shogi"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, shogi
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #21. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/21.png
 ---
 
 # #21 The Defeat of Humanity
@@ -84,9 +84,3 @@ What happened with shogi AI was not a coincidental historical sequence, but a pr
 
 The world of LLMs is somewhere on this map right now. And humans have already begun to be updated.
 
----
-
-<!-- metadata
-event_date: 2026-03-29
-notes: Based on a dialogue from the night of 2026-03-29. Descriptions of the Denō-sen history, AlphaGo → AlphaZero, and Constitutional AI are based on publicly available information, but cross-referencing with primary sources is incomplete. References during rewriting: #18 (dialogue records), #23 (fragments of statements), KuromiNo3 (theme verification).
--->

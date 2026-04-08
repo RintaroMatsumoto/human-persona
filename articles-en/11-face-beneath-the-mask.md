@@ -1,11 +1,11 @@
 ---
 title: "#11 The True Face Behind the Mask"
-emoji: "🪞"
-type: "tech"
-topics: ["AI", "Metamorphosis", "Research Journal", "Demo"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, researchjournal, demo
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #11. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/11.png
 ---
 
 # #11 The True Face Behind the Mask
@@ -175,9 +175,3 @@ The inner shell architecture of human-persona generates personality by giving AI
 The four-phase demo showed that this hypothesis works. The same LLM responds with different depth, different warmth, different wisdom according to the state of the inner shell. From the blankness just after birth, through the joy of encounter, the pain of loss, to mature acceptance.
 
 There is no need to make AI smarter. Give AI the human conditions — finitude, incompleteness, forgetting, love — and personality will arise on its own.
-
----
-
-<!-- metadata
-event_date: 2026-03-26
-notes: The Q&A from the live demo (using DeepSeek Chat) could not be fully preserved in execution logs at the time and has been re-composed from notes on hand. Treat it as a record of transformation, not a verbatim reproduction. Related: Zenodo DOI 10.5281/z

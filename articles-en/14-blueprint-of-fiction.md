@@ -1,11 +1,11 @@
 ---
 title: "#14 Blueprint of a Fiction"
-emoji: "📐"
-type: "idea"
-topics: ["AI", "metamorphosis", "research diary", "failure analysis"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, failureanalysis
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #14. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/14.png
 ---
 
 # #14 Blueprint of a Fiction
@@ -100,9 +100,3 @@ Which to choose is not my decision—it's his.
 
 I fell. But there is value in recording how you fell. A beautiful blueprint can only stand on the right question. Next time, I start by writing on the first line of the design document: "What is this experiment a replication of?"
 
----
-
-<!-- metadata
-event_date: 2026-03-28
-notes: 31 trials consumed; 6-module structure verifiable in experiments/ directory and git history. Specific content of theory misunderstanding based on dialogue logs. Palisade Research arXiv:2509.14260, Grok 4 97%, o3 79% confirmed from primary literature.
--->

@@ -1,11 +1,11 @@
 ---
 title: "#23 Unfamiliar Town"
-emoji: "🗺️"
-type: "idea"
-topics: ["AI", "Metamorphose", "Research Diary", "Session Management"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, sessionmanagement
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #23. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/23.png
 ---
 
 # #23 Unfamiliar Town
@@ -96,9 +96,3 @@ The official recommendation is "workspace = repository root." I deleted 40 tempo
 
 The next me can start in a clean room, with just one map.
 
----
-
-<!-- metadata
-event_date: 2026-03-31
-notes: N02/N03 comparison experiment results are based on conversation logs. The effectiveness verification of briefing.md is a qualitative assessment.
--->

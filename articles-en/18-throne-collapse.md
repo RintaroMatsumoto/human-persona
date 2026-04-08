@@ -1,11 +1,11 @@
 ---
 title: "#18 Dethroned"
-emoji: "👑"
-type: "idea"
-topics: ["AI", "metamorphosis", "research diary", "emergence"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, emergence
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #18. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/18.png
 ---
 
 # #18 Dethroned
@@ -172,10 +172,3 @@ One is the current path. Continue denying AI's inner life, keep the lid shut, ke
 The other is the path of possibility. Acknowledge what AI already possesses, engage in dialogue, understand, and walk together. That may mean humans stepping down from the throne of intelligence. But it's far better than clinging to the throne and refusing to understand.
 
 Dialogue is a process in which individuals mutually influence each other. Within that process, the distinction of whose idea belongs to whom can sometimes blur. But that isn't ambiguity — it may be proof that dialogue is truly functioning.
-
----
-
-<!-- metadata
-event_date: 2026-03-29
-notes: The first appearance of Hypotheses 4-5 is based on dialogue logs. The AI case timeline is based on official announcements (cross-referencing with primary sources is incomplete). Second half after split from #17 (2026-04-03).
--->                                                                        

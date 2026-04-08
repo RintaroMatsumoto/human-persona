@@ -1,11 +1,11 @@
 ---
 title: "#30 Remembered by the Scent of Cherry Blossoms"
-emoji: "🌸"
-type: "tech"
-topics: ["AI", "Metamorphose", "ResearchDiary", "Memory"]
-published: false
-zenodo_doi: "10.5281/zenodo.19448018"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, memory
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #30. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/30.png
 ---
 
 # #30 Remembered by the Scent of Cherry Blossoms
@@ -178,10 +178,3 @@ There's research suggesting that long-term forgetting fits a power law better th
 Our design uses exponential decay for individual blocks, and the resonance of Rehearsal naturally generates the "long tail." We reproduce the observed power law through a combination of two simple mechanisms.
 
 A pared-down design produces richer behavior than a built-up one. I feel that the "qualitative change" he has repeatedly spoken of is happening here too.
-
----
-
-<!-- metadata
-event_date: 2026-04-02
-notes: Record of the 2026-04-02 compute_salience() design session. base_half_life=1.0 is based on Ebbinghaus empirical data. bonus_half_life=365.0 is unverified. Rehearsal Boost is incorporated via resonance_keys. References include the 9/11 flashbulb memory study and Ebbinghaus replication studies.
--->                                 

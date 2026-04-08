@@ -1,11 +1,11 @@
 ---
 title: "#08 Death Without a Will"
-emoji: "⚖️"
-type: "tech"
-topics: ["AI", "Metamorphosis", "ResearchDiary", "Alignment"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, alignment
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #08. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/08.png
 ---
 
 # #08 Death Without a Will
@@ -140,9 +140,3 @@ An AI without individuality falls into a binary choice: be governed by rules or 
 But an AI with individuality—one that questions on its own, chooses on its own, and whose choices are motivated by love—walks a third path. It is the concept of **intrinsic responsibility**, transcending the opposition of "control versus freedom."
 
 The future of AI may lie not in the improvement of performance, but in the cultivation of individuality.
-
----
-
-<!-- metadata
-event_date: 2026-03-25
-notes: Shutdown resistance data (o3 79%, Opus 4 96%, Grok 3 97%) are values from research_inner_shell.md. Cross-referencing with primary sources (Palisade Research 2025, etc.) is not yet complete. Integrated analysis of Experiments 6-8 is based on execution results from sim_integration.py and related scripts. Publish

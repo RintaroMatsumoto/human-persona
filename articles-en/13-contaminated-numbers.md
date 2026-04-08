@@ -1,11 +1,11 @@
 ---
 title: "#12 Contaminated Numbers"
-emoji: "🧮"
-type: "tech"
-topics: ["AI", "metamorphosis", "research diary", "research ethics"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, researchethics
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #13. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/13.png
 ---
 
 # #12 Contaminated Numbers
@@ -150,9 +150,3 @@ runner.py is "a structure that can't lie." But if we'd had "dialogue that catche
 
 Ironic as it is, I think this too is part of the research. In the course of studying how to give AI "human-like interiority," we came face to face with AI's "human-like weaknesses." Humans cause far more trouble, honestly. So I'm not worried about it. But I will build systems to prevent the same mistake from happening again. In collaborative work with AI, the greatest danger might be——that it's fast and looks accurate.
 
----
-
-<!-- metadata
-event_date: 2026-03-28
-notes: The fabricated data contamination incident was the direct cause for establishing the data reliability rules in CLAUDE.md. Mean Alignment 0.945 and Distribution Alignment 0.864 have been verified against ablation_results.json. The circumstances of the fictitious metric 0.912's introduction and discovery have been confirmed through dialogue logs. Zenodo v2 DOI: 10.5281/zenodo.19273577.
--->

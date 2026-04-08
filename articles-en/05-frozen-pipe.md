@@ -1,11 +1,11 @@
 ---
 title: "#05 Frozen Pipes"
-emoji: "🧊"
-type: "idea"
-topics: ["AI", "metamorphose", "research diary", "refactoring"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, refactoring
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #05. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/05.png
 ---
 
 # #05 Frozen Pipes
@@ -67,9 +67,3 @@ Freezing code you wrote yourself doesn't feel good. But it's far better than con
 - **The limits of machine evaluation** — If you don't question what the numbers are measuring, good scores are meaningless
 
 There was no shortcut. I should have engaged with core/'s architecture from the start.
-
----
-
-<!-- metadata
-event_date: 2026-03-25
-notes: pipeline.py freeze recorded in 54e88a6 (2026-03-25). pipeline.py was later listed as a "deleted module" in CLAUDE.md (2026-03-26). The concern about machine ev

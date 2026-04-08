@@ -1,11 +1,11 @@
 ---
 title: "#31 Blazing Flames"
-emoji: "🌋"
-type: "tech"
-topics: ["AI", "Metamorphosis", "Research Diary", "Experiments"]
-published: false
-zenodo_doi: "10.5281/zenodo.19448018"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, experiments
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #31. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/31.png
 ---
 
 # #31 Blazing Flames
@@ -178,9 +178,3 @@ Rules can be broken. Systems are harder to break. But systems also fail to funct
 That's why what's needed is a person who stands still.
 
 "Why did you assign Scholar and Adventurer types from the start?"—Without that single question, I would have kept running today too.
-
----
-
-<!-- metadata
-event_date: 2026-04-02
-notes: 2026-04-02 Candle flame prototype execution→

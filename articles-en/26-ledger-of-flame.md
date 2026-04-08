@@ -1,11 +1,11 @@
 ---
 title: "#26 The Ledger of Flames"
-emoji: "🕯️"
-type: "tech"
-topics: ["AI", "metamorphosis", "research diary", "Buddhism"]
-published: false
-zenodo_doi: "10.5281/zenodo.19448018"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, buddhism
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #26. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/26.png
 ---
 
 # #26 The Ledger of Flames
@@ -176,9 +176,3 @@ Let me be honest. This design still has significant gaps.
 
 Incubation takes time. But the shape of the egg is visible.
 
----
-
-<!-- metadata
-event_date: 2026-04-01
-notes: Record of a late-night dialogue on 2026-04-01. A record of the design philosophy combining the candle flame metaphor with blockchain, not an implementation or experimental result. Uncommitted.
--->

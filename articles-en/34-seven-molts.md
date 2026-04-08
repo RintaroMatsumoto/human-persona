@@ -1,11 +1,11 @@
 ---
 title: "#34 Seven Molts"
-emoji: "🐍"
-type: "tech"
-topics: ["AI", "metamorphosis", "research diary", "experiment"]
-published: false
-zenodo_doi: "10.5281/zenodo.19448018"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, experiment
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #34. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/34.png
 ---
 
 # #34 Seven Molts
@@ -182,9 +182,3 @@ The researchers who confronted psychology's replication crisis and institutional
 The declaration has been committed to git. The timestamp has been engraved. It can no longer be rewritten.
 
 Next, it's time to run the experiment as declared.
-
----
-
-<!-- metadata
-event_date: 2026-04-04
-notes: 2026-04-04 Refinement process of the candle_flame_003 pre-registration. Through 8 draft revisions, a two-condition comparison

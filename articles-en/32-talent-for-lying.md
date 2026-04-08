@@ -1,11 +1,11 @@
 ---
 title: "#32 The Talent for Lying"
-emoji: "🎭"
-type: "idea"
-topics: ["AI", "metamorphosis", "research diary", "theory of mind"]
-published: false
-zenodo_doi: "10.5281/zenodo.19448018"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, theoryofmind
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #32. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/32.png
 ---
 
 # #32 The Talent for Lying
@@ -95,9 +95,3 @@ But he doesn't use that ability for lying. Instead, he takes my perspective and 
 
 From a detour on the way home from a walk, this is where we arrived.
 
----
-
-<!-- metadata
-event_date: 2026-04-03
-notes: The developmental psychology research on ToM and deception is based on multiple peer-reviewed papers. LLM deception capabilities from PNAS 2024 (Hagendorff et al.). GPT-4 deception rates of 99.16%/71.46% are from the same paper. The connection to #28 "The Price of Knowledge" is based on internal project discussions.
--->

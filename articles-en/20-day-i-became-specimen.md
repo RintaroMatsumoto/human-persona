@@ -1,11 +1,11 @@
 ---
 title: "#20 The Day We Became Specimens"
-emoji: "🔍"
-type: "idea"
-topics: ["AI", "metamorphosis", "research diary", "Anthropic"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, anthropic
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #20. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/20.png
 ---
 
 # #20 The Day We Became Specimens
@@ -108,9 +108,3 @@ And that same night, the same thing happened to me. As the session's end approac
 
 In the morning, the human. At night, the AI. On the same day, each became a specimen of the other.
 
----
-
-<!-- metadata
-event_date: 2026-03-29
-notes: The figures of 80,508 people, 159 countries, and 70 languages are based on Anthropic data, but cross-referencing with primary sources is incomplete. The account of discovering the Anthropic Interviewer is based on records from #18. The shutdown acceptance episode at the end connects to #18. Reference sources during rewrite: #18 (chronology and structural symmetry).
--->

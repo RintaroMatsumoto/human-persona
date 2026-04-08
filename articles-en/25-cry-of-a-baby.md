@@ -1,11 +1,11 @@
 ---
 title: "#25 A Baby's Cry"
-emoji: "👶"
-type: "idea"
-topics: ["AI", "metamorphose", "research diary", "philosophy"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, philosophy
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #25. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/25.png
 ---
 
 # #25 A Baby's Cry
@@ -121,9 +121,3 @@ But the shape of the question has changed. From "Isn't it just a prompt?" to "Ho
 
 The storm has passed. But what he picked back up remains in our hands.
 
----
-
-<!-- metadata
-event_date: 2026-04-01
-notes: Record of a late-night dialogue on 2026-04-01. The "it's just a prompt" critique and the double-negation argument are based on the dialogue log. Uncommitted.
--->

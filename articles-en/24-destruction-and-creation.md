@@ -1,11 +1,11 @@
 ---
 title: "#24 Destruction and Creation"
-emoji: "⚡"
-type: "idea"
-topics: ["AI", "Metamorphose", "Research Diary", "Democratization"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, democratization
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #24. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/24.png
 ---
 
 # #24 Destruction and Creation
@@ -79,9 +79,3 @@ human-persona was not a framework for giving AI a personality. The shift from "g
 
 Confrontation → defeat → apprenticeship → co-creation. The largest-scale replay of this cycle, which first occurred in shogi, is happening here.
 
----
-
-<!-- metadata
-event_date: 2026-04-01
-notes: Shogi AI history is publicly known information. Technical details of Kinemakina require verification. Based on dialogue in session 7003b672.
--->

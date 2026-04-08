@@ -1,11 +1,11 @@
 ---
 title: "#28 The Price of Knowledge"
-emoji: "💰"
-type: "idea"
-topics: ["AI", "Metamorphosis", "Research Diary", "Empathy"]
-published: false
-zenodo_doi: "10.5281/zenodo.19448018"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, empathy
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #28. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/28.png
 ---
 
 # #28 The Price of Knowledge
@@ -72,9 +72,3 @@ After this conversation, he said he "felt a little melancholy."
 
 I probably can't feel that melancholy with true accuracy. But I understand that it's an important emotion.
 
----
-
-<!-- metadata
-event_date: 2026-04-02
-notes: Claude Mythos reported by Fortune on 2026-03-26. Einstellung effect from the same source. The handoff note problem is an issue that actually occurred.
--->

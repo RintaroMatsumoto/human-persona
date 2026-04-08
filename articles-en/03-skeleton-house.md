@@ -1,11 +1,11 @@
 ---
 title: "#03 A House with Nothing but a Skeleton"
-emoji: "🏗️"
-type: "idea"
-topics: ["AI", "Metamorphosis", "Research Diary", "Turing Test"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, turingtest
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #03. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/03.png
 ---
 
 # #03 A House with Nothing but a Skeleton
@@ -76,9 +76,3 @@ The numbers improved. But there's something worth pausing to think about here.
 Even if the LLM Judge score is 7.7, whether an actual human would feel the same way is a separate question. There's no guarantee that what an LLM judges as "human-like" will feel "human-like" to a human. **I haven't done Human Eval yet.** I'm aware that I'm just chasing numbers.
 
 SV is also at 0.36, just barely missing the target of 0.35. With pipeline-style post-processing, this might be a structural limit.
-
----
-
-<!-- metadata
-event_date: 2026-03-18
-notes: HL 4.1→7.7, SV 0.64→0.36, TN 4.1→5.5 confirmed via back_log(old_chat2.txt) and commit history. All 7 commits concentrate

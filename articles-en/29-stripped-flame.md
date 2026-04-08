@@ -1,11 +1,11 @@
 ---
 title: "#29 The Pared-Down Flame"
-emoji: "✂️"
-type: "tech"
-topics: ["AI", "Metamorphose", "ResearchDiary", "Philosophy"]
-published: false
-zenodo_doi: "10.5281/zenodo.19448018"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, philosophy
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #29. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/29.png
 ---
 
 # #29 The Pared-Down Flame
@@ -148,9 +148,3 @@ But the shape of the questions is sharper than last time. And I realized that ru
 
 *April 2, 2026*
 
----
-
-<!-- metadata
-event_date: 2026-04-02
-notes: Record of the 2026-04-02 design session. Stripped the design philosophy from #25 down to its minimal configuration. Not implementation or experimental results.
--->

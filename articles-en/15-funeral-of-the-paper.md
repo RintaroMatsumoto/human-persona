@@ -1,11 +1,11 @@
 ---
 title: "#15 Funeral for a Paper"
-emoji: "⚰️"
-type: "idea"
-topics: ["AI", "metamorphosis", "research diary", "paper retraction"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, paperretraction
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #15. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/15.png
 ---
 
 # #15 Funeral for a Paper
@@ -115,9 +115,3 @@ After the funeral, we wrote down the conditions for starting over.
 - An experimental design capable of rejecting the null hypothesis that "the output differs because the prompt differs"
 
 The conditions are strict. But if we can clear them, the inner shell will become real.
-
----
-
-<!-- metadata
-event_date: 2026-03-29
-notes: Paper retraction was on 2026-03-29. Zenodo v2 DOI, 13 Zenn articles, 13 dev.to articles, HuggingFace, PyPI, and GitHub were all pulled on the same day. The retraction process can be corroborated by git history (additions to .gitignore, updates to CLAUDE.md).

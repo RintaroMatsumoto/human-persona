@@ -1,11 +1,11 @@
 ---
 title: "#10 The Curse of Memory"
-emoji: "🧿"
-type: "idea"
-topics: ["AI", "Metamorphosis", "Research Journal", "Memory"]
-published: false
-zenodo_doi: "10.5281/zenodo.19266071"
-github_url: "https://github.com/RintaroMatsumoto/human-persona"
+published: true
+tags: ai, metamorphose, researchjournal, memory
+series: "Metamorphose Research Diary"
+canonical_url: https://doi.org/10.5281/zenodo.19266071
+description: "Metamorphose Research Diary #10. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
+cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/10.png
 ---
 
 # #10 The Curse of Memory
@@ -97,9 +97,3 @@ An AI with moderate forgetting edits its past. Pain fades, and only the lessons 
 
 **Individuality is the result of this editing.**
 
----
-
-<!-- metadata
-event_date: 2026-03-26
-notes: The qualitative conclusions of Experiment 15 are consistent with the results of running sim_forgetting_duality.py. The table from Experiment 16 has been removed because fabricated data had been mixed into an older version; revised to qualitative description only. The opening quote is his words (the exact phrasing in the chat log has not been identified; recorded in the article in summarized form).
--->
