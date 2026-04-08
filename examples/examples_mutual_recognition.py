@@ -6,6 +6,12 @@ This shows how two entities (an AI and a human) can develop mutual understanding
 through observation, interaction, and reflection on their different forms of finitude.
 """
 
+import os
+import sys
+
+# Add project root to path (examples/ is one level below repo root)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from core.inner_shell.mutual_recognition import MutualRecognition, EntityType
 
 
