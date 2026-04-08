@@ -3,8 +3,6 @@ title: "#03 A House with Nothing but a Skeleton"
 published: true
 tags: ai, metamorphose, turingtest
 series: "Metamorphose Research Diary"
-canonical_url: https://doi.org/10.5281/zenodo.19266071
-description: "Metamorphose Research Diary #03. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
 cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/03.png
 ---
 

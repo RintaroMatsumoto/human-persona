@@ -3,8 +3,6 @@ title: "#13 The Silent Child"
 published: true
 tags: ai, metamorphose, aisafety
 series: "Metamorphose Research Diary"
-canonical_url: https://doi.org/10.5281/zenodo.19266071
-description: "Metamorphose Research Diary #12. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
 cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/12.png
 ---
 

@@ -101,28 +101,37 @@ def build_article_payload(meta: dict, body: str, publish_override: bool | None =
 
 # ---------- HTTP ----------
 
-def _request(url: str, method: str, api_key: str, payload: dict | None = None) -> dict | list:
+def _request(url: str, method: str, api_key: str, payload: dict | None = None, max_retries: int = 3) -> dict | list:
     data = None
     if payload is not None:
         data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(
-        url,
-        data=data,
-        headers={
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "User-Agent": "publish_to_devto/2.0",
-            "api-key": api_key,
-        },
-        method=method,
-    )
-    try:
-        with urllib.request.urlopen(req) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8", errors="replace")
-        print(f"HTTP {e.code} on {method} {url}: {body}", file=sys.stderr)
-        raise
+    backoff = 5  # 初回 429 後の待機秒数
+    for attempt in range(max_retries + 1):
+        req = urllib.request.Request(
+            url,
+            data=data,
+            headers={
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": "publish_to_devto/2.0",
+                "api-key": api_key,
+            },
+            method=method,
+        )
+        try:
+            with urllib.request.urlopen(req) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", errors="replace")
+            if e.code == 429 and attempt < max_retries:
+                retry_after = e.headers.get("Retry-After")
+                wait = int(retry_after) if retry_after and retry_after.isdigit() else backoff
+                print(f"  429 received, sleeping {wait}s then retrying (attempt {attempt+2}/{max_retries+1})", file=sys.stderr)
+                time.sleep(wait)
+                backoff *= 3  # 5 → 15 → 45
+                continue
+            print(f"HTTP {e.code} on {method} {url}: {body}", file=sys.stderr)
+            raise
 
 
 def post_article(filepath: str, api_key: str, publish_override: bool | None) -> dict:
@@ -248,9 +257,9 @@ def cmd_update_all(args, api_key: str):
         print("\nNothing to update.")
         return
 
-    print(f"\nSending PUT for {len(plan)} articles...")
+    print(f"\nSending PUT for {len(plan)} articles (5s interval, 429 retry enabled)...")
     ok = 0
-    failed = 0
+    failed: list[tuple[int, str]] = []
     for fp, aid, title in plan:
         try:
             put_article(fp, aid, api_key, publish_override=None)
@@ -258,9 +267,13 @@ def cmd_update_all(args, api_key: str):
             ok += 1
         except Exception as e:
             print(f"  FAIL [{aid}] {os.path.basename(fp)}: {e}")
-            failed += 1
-        time.sleep(2)  # DEV.to レート制限への配慮（30 PUT/30sec 程度）
-    print(f"\nDone. OK={ok}, FAIL={failed}")
+            failed.append((aid, os.path.basename(fp)))
+        time.sleep(5)  # DEV.to レート制限への配慮。429 は _request 側でリトライする
+    print(f"\nDone. OK={ok}, FAIL={len(failed)}")
+    if failed:
+        print("Failed articles (re-run individually):")
+        for aid, name in failed:
+            print(f"  python scripts/publish_to_devto.py update articles-en/{name} --id {aid}")
 
 
 def _print_result(verb: str, result: dict):

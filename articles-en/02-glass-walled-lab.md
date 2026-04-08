@@ -3,8 +3,6 @@ title: "#02 The Glass-Walled Laboratory"
 published: true
 tags: ai, metamorphose, oss
 series: "Metamorphose Research Diary"
-canonical_url: https://doi.org/10.5281/zenodo.19266071
-description: "Metamorphose Research Diary #02. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
 cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/02.png
 ---
 

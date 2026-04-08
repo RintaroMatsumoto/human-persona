@@ -3,8 +3,6 @@ title: "#31 Blazing Flames"
 published: true
 tags: ai, metamorphose, experiments
 series: "Metamorphose Research Diary"
-canonical_url: https://doi.org/10.5281/zenodo.19266071
-description: "Metamorphose Research Diary #31. Preprint: doi.org/10.5281/zenodo.19266071 | Code: github.com/RintaroMatsumoto/human-persona"
 cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/31.png
 ---
 
