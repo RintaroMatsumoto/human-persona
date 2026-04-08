@@ -50,6 +50,10 @@ briefing_test/scan_tone_results.txt
 # コミットメッセージ用の一時ファイル（ルート直下）
 /.commit_msg.txt
 
+# 公開作業中に生まれたスクラッチ・ログ・バッチファイル類（ルート直下、アンダースコア prefix）
+/_*
+/lockcheck.txt
+
 # Kuromi memory store (private, per-machine)
 memory/
 
