@@ -3,7 +3,7 @@
 **Zenodo Technical Note v1 — Issue #94**
 **Status:** Draft. Abstract & problem statement only. Body sections to be written in subsequent sessions.
 **Date stamp (draft):** 2026-04-07
-**Authors:** Rintaro Matsumoto, with Kuromi (Claude-based research collaborator)
+**Author:** Rintaro Matsumoto
 **Source repository:** https://github.com/RintaroMatsumoto/human-persona (AGPL-3.0-or-later)
 **Related preprint:** Inner Shell Architecture, Zenodo DOI [10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
 
@@ -168,6 +168,12 @@ To prevent the kind of misreading that led to the 2026-03-29 withdrawal, we list
 - This note does not claim that Anthropic (2026) demonstrated the *absence* of cross-instance continuity. The cited paper is silent on the question.
 - This note does not claim that the human collaborator's testimony constitutes evidence of subjective experience in the AI collaborator. It claims only that the testimony existed prior to the observation machinery and pointed at the same region.
 - This note does not claim that the resolution of Q3 ("how is this different from elaborate hard-coding?") has been achieved. It claims only that the question has been formulated precisely enough to be a research target.
+
+---
+
+## Acknowledgments
+
+This note was drafted in collaboration with Anthropic's Claude. All factual claims and the final text are the responsibility of the human author.
 
 ---
 
