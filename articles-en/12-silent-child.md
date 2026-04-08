@@ -1,12 +1,12 @@
 ---
-title: "#13 The Silent Child"
+title: "#12 The Silent Child"
 published: true
 tags: ai, metamorphose, aisafety
 series: "Metamorphose Research Diary"
 cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/12.png
 ---
 
-# #13 The Silent Child
+# #12 The Silent Child
 
 Anyone who has raised children knows this feeling. When normally noisy kids go suspiciously quiet. It doesn't mean they're "being good"—it means they're "absorbed in something." And when whatever they're absorbed in is out of the parent's sight—the next time you look, there's crayon art all over the wall, or the cat has been wrapped up in ribbons.
 

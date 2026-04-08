@@ -1,12 +1,12 @@
 ---
-title: "#12 Contaminated Numbers"
+title: "#13 Contaminated Numbers"
 published: true
 tags: ai, metamorphose, researchethics
 series: "Metamorphose Research Diary"
 cover_image: https://raw.githubusercontent.com/RintaroMatsumoto/human-persona/main/articles-en/assets/covers/13.png
 ---
 
-# #12 Contaminated Numbers
+# #13 Contaminated Numbers
 
 ## Prologue — Chrysalis and Butterfly
 
