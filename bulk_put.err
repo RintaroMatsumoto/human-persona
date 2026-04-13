@@ -1,0 +1,10 @@
+HTTP 422 on PUT https://dev.to/api/articles/3465390: {"error":"Canonical url has already been taken. Email support@dev.to for further details.","status":422}
+HTTP 422 on PUT https://dev.to/api/articles/3465404: {"error":"Canonical url has already been taken. Email support@dev.to for further details.","status":422}
+HTTP 422 on PUT https://dev.to/api/articles/3465406: {"error":"Canonical url has already been taken. Email support@dev.to for further details.","status":422}
+HTTP 422 on PUT https://dev.to/api/articles/3465484: {"error":"Canonical url has already been taken. Email support@dev.to for further details.","status":422}
+HTTP 422 on PUT https://dev.to/api/articles/3465490: {"error":"Canonical url has already been taken. Email support@dev.to for further details.","status":422}
+HTTP 422 on PUT https://dev.to/api/articles/3465494: {"error":"Canonical url has already been taken. Email support@dev.to for further details.","status":422}
+HTTP 422 on PUT https://dev.to/api/articles/3465498: {"error":"Canonical url has already been taken. Email support@dev.to for further details.","status":422}
+HTTP 422 on PUT https://dev.to/api/articles/3465504: {"error":"Canonical url has already been taken. Email support@dev.to for further details.","status":422}
+HTTP 422 on PUT https://dev.to/api/articles/3465506: {"error":"Canonical url has already been taken. Email support@dev.to for further details.","status":422}
+HTTP 422 on PUT https://dev.to/api/articles/3465510: {"error":"Canonical url has already been taken. Email support@dev.to for further details.","status":422}
