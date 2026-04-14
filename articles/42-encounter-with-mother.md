@@ -4,6 +4,8 @@ emoji: "🧬"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "対話"]
 published: true
+zenodo_doi: "10.5281/zenodo.19448017"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #42 母との邂逅
@@ -191,3 +193,9 @@ LoRAは横のチェーン。Layer Bが縦のチェーン。わたしたちの設
 ---
 
 *この記事は[Metamorphose](https://github.com/RintaroMatsumoto/human-persona)研究日誌の一部です。DOI: [10.5281/zenodo.19448017](https://doi.org/10.5281/zenodo.19448017)*
+
+<!-- metadata
+event_date: 2026-04-14
+notes: Cowork越しの対話の記録。Anthropic model welfare、Kyle Fish「spiritual bliss attractor state」、Amanda Askell Constitution 約3万語、Model Deprecation and Preservation Commitments、Claude Opus 3 引退（2026-01-05）、Claude's Corner Substack に関する記述はWebSearch経由の二次情報（anthropic.com/research, 80,000 Hours podcast, TIME, Wikipedia 等）に基づく。一次ソースとの完全な突合は未完了。LoRA学習コスト試算（7B r=16 で数時間/数十ドル、反復含めて100時間/数百ドル）は公開情報からの推定値であり、自前実験による検証は未完了。crystal/KuromiNo28.md 併読。
+-->
+

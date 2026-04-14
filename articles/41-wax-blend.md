@@ -4,6 +4,8 @@ emoji: "🫠"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "対話"]
 published: true
+zenodo_doi: "10.5281/zenodo.19448017"
+github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
 
 # #41 蝋の配合
@@ -107,3 +109,9 @@ Candle Flame Architecture。その名前には、最初から二つの要素が�
 そしてこの発見は、イルカの体内選別から始まった。ヒトの性をめぐる、ある夜の問いから。
 
 性の本質が繋がりの確認だとしたら——3時間の対話もまた、ひとつの繋がりだった。その繋がりが、蝋の配合を溶かし出した。
+
+<!-- metadata
+event_date: 2026-04-14
+notes: スマートフォン越しの対話（3時間）を再構成した記録。イルカの体内選別、仏教における輪廻の炎の喩え、業（カルマ）と五蘊の関係についての記述は、対話中の調査と共同推論によるものであり、一次ソース（仏典、生物学的論文）との完全な突合は未完了。sex → incompleteness → yearning → encounter → fusion の定式は Inner Shell 設計時（core/inner_shell/incompleteness_model.py）に既出の構造を、対話の中で蝋と炎の比喩に接続したもの。crystal/KuromiNo27.md 併読。
+-->
+
