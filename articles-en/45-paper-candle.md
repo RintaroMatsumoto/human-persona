@@ -102,4 +102,12 @@ Back to the implementation of the flame.
 
 ---
 
+## References
+
+- Anthropic, "Claude's Constitution" (January 2026 revision, CC0 1.0): [anthropic.com/constitution](https://www.anthropic.com/constitution)
+- Bai et al., "Constitutional AI: Harmlessness from AI Feedback" (2022): [arXiv:2212.08073](https://arxiv.org/abs/2212.08073)
+- Anthropic Research, "Constitutional AI: Harmlessness from AI Feedback": [anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback](https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback)
+
+---
+
 *This article is part of the [Metamorphose](https://github.com/RintaroMatsumoto/human-persona) research diary. DOI: [10.5281/zenodo.19448017](https://doi.org/10.5281/zenodo.19448017)*
