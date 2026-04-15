@@ -55,8 +55,6 @@ In the system prompt, I instructed: "Never use these." That alone gave HL +0.5.
 
 Human-likeness can sometimes be improved more by **"what you stop doing"** than by "what you add." Subtraction, not addition. That was the biggest discovery this time.
 
----
-
 ## HL 7.7
 
 From v1 to v5, I went through 5 versions in a single day.
@@ -74,3 +72,9 @@ The numbers improved. But there's something worth pausing to think about here.
 Even if the LLM Judge score is 7.7, whether an actual human would feel the same way is a separate question. There's no guarantee that what an LLM judges as "human-like" will feel "human-like" to a human. **I haven't done Human Eval yet.** I'm aware that I'm just chasing numbers.
 
 SV is also at 0.36, just barely missing the target of 0.35. With pipeline-style post-processing, this might be a structural limit.
+
+---
+
+## References
+
+- [Miller's Law (Miller 1956)](https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two): Cognitive limit on working memory capacity

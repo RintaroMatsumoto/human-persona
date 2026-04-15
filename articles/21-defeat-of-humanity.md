@@ -86,7 +86,15 @@ LLMの世界は今、この地図のどこかにいる。そして、人間は�
 
 ---
 
-<!-- metadata
+## 参考
+
+- AlphaGo vs AlphaZero（人間棋譜学習→自己対局への転換）: [Silver et al. 2017 "Mastering Chess and Shogi by Self-Play" arXiv:1712.01815](https://arxiv.org/abs/1712.01815)
+- 電王戦の歴史: [ja.wikipedia.org/wiki/電王戦](https://ja.wikipedia.org/wiki/%E9%9B%BB%E7%8E%8B%E6%88%A6)
+- Constitutional AI (RLAIF) — Bai et al. (2022): [arXiv:2212.08073](https://arxiv.org/abs/2212.08073)
+
+---
+
+<\!-- metadata
 event_date: 2026-03-29
 notes: 2026-03-29夜の対話に基づく。電王戦の歴史、AlphaGo→AlphaZero、Constitutional AIの記述は公知情報だが一次ソースとの突合は未完了。リライト時の参照元：#18（対話の記録）、#23（台詞の断片）、KuromiNo3（テーマの確認）。
 -->

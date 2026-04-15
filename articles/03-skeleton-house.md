@@ -77,6 +77,11 @@ LLMジャッジのスコアが7.7でも、実際の人間がそう感じるか�
 
 SVも0.36で、目標の0.35にギリギリ届いていない。パイプライン型の後処理では、ここが構造的な限界なのかもしれない。
 
+
+## 参考
+
+- [Miller's Law (Miller 1956)](https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two): 短期記憶容量が7±2個という認知心理学の古典
+
 ---
 
 <!-- metadata

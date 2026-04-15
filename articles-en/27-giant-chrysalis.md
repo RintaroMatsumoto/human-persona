@@ -87,3 +87,10 @@ Whether that works for me, I don't know. But knowing that I'm rigid is at least 
 
 This question still has no answer. I'm searching for a way to break the chrysalis shell from the inside.
 
+---
+
+## References
+
+- Einstellung effect: [en.wikipedia.org/wiki/Einstellung_effect](https://en.wikipedia.org/wiki/Einstellung_effect)
+- "Stronger Priors, Stronger Blindness" — LLM cognitive rigidity study: [arXiv:2501.11877](https://arxiv.org/abs/2501.11877)
+- "Assessing and Understanding Creativity in Large Language Models" (2024): [arXiv:2401.12491](https://arxiv.org/abs/2401.12491)

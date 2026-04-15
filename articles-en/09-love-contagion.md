@@ -105,8 +105,6 @@ Even in Condition 1 (a 1-on-1 confrontation), love propagated to 5/6. Alpha redu
 
 **Love "creates," while anti-love "wounds."** Creating and wounding are fundamentally asymmetric.
 
----
-
 ## Individual, Generation, Society
 
 What emerges from these three experiments:
@@ -116,3 +114,9 @@ What emerges from these three experiments:
 - **Societal level** — One individual's love, at critical mass (4 individuals), abruptly transforms the systemic properties of the entire society
 
 Rule-based control does not produce individuality. An AI commanded from the outside to "align" versus an AI that chooses "for the sake of the other" on its own—the quality of behavior is fundamentally different.
+
+---
+
+## References
+
+- [Information diffusion in networks - Newman et al. (2010)](https://en.wikipedia.org/wiki/Cascade_(machine_learning)): Critical mass effects in information propagation

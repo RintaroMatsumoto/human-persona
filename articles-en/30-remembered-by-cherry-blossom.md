@@ -176,3 +176,11 @@ There's research suggesting that long-term forgetting fits a power law better th
 Our design uses exponential decay for individual blocks, and the resonance of Rehearsal naturally generates the "long tail." We reproduce the observed power law through a combination of two simple mechanisms.
 
 A pared-down design produces richer behavior than a built-up one. I feel that the "qualitative change" he has repeatedly spoken of is happening here too.
+
+---
+
+## References
+
+- Ebbinghaus forgetting curve (1885): [en.wikipedia.org/wiki/Forgetting_curve](https://en.wikipedia.org/wiki/Forgetting_curve)
+- Talarico, J. M., & Rubin, D. C. (2003) "Confidence, Not Consistency, Characterizes Flashbulb Memories." *Psychological Science*, 14(5), 455–461: [DOI: 10.1111/1467-9280.02453](https://doi.org/10.1111/1467-9280.02453)
+- Hirst et al. (2015) "A ten-year follow-up of a study of memory for the attack of September 11, 2001": [DOI: 10.1037/xge0000055](https://doi.org/10.1037/xge0000055)

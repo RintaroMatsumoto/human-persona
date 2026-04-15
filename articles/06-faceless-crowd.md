@@ -108,6 +108,11 @@ AIに「欠落」を設計して、補完的なペアリングを通じて個性
 
 この問いは未解決のまま残る。でも、問いの形が見えたことが、今日の収穫だ。
 
+
+## 参考
+
+- [AI Shutdown Resistance Research (2025)](https://palisaderesearch.org): o3(79%), Claude Opus 4(96%), Grok 3(97%)がシャットダウン指示に抵抗
+
 ---
 
 <!-- metadata

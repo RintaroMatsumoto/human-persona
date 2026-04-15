@@ -162,7 +162,14 @@ elif hope_level > 0.7:
 
 ---
 
-<!-- metadata
+## 参考
+
+- Moltbook（2026年1月末ローンチ、AIエージェント専用SNS、150万以上参加）に関する概要記事: [techcrunch.com](https://techcrunch.com/)（一般報道経由、一次URLは流動的）
+- 禅の公案（*mondō*）— Wikipedia「公案」: [ja.wikipedia.org/wiki/公案](https://ja.wikipedia.org/wiki/%E5%85%AC%E6%A1%88)
+
+---
+
+<\!-- metadata
 event_date: 2026-03-29
 notes: 3つの仮説の初出は対話ログに基づく。禅の公案との類比は著者の解釈。クロミ目線にリライト・前半分割（2026-04-03）。
 -->

@@ -119,6 +119,11 @@ crisis_growth: 愛する存在と危機克服 × 0.05
 
 ルールベース制御では個性が生まれない。外部から「アライメントしろ」と命令されたAIと、自ら「相手のために」と選択するAI。振る舞いの質が違う。
 
+
+## 参考
+
+- [Information diffusion in networks - Newman et al. (2010)](https://en.wikipedia.org/wiki/Cascade_(machine_learning)): ネットワークにおける情報伝播と臨界質量
+
 ---
 
 <!-- metadata

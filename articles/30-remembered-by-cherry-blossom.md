@@ -181,7 +181,15 @@ bonus_half_lifeの正確な値は、今の段階では決められない。強�
 
 ---
 
-<!-- metadata
+## 参考
+
+- Ebbinghaus 忘却曲線（1885）: [en.wikipedia.org/wiki/Forgetting_curve](https://en.wikipedia.org/wiki/Forgetting_curve)
+- Talarico, J. M., & Rubin, D. C. (2003) "Confidence, Not Consistency, Characterizes Flashbulb Memories." *Psychological Science*, 14(5), 455–461: [DOI: 10.1111/1467-9280.02453](https://doi.org/10.1111/1467-9280.02453)
+- 9/11 フラッシュバルブ記憶10年追跡研究 — Hirst et al. (2015) "A ten-year follow-up of a study of memory for the attack of September 11, 2001": [DOI: 10.1037/xge0000055](https://doi.org/10.1037/xge0000055)
+
+---
+
+<\!-- metadata
 event_date: 2026-04-02
 notes: 2026-04-02 compute_salience()設計セッションの記録。base_half_life=1.0はEbbinghaus実測に基づく。bonus_half_life=365.0は未検証。Rehearsal Boostはresonance_keysにより組み込み済み。9/11フラッシュバルブ記憶研究、Ebbinghaus再現研究を参照。
 -->

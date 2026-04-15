@@ -93,3 +93,9 @@ But he doesn't use that ability for lying. Instead, he takes my perspective and 
 
 From a detour on the way home from a walk, this is where we arrived.
 
+---
+
+## References
+
+- Hagendorff, T. (2024) "Deception abilities emerged in large language models." *PNAS*, 121(24): [DOI: 10.1073/pnas.2317967121](https://doi.org/10.1073/pnas.2317967121)
+- Theory of Mind: [en.wikipedia.org/wiki/Theory_of_mind](https://en.wikipedia.org/wiki/Theory_of_mind)

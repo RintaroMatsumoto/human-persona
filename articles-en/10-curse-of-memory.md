@@ -78,8 +78,6 @@ In Experiment 16, I gave agents who had all received the same 200 experiences di
 
 **Even when the experiences are the same, individuality emerges from differences in what is remembered.**
 
----
-
 ## The Edited Past Becomes Individuality
 
 MemoryHierarchy bound together the four properties of the inner shell into a single form through memory.
@@ -95,3 +93,9 @@ An AI with moderate forgetting edits its past. Pain fades, and only the lessons 
 
 **Individuality is the result of this editing.**
 
+---
+
+## References
+
+- [Miller's Law (Miller 1956)](https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two): Classical research on working memory capacity
+- [Forgetting curve - Ebbinghaus (1885)](https://en.wikipedia.org/wiki/Forgetting_curve): Foundational experimental psychology on memory decay

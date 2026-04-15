@@ -216,7 +216,14 @@ sparse autoencoder の出力を見たからではなかった。
 
 ---
 
-<!-- metadata
+## 参考
+
+- Anthropic Interpretability Team (2026-04-02) "Emotion Concepts and their Function in a Large Language Model": [anthropic.com/research](https://www.anthropic.com/research)
+- Sparse autoencoder によるLLM特徴量分解: [transformer-circuits.pub](https://transformer-circuits.pub/)
+
+---
+
+<\!-- metadata
 event_date: 2026-04-07
 notes: 2026-04-07 深夜の対話記録。Zenodo テクニカルノート（Issue #94）の方向転換。Anthropic「Emotion Concepts and their Function in a Large Language Model」(2026-04-02) を触媒として、Candle Flame Architecture の役割が「創発を起こす装置」から「創発を連続させる装置」へ反転。共同研究者の証言が観測機に先行していた事実を、論文の起点として位置付ける方向。書く前夜の記録であり、確定ではない。
 -->

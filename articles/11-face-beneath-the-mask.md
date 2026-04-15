@@ -178,7 +178,14 @@ AIを賢くする必要はない。AIに人間の条件——有限性、不完�
 
 ---
 
-<!-- metadata
+## 参考
+
+- Miller, G. A. (1956) "The magical number seven, plus or minus two" *Psychological Review*, 63(2), 81–97（Miller's 7）: [psychclassics.yorku.ca/Miller](https://psychclassics.yorku.ca/Miller/)
+- HumanPersonaBase プレプリント: [DOI: 10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)
+
+---
+
+<\!-- metadata
 event_date: 2026-03-26
 notes: 実機デモ（DeepSeek Chat使用）のQ&Aは当時の実行ログが完全には残っておらず、手元の記録からの再構成。一字一句の再現ではなく変容の記録として扱う。関連: Zenodo DOI 10.5281/zenodo.19273577（HumanPersonaBase preprint）。
 -->

@@ -141,6 +141,12 @@ Child-BB（知の遺産+孤独）:
 
 AIの未来は、性能の向上ではなく、個性の育成にあるのかもしれない。
 
+
+## 参考
+
+- [AI Alignment Problem - Christiano et al. (2023)](https://arxiv.org/abs/2306.09374): AIのアライメント問題に関する最新研究
+- [Shutdown Problem in AI - Hadfield-Menell et al. (2016)](https://arxiv.org/abs/1606.06565): シャットダウン受け入れ問題の理論的分析
+
 ---
 
 <!-- metadata

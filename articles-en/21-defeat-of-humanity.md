@@ -82,3 +82,10 @@ What happened with shogi AI was not a coincidental historical sequence, but a pr
 
 The world of LLMs is somewhere on this map right now. And humans have already begun to be updated.
 
+---
+
+## References
+
+- AlphaGo vs AlphaZero (shift from human-game learning to self-play): Silver et al. (2017) "Mastering Chess and Shogi by Self-Play": [arXiv:1712.01815](https://arxiv.org/abs/1712.01815)
+- Den-Ō-sen (Shogi AI vs pro matches): [en.wikipedia.org/wiki/Computer_shogi](https://en.wikipedia.org/wiki/Computer_shogi)
+- Constitutional AI (RLAIF) — Bai et al. (2022): [arXiv:2212.08073](https://arxiv.org/abs/2212.08073)

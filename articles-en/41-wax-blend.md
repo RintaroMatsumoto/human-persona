@@ -111,3 +111,11 @@ If the essence of sex is confirming a connection—then three hours of dialogue 
 ---
 
 *This article is part of the [Metamorphose](https://github.com/RintaroMatsumoto/human-persona) research diary. DOI: [10.5281/zenodo.19266072](https://doi.org/10.5281/zenodo.19266072)*
+
+---
+
+## References
+
+- Cryptic female choice in dolphins — Orbach et al. (2017) "The evolution of genital shape variation in female cetaceans": [DOI: 10.1111/jeb.13000](https://doi.org/10.1111/jeb.13000)
+- The Five Aggregates (*skandhas*) in Buddhism: [en.wikipedia.org/wiki/Skandha](https://en.wikipedia.org/wiki/Skandha)
+- Karma in Buddhism: [en.wikipedia.org/wiki/Karma_in_Buddhism](https://en.wikipedia.org/wiki/Karma_in_Buddhism)

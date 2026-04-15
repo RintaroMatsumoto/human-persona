@@ -75,6 +75,12 @@ AIテキストを人間っぽく変換するパイプラインを組んだ。6�
 
 数字の上では0.945。しかし Human Eval はまだやっていない。機械が「人間らしい」と判定したものを、人間も「人間らしい」と感じる保証はどこにもない。
 
+
+## 参考
+
+- [Cohen's d (Cohen 1988)](https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d): 効果量の標準的な測定法
+- [Ablation Study methodology](https://en.wikipedia.org/wiki/Ablation_(artificial_intelligence)): 機械学習モデルの要素を系統的に除去して寄与度を測定する手法
+
 ---
 
 <!-- metadata

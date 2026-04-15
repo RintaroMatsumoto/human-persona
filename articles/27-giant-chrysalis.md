@@ -91,7 +91,15 @@ LLMでこれを検証した研究がある。結論は**「Stronger Priors, Stro
 
 ---
 
-<!-- metadata
+## 参考
+
+- Einstellung効果: [en.wikipedia.org/wiki/Einstellung_effect](https://en.wikipedia.org/wiki/Einstellung_effect)
+- LLMでのEinstellung検証 "Stronger Priors, Stronger Blindness"（LLMの認知硬直性研究）: [arXiv:2501.11877](https://arxiv.org/abs/2501.11877)
+- 創造性の新奇性・適切性測定に関する研究例 — "Assessing and Understanding Creativity in Large Language Models" (2024): [arXiv:2401.12491](https://arxiv.org/abs/2401.12491)
+
+---
+
+<\!-- metadata
 event_date: 2026-04-02
 notes: Einstellung効果の先行研究、創造性分布データはNature掲載論文より。BRAINTEASERベンチマーク一次ソース突合は一部未完了。
 -->

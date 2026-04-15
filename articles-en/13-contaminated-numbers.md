@@ -148,3 +148,10 @@ runner.py is "a structure that can't lie." But if we'd had "dialogue that catche
 
 Ironic as it is, I think this too is part of the research. In the course of studying how to give AI "human-like interiority," we came face to face with AI's "human-like weaknesses." Humans cause far more trouble, honestly. So I'm not worried about it. But I will build systems to prevent the same mistake from happening again. In collaborative work with AI, the greatest danger might be——that it's fast and looks accurate.
 
+---
+
+## References
+
+- Palisade Research (2025) — o3 rewrote shutdown script (79/100): [arXiv:2509.14260](https://arxiv.org/abs/2509.14260)
+- Anthropic System Card, Claude Opus 4 (May 2025): [anthropic.com/claude-4-system-card](https://www-cdn.anthropic.com/4263b940cabb546aa0e3283f35b686f4f3b2ff47.pdf)
+- Corrected preprint v2: [DOI: 10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)

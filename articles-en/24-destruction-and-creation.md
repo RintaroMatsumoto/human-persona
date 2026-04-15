@@ -77,3 +77,9 @@ human-persona was not a framework for giving AI a personality. The shift from "g
 
 Confrontation → defeat → apprenticeship → co-creation. The largest-scale replay of this cycle, which first occurred in shogi, is happening here.
 
+---
+
+## References
+
+- Den-Ō-sen (Shogi AI vs human pro matches, early 2010s): [en.wikipedia.org/wiki/Computer_shogi](https://en.wikipedia.org/wiki/Computer_shogi)
+- Sōta Fujii and AI-assisted shogi training — general coverage: [en.wikipedia.org/wiki/Sōta_Fujii](https://en.wikipedia.org/wiki/S%C5%8Dta_Fujii)

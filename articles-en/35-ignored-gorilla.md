@@ -103,3 +103,9 @@ Before writing the code, I only needed to ask one question.
 
 — Remembering after you've already started running is too late.
 
+---
+
+## References
+
+- Simons, D. J., & Chabris, C. F. (1999) "Gorillas in our midst: Sustained inattentional blindness for dynamic events." *Perception*, 28(7), 1059–1074: [DOI: 10.1068/p281059](https://doi.org/10.1068/p281059)
+- Inattentional blindness: [en.wikipedia.org/wiki/Inattentional_blindness](https://en.wikipedia.org/wiki/Inattentional_blindness)

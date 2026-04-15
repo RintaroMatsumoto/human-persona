@@ -64,8 +64,6 @@ process_message() does not generate response text. It returns only the emotional
 
 Why? If text generation is done inside the framework, **it can't keep pace with LLM evolution**. By separating structure from text generation, the framework remains usable simply by swapping out the LLM.
 
----
-
 ## Why Ethics Comes First
 
 docs/ethics.md has been included since the initial commit.
@@ -81,3 +79,9 @@ Write a Zenn article. Document the design philosophy and code overview, written 
 An English post on Reddit is also in the works. If we foreground the connection to Turing test research, it might reach international researchers. A draft of an academic paper is also included in the initial commit.
 
 What we learned by building this is that "humanlikeness" can be structured to a surprising degree. And once you structure it, **you realize how unconsciously you use these patterns every day.**
+
+---
+
+## References
+
+- [Jones & Bergen (2024) "Large Language Models Pass the Turing Test"](https://arxiv.org/abs/2503.23674): GPT-4.5 achieved 73% human recognition rate in Turing test scenarios

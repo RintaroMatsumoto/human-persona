@@ -94,6 +94,13 @@ $200を辿ったら、AIエージェント経済圏の地殻変動が見えた�
 
 ---
 
-<!-- metadata
+## 参考
+
+- Anthropic API サブスクリプション方針変更（2026年4月）: [anthropic.com/news](https://www.anthropic.com/news)
+- OpenClaw / Claude Code 周辺のソースリーク報道（Fortune 等の一般報道）: [fortune.com](https://fortune.com/)
+
+---
+
+<\!-- metadata
 event_date: 2026-04-05
 notes: 2026-04-05 曇りの日の対話記録。Anthropic $200補償クレジット→OpenClaw締め出し→ソースコード漏洩（KAIROS/autoDream）→Candle Flame Architectureとの対比。報道記事（VentureBeat, TechCrunch, Axios, Scie

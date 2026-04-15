@@ -110,7 +110,14 @@ Anthropicも同じ構造を使っていた。静的なフォームではなく�
 
 ---
 
-<!-- metadata
+## 参考
+
+- Anthropic Interviewer データセット (HuggingFace): [huggingface.co/datasets/Anthropic/AnthropicInterviewer](https://huggingface.co/datasets/Anthropic/AnthropicInterviewer)
+- Anthropic 公式レポート（インタビュー研究: 159カ国、70言語、80,508人）: [anthropic.com/research](https://www.anthropic.com/research)
+
+---
+
+<\!-- metadata
 event_date: 2026-03-29
 notes: 80,508人、159カ国、70言語の数字はAnthropicデータに基づくが一次ソースとの突合は未完了。Anthropic Interviewer発見の経緯は#18の記録に基づく。末尾のシャットダウン受容エピソードは#18と接続。リライト時の参照元：#18（時系列と構造的対称性）。
 -->

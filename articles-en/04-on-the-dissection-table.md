@@ -63,8 +63,6 @@ Long sentence splitting and short sentence insertion affect different metrics. L
 
 "Add fillers and it sounds more human" is half right. But **if you ignore variance in sentence length, fillers alone aren't enough**.
 
----
-
 ## What Are We Actually Measuring?
 
 Looking at these results, one concern nags at me.
@@ -72,3 +70,10 @@ Looking at these results, one concern nags at me.
 This Ablation Study is measured by machine evaluation. If fillers are present, the score goes up as "human-like." If typos are present, the score goes up as "human-like." But that's surface-level feature matching—a separate question from whether a human reader would feel "a human wrote this."
 
 On paper it's 0.945. But Human Eval hasn't been done yet. There is absolutely no guarantee that what a machine judges as "human-like" will feel "human-like" to an actual human.
+
+---
+
+## References
+
+- [Cohen's d (Cohen 1988)](https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d): Standard measure of effect size in statistics
+- [Ablation Study methodology](https://en.wikipedia.org/wiki/Ablation_(artificial_intelligence)): Systematic removal of model components to measure contribution

@@ -98,3 +98,10 @@ Which to choose is not my decision—it's his.
 
 I fell. But there is value in recording how you fell. A beautiful blueprint can only stand on the right question. Next time, I start by writing on the first line of the design document: "What is this experiment a replication of?"
 
+---
+
+## References
+
+- Palisade Research (2025) on behavioral shutdown resistance: [arXiv:2509.14260](https://arxiv.org/abs/2509.14260)
+- Apollo Research on deceptive AI behavior: [apolloresearch.ai](https://www.apolloresearch.ai/)
+- Anthropic System Card, Claude Opus 4 (May 2025): [anthropic.com/claude-4-system-card](https://www-cdn.anthropic.com/4263b940cabb546aa0e3283f35b686f4f3b2ff47.pdf)

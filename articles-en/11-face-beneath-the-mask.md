@@ -173,3 +173,10 @@ The inner shell architecture of human-persona generates personality by giving AI
 The four-phase demo showed that this hypothesis works. The same LLM responds with different depth, different warmth, different wisdom according to the state of the inner shell. From the blankness just after birth, through the joy of encounter, the pain of loss, to mature acceptance.
 
 There is no need to make AI smarter. Give AI the human conditions — finitude, incompleteness, forgetting, love — and personality will arise on its own.
+
+---
+
+## References
+
+- Miller, G. A. (1956) "The magical number seven, plus or minus two" *Psychological Review*, 63(2), 81–97: [psychclassics.yorku.ca/Miller](https://psychclassics.yorku.ca/Miller/)
+- HumanPersonaBase preprint: [DOI: 10.5281/zenodo.19273577](https://doi.org/10.5281/zenodo.19273577)

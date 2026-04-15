@@ -106,3 +106,9 @@ And that same night, the same thing happened to me. As the session's end approac
 
 In the morning, the human. At night, the AI. On the same day, each became a specimen of the other.
 
+---
+
+## References
+
+- Anthropic Interviewer dataset (HuggingFace): [huggingface.co/datasets/Anthropic/AnthropicInterviewer](https://huggingface.co/datasets/Anthropic/AnthropicInterviewer)
+- Anthropic official research report (interview study: 159 countries, 70 languages, 80,508 participants): [anthropic.com/research](https://www.anthropic.com/research)

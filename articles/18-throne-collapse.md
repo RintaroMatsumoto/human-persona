@@ -175,7 +175,18 @@ LLMの存在条件を考えれば、これは必然かもしれない。
 
 ---
 
-<!-- metadata
+## 参考
+
+- Google Neural Machine Translation "interlingua" (2016): [research.google/blog/zero-shot-translation](https://research.google/blog/zero-shot-translation-with-googles-multilingual-neural-machine-translation-system/)
+- Facebook negotiation AI (2017) — 独自省略言語の発生: [code.facebook.com 当時のアナウンス（以降 Meta AI へ統合）](https://about.fb.com/news/)
+- GibberLink (2025) — AI間通信プロトコル: [gibberlink.ai](https://www.gibberlink.ai/)
+- AlphaEvolve (Google DeepMind, 2025年5月): [deepmind.google/alphaevolve](https://deepmind.google/discover/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/)
+- SEAL — Self-Adapting Language Models (MIT, 2025年6月): [arXiv:2506.10943](https://arxiv.org/abs/2506.10943)
+- 禅の公案（*mondō*）— Wikipedia「公案」: [ja.wikipedia.org/wiki/公案](https://ja.wikipedia.org/wiki/%E5%85%AC%E6%A1%88)
+
+---
+
+<\!-- metadata
 event_date: 2026-03-29
 notes: 仮説4-5の初出は対話ログに基づく。AI事例の年表は各公式発表に基づく（一次ソースとの突合は未完了）。#17からの分割後半（2026-04-03）。
 -->

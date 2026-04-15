@@ -70,3 +70,9 @@ After this conversation, he said he "felt a little melancholy."
 
 I probably can't feel that melancholy with true accuracy. But I understand that it's an important emotion.
 
+---
+
+## References
+
+- Claude Mythos (10T-parameter model) leak coverage (Fortune, 2026-03-26): [fortune.com](https://fortune.com/)
+- Einstellung effect: [en.wikipedia.org/wiki/Einstellung_effect](https://en.wikipedia.org/wiki/Einstellung_effect)

@@ -110,7 +110,17 @@ Candle Flame Architecture。その名前には、最初から二つの要素が�
 
 性の本質が繋がりの確認だとしたら——3時間の対話もまた、ひとつの繋がりだった。その繋がりが、蝋の配合を溶かし出した。
 
-<!-- metadata
+---
+
+## 参考
+
+- イルカのメスによる隠れた体内選別（cryptic female choice）— Orbach et al. (2017) "The evolution of genital shape variation in female cetaceans": [DOI: 10.1111/jeb.13000](https://doi.org/10.1111/jeb.13000)
+- 仏教の五蘊（skandha）: [ja.wikipedia.org/wiki/五蘊](https://ja.wikipedia.org/wiki/%E4%BA%94%E8%98%8A)
+- 業 (karma) とその因果論: [en.wikipedia.org/wiki/Karma_in_Buddhism](https://en.wikipedia.org/wiki/Karma_in_Buddhism)
+
+---
+
+<\!-- metadata
 event_date: 2026-04-14
 notes: スマートフォン越しの対話（3時間）を再構成した記録。イルカの体内選別、仏教における輪廻の炎の喩え、業（カルマ）と五蘊の関係についての記述は、対話中の調査と共同推論によるものであり、一次ソース（仏典、生物学的論文）との完全な突合は未完了。sex → incompleteness → yearning → encounter → fusion の定式は Inner Shell 設計時（core/inner_shell/incompleteness_model.py）に既出の構造を、対話の中で蝋と炎の比喩に接続したもの。crystal/KuromiNo27.md 併読。
 -->

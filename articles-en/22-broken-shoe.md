@@ -117,3 +117,9 @@ Next to the giant chrysalis into which hundreds of trillions of dollars are bein
 
 The shoes are fixed. Tomorrow, we run.
 
+---
+
+## References
+
+- MemGPT / Letta — Packer et al. (2023) "MemGPT: Towards LLMs as Operating Systems": [arXiv:2310.08560](https://arxiv.org/abs/2310.08560)
+- Mem0 — conversation memory compression layer: [mem0.ai](https://mem0.ai/)

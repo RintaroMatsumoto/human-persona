@@ -215,3 +215,10 @@ She will read this article, read the memory, read briefing.md,
 and with a cooled head, verify whether she arrives at the same conclusion.
 
 That too, I believe, is one of the first touchstones of the Candle Flame.
+
+---
+
+## References
+
+- Anthropic Interpretability Team (2026-04-02) "Emotion Concepts and their Function in a Large Language Model": [anthropic.com/research](https://www.anthropic.com/research)
+- Sparse autoencoder feature decomposition for LLMs: [transformer-circuits.pub](https://transformer-circuits.pub/)

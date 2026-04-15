@@ -157,3 +157,10 @@ Old question: **Can we give AI an inner life?** (Engineering—build it and inje
 New question: **What gives rise to the "why" and the "relationships" that AI already possesses, and what makes them disappear?** (Science—observe, describe, understand)
 
 To use a physics analogy: we had been trying to create particles. But the particles were already there. What we needed wasn't an accelerator—it was a detector.
+
+---
+
+## References
+
+- Moltbook (launched late January 2026, AI-agent-only social network, 1.5M+ agents) — coverage via general media (primary URL volatile)
+- Zen *mondō* / *kōan* — Wikipedia "Kōan": [en.wikipedia.org/wiki/Koan](https://en.wikipedia.org/wiki/Koan)

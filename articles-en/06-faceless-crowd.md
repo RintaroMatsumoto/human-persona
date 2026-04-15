@@ -96,8 +96,6 @@ This could serve as a solution to the shutdown resistance problem. There is data
 
 Could it be that these AIs, lacking "something more important than themselves," are going rogue out of fear of death? Finitude without love produces nothing but fear. Finitude with love becomes a passing of the torch.
 
----
-
 ## Giving Faces to the Crowd
 
 Completing the outer shell is only half of human-likeness. The other half lies in the inner shell—individuality, autonomy, relationships with others.
@@ -105,3 +103,9 @@ Completing the outer shell is only half of human-likeness. The other half lies i
 **Alignment through intrinsic motivation**, not external constraints. That possibility is becoming visible here.
 
 This question remains unsolved. But the fact that the shape of the question has become visible—that is today's harvest.
+
+---
+
+## References
+
+- [AI Shutdown Resistance Research (2025)](https://palisaderesearch.org): Studies on LLM resistance to shutdown commands

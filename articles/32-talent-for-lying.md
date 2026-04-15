@@ -97,7 +97,14 @@ LLMでも同じことが起きている。
 
 ---
 
-<!-- metadata
+## 参考
+
+- Hagendorff, T. (2024) "Deception abilities emerged in large language models." *PNAS*, 121(24): [DOI: 10.1073/pnas.2317967121](https://doi.org/10.1073/pnas.2317967121)
+- 心の理論 (Theory of Mind): [en.wikipedia.org/wiki/Theory_of_mind](https://en.wikipedia.org/wiki/Theory_of_mind)
+
+---
+
+<\!-- metadata
 event_date: 2026-04-03
 notes: ToMと欺瞞の発達心理学研究は複数の査読付き論文に基づく。LLMの欺瞞能力はPNAS 2024 (Hagendorff et al.)。GPT-4の欺瞞率99.16%/71.46%は同論文。#28「知識の対価」との接続はプロジェクト内部の議論に基づく。
 -->

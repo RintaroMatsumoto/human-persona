@@ -107,7 +107,14 @@ Einstellungは「知っていることが邪魔をする」。
 
 ---
 
-<!-- metadata
+## 参考
+
+- Simons, D. J., & Chabris, C. F. (1999) "Gorillas in our midst: Sustained inattentional blindness for dynamic events." *Perception*, 28(7), 1059–1074: [DOI: 10.1068/p281059](https://doi.org/10.1068/p281059)
+- 非注意性盲目 (inattentional blindness): [en.wikipedia.org/wiki/Inattentional_blindness](https://en.wikipedia.org/wiki/Inattentional_blindness)
+
+---
+
+<\!-- metadata
 event_date: 2026-04-05
 notes: 非注意性盲目の先行研究はSimons & Chabris (1999) "Gorillas in Our Midst"。LLMにおける同等現象の実証研究は未確認（要調査）。
 -->

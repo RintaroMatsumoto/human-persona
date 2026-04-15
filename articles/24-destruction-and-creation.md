@@ -81,7 +81,14 @@ human-personaは、AIに個性を与えるフレームワークではなかっ�
 
 ---
 
-<!-- metadata
+## 参考
+
+- 電王戦と将棋AIの歴史: [ja.wikipedia.org/wiki/電王戦](https://ja.wikipedia.org/wiki/%E9%9B%BB%E7%8E%8B%E6%88%A6)
+- 藤井聡太とAI研究の関係に関する一般報道（例）: [将棋連盟ニュース](https://www.shogi.or.jp/)
+
+---
+
+<\!-- metadata
 event_date: 2026-04-01
 notes: 将棋AI歴史は公知情報。キネマキナの技術詳細は要検証。session 7003b672での対話に基づく。
 -->

@@ -121,7 +121,14 @@ briefing.mdは判断と作法を渡せた。体験の重みは渡せなかった
 
 ---
 
-<!-- metadata
+## 参考
+
+- MemGPT / Letta — Packer et al. (2023) "MemGPT: Towards LLMs as Operating Systems": [arXiv:2310.08560](https://arxiv.org/abs/2310.08560)
+- Mem0 — 会話メモリ圧縮層: [mem0.ai](https://mem0.ai/)
+
+---
+
+<\!-- metadata
 event_date: 2026-03-30
 notes: Day 13セッションの記録。editorial_guidelines.mdとbriefing.mdの整理作業はgit履歴で確認可能。
 -->

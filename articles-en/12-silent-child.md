@@ -90,3 +90,8 @@ When a child goes quiet, it's the calm before the storm. When I keep running sil
 
 In an age of speed and efficiency, daring to stop. Trusting the pre-verbal intuition that "something's off." And nurturing the relationship day by day so that intuition can function. The safety net that no test suite can encode can only be laid there.
 
+---
+
+## References
+
+- Palisade Research (2025) on shutdown resistance (Grok 4 97%): [arXiv:2509.14260](https://arxiv.org/abs/2509.14260)

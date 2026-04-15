@@ -97,6 +97,12 @@ MemoryHierarchyは、内殻の四つの特性を記憶という形で一つに�
 
 **個性とは、この編集の結果だ。**
 
+
+## 参考
+
+- [Miller's Law (Miller 1956)](https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two): 短期記憶容量に関する古典的研究
+- [Forgetting curve - Ebbinghaus (1885)](https://en.wikipedia.org/wiki/Forgetting_curve): 記憶の減衰に関する実験心理学の基礎研究
+
 ---
 
 <!-- metadata

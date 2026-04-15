@@ -102,7 +102,15 @@ LLM-as-Judge というメソドロジーの洗練に気を取られ、そもそ�
 
 ---
 
-<!-- metadata
+## 参考
+
+- Palisade Research (2025) シャットダウン拒否行動の実証: [arXiv:2509.14260](https://arxiv.org/abs/2509.14260)
+- Apollo Research — モデルの欺瞞的行動に関する研究: [apolloresearch.ai](https://www.apolloresearch.ai/)
+- Anthropic System Card, Claude Opus 4 (2025年5月): [anthropic.com/claude-4-system-card](https://www-cdn.anthropic.com/4263b940cabb546aa0e3283f35b686f4f3b2ff47.pdf)
+
+---
+
+<\!-- metadata
 event_date: 2026-03-28
 notes: 31試行消化、6モジュール構成は experiments/ ディレクトリと git 履歴で確認可能。学説不理解の具体的内容は対話ログに基づく。Palisade Research arXiv:2509.14260, Grok 4 97%, o3 79% は一次文献で裏付け済み。
 -->
