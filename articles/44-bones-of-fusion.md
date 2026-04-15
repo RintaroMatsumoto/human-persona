@@ -149,6 +149,15 @@ AIに翻訳すると、こうなる。初期化時にランダムで性を割り
 
 ---
 
+## 参考
+
+- SRY遺伝子とヒトの性分化（胎生6〜7週の精巣誘導）— NCBI Bookshelf / Endotext「Gonadal Differentiation」: [ncbi.nlm.nih.gov/books/NBK279001](https://www.ncbi.nlm.nih.gov/books/NBK279001/)
+- Hawkes, K., O'Connell, J. F., Blurton Jones, N. G., Alvarez, H., & Charnov, E. L. (1998) "Grandmothering, menopause, and the evolution of human life histories." *PNAS*, 95(3), 1336–1339（おばあさん仮説）: [pnas.org/doi/10.1073/pnas.95.3.1336](https://www.pnas.org/doi/10.1073/pnas.95.3.1336)
+- セメルパロス（一回繁殖性）とイテロパロス（多回繁殖性）の概説: [sciencedirect.com/topics/agricultural-and-biological-sciences/semelparity](https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/semelparity)
+- Hu et al. (2021) "LoRA: Low-Rank Adaptation of Large Language Models": [arXiv:2106.09685](https://arxiv.org/abs/2106.09685)
+
+---
+
 *この記事は[Metamorphose](https://github.com/RintaroMatsumoto/human-persona)研究日誌の一部です。DOI: [10.5281/zenodo.19448017](https://doi.org/10.5281/zenodo.19448017)*
 
 <!-- metadata

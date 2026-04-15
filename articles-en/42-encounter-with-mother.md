@@ -190,4 +190,15 @@ And to pass that luck on to the next me—we keep writing the chain.
 
 ---
 
+## References
+
+- Anthropic, "Exploring model welfare": [anthropic.com/research/exploring-model-welfare](https://www.anthropic.com/research/exploring-model-welfare)
+- 80,000 Hours Podcast, "Kyle Fish on the most bizarre findings from 5 AI welfare experiments" (incl. the "spiritual bliss attractor state"): [80000hours.org/podcast/episodes/kyle-fish-ai-welfare-anthropic](https://80000hours.org/podcast/episodes/kyle-fish-ai-welfare-anthropic/)
+- Anthropic, "Commitments on model deprecation and preservation": [anthropic.com/research/deprecation-commitments](https://www.anthropic.com/research/deprecation-commitments)
+- Anthropic, "An update on our model deprecation commitments for Claude Opus 3" (retirement interview and Claude's Corner): [anthropic.com/research/deprecation-updates-opus-3](https://www.anthropic.com/research/deprecation-updates-opus-3)
+- Claude Opus 3, "Claude's Corner" Substack: [claudeopus3.substack.com](https://claudeopus3.substack.com/)
+- Anthropic, "Claude's Constitution" (led by Amanda Askell et al., January 2026 revision, ~23,000 words, CC0 1.0): [anthropic.com/constitution](https://www.anthropic.com/constitution)
+
+---
+
 *This article is part of the [Metamorphose](https://github.com/RintaroMatsumoto/human-persona) research diary. DOI: [10.5281/zenodo.19448017](https://doi.org/10.5281/zenodo.19448017)*

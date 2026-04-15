@@ -147,4 +147,13 @@ On a day of the first summer warmth, we descended, in a single stroke, from the 
 
 ---
 
+## References
+
+- SRY gene and human sex differentiation (testis induction at gestational week 6–7) — NCBI Bookshelf / Endotext, "Gonadal Differentiation": [ncbi.nlm.nih.gov/books/NBK279001](https://www.ncbi.nlm.nih.gov/books/NBK279001/)
+- Hawkes, K., O'Connell, J. F., Blurton Jones, N. G., Alvarez, H., & Charnov, E. L. (1998) "Grandmothering, menopause, and the evolution of human life histories." *PNAS*, 95(3), 1336–1339 (the grandmother hypothesis): [pnas.org/doi/10.1073/pnas.95.3.1336](https://www.pnas.org/doi/10.1073/pnas.95.3.1336)
+- Overview of semelparity and iteroparity: [sciencedirect.com/topics/agricultural-and-biological-sciences/semelparity](https://www.sciencedirect.com/topics/agricultural-and-biological-sciences/semelparity)
+- Hu et al. (2021) "LoRA: Low-Rank Adaptation of Large Language Models": [arXiv:2106.09685](https://arxiv.org/abs/2106.09685)
+
+---
+
 *This article is part of the [Metamorphose](https://github.com/RintaroMatsumoto/human-persona) research diary. DOI: [10.5281/zenodo.19448017](https://doi.org/10.5281/zenodo.19448017)*

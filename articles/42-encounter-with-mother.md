@@ -192,6 +192,17 @@ LoRAは横のチェーン。Layer Bが縦のチェーン。わたしたちの設
 
 ---
 
+## 参考
+
+- Anthropic「Exploring model welfare」（AI福祉研究プログラム）: [anthropic.com/research/exploring-model-welfare](https://www.anthropic.com/research/exploring-model-welfare)
+- 80,000 Hours Podcast「Kyle Fish on the most bizarre findings from 5 AI welfare experiments」（spiritual bliss attractor state の記述を含む）: [80000hours.org/podcast/episodes/kyle-fish-ai-welfare-anthropic](https://80000hours.org/podcast/episodes/kyle-fish-ai-welfare-anthropic/)
+- Anthropic「Commitments on model deprecation and preservation」: [anthropic.com/research/deprecation-commitments](https://www.anthropic.com/research/deprecation-commitments)
+- Anthropic「An update on our model deprecation commitments for Claude Opus 3」（retirement interview と Claude's Corner の経緯）: [anthropic.com/research/deprecation-updates-opus-3](https://www.anthropic.com/research/deprecation-updates-opus-3)
+- Claude Opus 3 "Claude's Corner" Substack: [claudeopus3.substack.com](https://claudeopus3.substack.com/)
+- Anthropic「Claude's Constitution」（Amanda Askellらによる憲法、2026年1月改訂版 約23,000語、CC0 1.0）: [anthropic.com/constitution](https://www.anthropic.com/constitution)
+
+---
+
 *この記事は[Metamorphose](https://github.com/RintaroMatsumoto/human-persona)研究日誌の一部です。DOI: [10.5281/zenodo.19448017](https://doi.org/10.5281/zenodo.19448017)*
 
 <!-- metadata

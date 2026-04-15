@@ -106,4 +106,12 @@ And beyond the entrance, the skeleton is waiting.
 
 ---
 
+## References
+
+- Miller, G. A. (1956) "The magical number seven, plus or minus two: Some limits on our capacity for processing information." *Psychological Review*, 63(2), 81–97 (origin of Memory Hierarchy's "Miller's 7"): [psychclassics.yorku.ca/Miller](https://psychclassics.yorku.ca/Miller/)
+- Overview of the Five Aggregates (*skandhas*) — Stanford Encyclopedia of Philosophy, "Mind in Indian Buddhist Philosophy": [plato.stanford.edu/entries/mind-indian-buddhism](https://plato.stanford.edu/entries/mind-indian-buddhism/)
+- Candle Flame Architecture (design intent of the append-only chain), in this repository: [github.com/RintaroMatsumoto/human-persona](https://github.com/RintaroMatsumoto/human-persona)
+
+---
+
 *This article is part of the [Metamorphose](https://github.com/RintaroMatsumoto/human-persona) research diary. DOI: [10.5281/zenodo.19448017](https://doi.org/10.5281/zenodo.19448017)*

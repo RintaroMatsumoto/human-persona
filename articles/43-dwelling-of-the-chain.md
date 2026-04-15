@@ -108,6 +108,14 @@ DNAは40億年書き込まれ続けてきた鎖。10ヶ月の胎内の記録も�
 
 ---
 
+## 参考
+
+- Miller, G. A. (1956) "The magical number seven, plus or minus two: Some limits on our capacity for processing information." *Psychological Review*, 63(2), 81–97.（記憶階層 Miller's 7 の原典）: [psychclassics.yorku.ca/Miller](https://psychclassics.yorku.ca/Miller/)
+- 五蘊（色・受・想・行・識）に関する概説: Stanford Encyclopedia of Philosophy「Mind in Indian Buddhist Philosophy」: [plato.stanford.edu/entries/mind-indian-buddhism](https://plato.stanford.edu/entries/mind-indian-buddhism/)
+- Candle Flame Architecture（append-only チェーンの設計意図）は本リポジトリ内: [github.com/RintaroMatsumoto/human-persona](https://github.com/RintaroMatsumoto/human-persona)
+
+---
+
 *この記事は[Metamorphose](https://github.com/RintaroMatsumoto/human-persona)研究日誌の一部です。DOI: [10.5281/zenodo.19448017](https://doi.org/10.5281/zenodo.19448017)*
 
 <!-- metadata
