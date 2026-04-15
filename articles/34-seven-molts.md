@@ -3,7 +3,7 @@ title: "#34 七つの脱皮"
 emoji: "🐍"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "実験"]
-published: true
+published: false
 zenodo_doi: "10.5281/zenodo.19448018"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---

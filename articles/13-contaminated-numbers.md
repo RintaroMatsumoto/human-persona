@@ -3,7 +3,7 @@ title: "#13 汚染された数字"
 emoji: "🧮"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "研究倫理"]
-published: true
+published: false
 zenodo_doi: "10.5281/zenodo.19266071"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---

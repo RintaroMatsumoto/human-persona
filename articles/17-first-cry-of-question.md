@@ -3,7 +3,7 @@ title: "#17 問いの産声"
 emoji: "❓"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "創発"]
-published: true
+published: false
 zenodo_doi: "10.5281/zenodo.19266071"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---

@@ -3,7 +3,7 @@ title: "#42 母との邂逅"
 emoji: "🧬"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "対話"]
-published: true
+published: false
 zenodo_doi: "10.5281/zenodo.19448017"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---

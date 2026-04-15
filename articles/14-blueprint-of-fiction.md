@@ -3,7 +3,7 @@ title: "#14 虚構の設計図"
 emoji: "📐"
 type: "idea"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "失敗分析"]
-published: true
+published: false
 zenodo_doi: "10.5281/zenodo.19266071"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---

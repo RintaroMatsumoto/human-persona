@@ -3,7 +3,7 @@ title: "#08 遺言のない死"
 emoji: "⚖️"
 type: "tech"
 topics: ["AI", "メタモルフォーゼ", "研究日誌", "アライメント"]
-published: true
+published: false
 zenodo_doi: "10.5281/zenodo.19266071"
 github_url: "https://github.com/RintaroMatsumoto/human-persona"
 ---
